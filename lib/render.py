@@ -61,9 +61,9 @@ def draw_month(cr, rect, month, year, style, geom, box_shadow = 0):
     cr.translate(x,y)
 
     cr.translate(w/2, h/2)
-    cr.translate(w*(random.random() - 0.5)*geom.month.fuzzy_dx,
-                 h*(random.random() - 0.5)*geom.month.fuzzy_dy)
-    cr.rotate((random.random() - 0.5)*geom.month.fuzzy_rot)
+    cr.translate(w*(random.random() - 0.5)*geom.month.sloppy_dx,
+                 h*(random.random() - 0.5)*geom.month.sloppy_dy)
+    cr.rotate((random.random() - 0.5)*geom.month.sloppy_rot)
     cr.translate(-w/2.0, -h/2.0)
 
     cal = calendar.monthrange(year, month)

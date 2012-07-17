@@ -22,6 +22,6 @@ class dom:
     top_margin = bottom_margin = 0.05
     
 class month:
-    fuzzy_rot = 0
-    fuzzy_dx = 0
-    fuzzy_dy = 0
+    sloppy_rot = 0
+    sloppy_dx = 0
+    sloppy_dy = 0

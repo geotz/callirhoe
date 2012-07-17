@@ -154,7 +154,8 @@ for i in range(min(foo.count(),12),0,-1):
 #draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=1)
 draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=2)
 #draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=3)
-draw_str(p.cr, "created by Callirhoe ver.0.1 © 2012 GeoTz", Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=2, slant=cairo.FONT_SLANT_ITALIC)
+draw_str(p.cr, "rendered by Callirhoe ver. %s" % _version, 
+         Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=1, slant=cairo.FONT_SLANT_ITALIC)
 
 #render.cr.move_to(render.Page.Text_pos[0],render.Page.Text_pos[1])
 #render.cr.line_to(render.Page.Text_size[0]+render.Page.Text_pos[0], render.Page.Text_size[1]+render.Page.Text_pos[1])
