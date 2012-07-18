@@ -59,28 +59,32 @@ def import_plugin(cat, longcat, longcat2, listopt, preset):
         sys.path[0] = old
         return m
     except ImportError:
-        print >> sys.stderr, "%s definition `%s' not found, use %s to see available %s" % (longcat,preset,listopt,longcat2)
+        print >> sys.stderr, "%s definition `%s' not found, use %s to see available %s" % (longcat,
+                               preset,listopt,longcat2)
         sys.exit(1)
 
-parser = optparse.OptionParser(usage="usage: %prog [options] FILE", 
+# TODO:
+# prog [[MONTH1-MONTH2 | MONTH:SPAN] YEAR] FILE
+parser = optparse.OptionParser(usage="usage: %prog [options] [YEAR [MONTH [SPAN]]] FILE", 
        description="High quality calendar rendering with vector graphics.\n"
        "By default, a pdf calendar of the current year will be written to FILE. Program version: " + _version)
-parser.add_option("-y", "--year",  dest="year", type="int", default=-1,
-                help="select YEAR instead of current one")
 parser.add_option("-l", "--lang",  dest="lang", default="EN",
                 help="choose language [EN]")
+parser.add_option("-t", "--template",  dest="template", default="tiles",
+                help="choose template [tiles]")
 parser.add_option("-s", "--style",  dest="style", default="default",
                 help="choose style [default]")
 parser.add_option("-g", "--geometry",  dest="geom", default="default",
                 help="choose geometry [default]")
 parser.add_option("--landscape", action="store_true", dest="landscape", default=False,
                 help="landscape mode")
-parser.add_option("--list-languages", action="store_true", dest="list_languages", default=False,
-                help="list available languages")
-parser.add_option("--list-styles", action="store_true", dest="list_styles", default=False,
-                help="list available styles")
-parser.add_option("--list-geometries", action="store_true", dest="list_geometries", default=False,
-                help="list available geometries")
+                
+def add_list_option(parser, opt):
+    parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
+                       help="list available %s" % opt)
+for x in ["languages", "templates", "styles", "geometries"]:
+    add_list_option(parser, x)
+
 parser.add_option("--lang-var", action="append", dest="lang_assign",
                 help="modify a language variable")
 parser.add_option("--style-var", action="append", dest="style_assign",
@@ -106,25 +110,29 @@ if options.list_styles:
 if options.list_geometries:
     for x in plugin_list("geom"): print x[0],
     print
-if options.list_languages or options.list_styles or options.list_geometries: sys.exit(0)    
+if options.list_templates:
+    for x in plugin_list("templates"): print x[0],
+    print
+if (options.list_languages or options.list_styles or
+    options.list_geometries or options.list_templates): sys.exit(0)    
 
 if len(args)==0:
     parser.print_help()
     sys.exit(0)
 
-cal_lang = import_plugin("lang", "language", "languages", "--list-languages", options.lang)
-cal_style = import_plugin("style", "style", "styles", "--list-styles", options.style)
-cal_geom = import_plugin("geom", "geometry", "geometries", "--list-geometries", options.geom)
+Language = import_plugin("lang", "language", "languages", "--list-languages", options.lang)
+Style = import_plugin("style", "style", "styles", "--list-styles", options.style)
+Geometry = import_plugin("geom", "geometry", "geometries", "--list-geometries", options.geom)
 
 if options.lang_assign:
-    for x in options.lang_assign: exec "cal_lang.%s" % x
+    for x in options.lang_assign: exec "Language.%s" % x
 if options.style_assign:
-    for x in options.style_assign: exec "cal_style.%s" % x
+    for x in options.style_assign: exec "Style.%s" % x
 if options.geom_assign:
-    for x in options.geom_assign: exec "cal_geom.%s" % x
+    for x in options.geom_assign: exec "Geometry.%s" % x
 
-calendar.month_name = cal_lang.month_name
-calendar.day_name = cal_lang.day_name
+calendar.month_name = Language.month_name
+calendar.day_name = Language.day_name
 
 def get_orthodox_easter(y):
     y1, y2, y3 = y - y//4 * 4, y - y//7 * 7, y - y//19 * 19
@@ -135,21 +143,64 @@ def get_orthodox_easter(y):
     r = 1 + 3 + y4 + y5;
     return (5, r - 30) if r > 30 else (4,r)
 
-year = options.year if options.year >= 0 else time.localtime()[0]
+ac = 0
+try:
+    if len(args) > 1: Year = int(args[ac]); ac += 1
+    else: Year = time.localtime()[0]
+except ValueError as e:
+    sys.exit("invalid year `" + args[ac] +"'")
+try:
+    if len(args) > 2: Month = int(args[ac]); ac += 1
+    else: Month = 1
+    if Month < 1: Month = time.localtime()[1]
+    if Month > 12: ac -= 1; raise ValueError() # nasty!
+except ValueError as e:
+    sys.exit("invalid month `" + args[ac] +"'")
+try:
+    if len(args) > 3: MonthSpan = int(args[ac]); ac += 1
+    else: MonthSpan = 12
+    if MonthSpan < 1: ac -= 1; raise ValueError() # nasty!
+except ValueError as e:
+    sys.exit("invalid month span `" + args[ac] +"'")
 
-p = PDFPage(args[0], options.landscape)
+print Year, Month, MonthSpan
+
+# TODO: maybe add warning when last arg looks like an int
+p = PDFPage(args[ac], options.landscape)
+
+
+#1   1   1
+#2   2   1
+#3   3   1
+
+#4   2   2
+#5   3   2
+#6   3   2
+#7   4   2
+#8   4   2
+
+#9   3   3
+#10  4   3
+#11  4   3
+#12  4   3
+if MonthSpan < 4: cols = 1; rows = MonthSpan
+elif MonthSpan < 9: cols = 2; rows = int(math.ceil(MonthSpan/2.0))
+else: cols = 3; rows = int(math.ceil(MonthSpan/3.0))
+
+# else x = floor(sqrt(span))... consider x*x, (x+1)*x, (x+1)*(x+1)
+
+# TODO: allow /usr/bin/date -like formatting %x... 
+# fix frame_thickness usage (add month. or use same everywhere)
 
 R0,R1 = rect_vsplit(p.Text_rect, 0.05)
 Rcal,Rc = rect_vsplit(R1,0.97)
-if options.landscape:
-    rows,cols = 3,4
-else:
-    rows,cols = 4,3
+if options.landscape: rows,cols = cols,rows
+# TODO: wrap around years
 foo = GLayout(Rcal, rows, cols, pad = (p.Text_rect[2]*0.02,)*4)
-shad = p.Size[0]*0.01 if cal_style.month.box_shadow else 0
-for i in range(min(foo.count(),12),0,-1):
-    draw_month(p.cr, foo.item_seq(i-1), month=i, year=year, 
-               style = cal_style, geom = cal_geom, box_shadow = shad)
-draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=2)
+shad = p.Size[0]*0.01 if Style.month.box_shadow else 0
+for i in range(min(foo.count(),MonthSpan),0,-1):
+    draw_month(p.cr, foo.item_seq(i-1), month=i+Month-1, year=Year, 
+               style = Style, geom = Geometry, box_shadow = shad)
+draw_str(p.cr, str(Year), R0, stroke_rgba = (0,0,0,0.3), align=2)
 draw_str(p.cr, "rendered by Callirhoe ver. %s" % _version, 
          Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=1, slant=cairo.FONT_SLANT_ITALIC)

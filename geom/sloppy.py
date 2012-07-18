@@ -14,7 +14,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- geom.default ---
+# --- geom.sloppy ---
 
 class dom:
     num_size = (0.5,0.5)
