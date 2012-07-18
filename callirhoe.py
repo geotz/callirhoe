@@ -150,22 +150,6 @@ shad = p.Size[0]*0.01 if cal_style.month.box_shadow else 0
 for i in range(min(foo.count(),12),0,-1):
     draw_month(p.cr, foo.item_seq(i-1), month=i, year=year, 
                style = cal_style, geom = cal_geom, box_shadow = shad)
-#    render.draw_box(render.cr,*foo.item_seq(i))
-#draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=1)
 draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=2)
-#draw_str(p.cr, str(year), R0, stroke_rgba = (0,0,0,0.3), align=3)
 draw_str(p.cr, "rendered by Callirhoe ver. %s" % _version, 
          Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=1, slant=cairo.FONT_SLANT_ITALIC)
-
-#render.cr.move_to(render.Page.Text_pos[0],render.Page.Text_pos[1])
-#render.cr.line_to(render.Page.Text_size[0]+render.Page.Text_pos[0], render.Page.Text_size[1]+render.Page.Text_pos[1])
-#render.cr.stroke()
-
-#draw_month(cr, *foo.item(2), m=9)
-
-#bw, bh = 40,40
-#draw_day_cell(cr, 30, 50, bw, bh, '24', 'Παραμονή Χριστουγ.', 'Ευγενία', default_style)
-#draw_day_cell(cr, 30+bw, 50, bw, bh, '25', 'ΧΡΙΣΤΟΥΓΕΝΝΑ', 'Χρήστος, Χριστίνα', weekend_holiday_style)
-#draw_day_cell(cr, 30+2*bw, 50, bw, bh, '26', '2η μέρα Χριστουγ.', 'Εμμανουήλ', weekend_style)
-#draw_day_cell(cr, 30+3*bw, 50, bw, bh, '27', '', 'Στέφανος', default_style)
-#draw_day_page(cr, 30+2*bw, 50, bw, bh, '26', 'Κυριακή', 'Δεκεμβρίου', [1,1,1], [.3,.3,.3])
