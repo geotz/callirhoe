@@ -59,6 +59,9 @@ def set_color(cr, rgba):
     else:
         cr.set_source_rgba(*rgba)
 
+def extract_font_name(f):
+    return f if type(f) is str else f[0]
+
 def draw_shadow(cr, rect, thickness, shadow_color = (0,0,0,0.3)):
     if thickness <= 0: return
     f = thickness
@@ -87,11 +90,15 @@ def draw_box(cr, rect, stroke_rgba = (), fill_rgba = (), width_scale = 1.0, shad
     cr.stroke()
 
 def draw_str(cr, text, rect, stretch = -1, stroke_rgba = (), align = 0, bbox = False,
-             font = "Times", slant = cairo.FONT_SLANT_NORMAL, weight = cairo.FONT_WEIGHT_NORMAL, 
-             measure = '', shadow = False):
+             font = "Times", measure = '', shadow = False):
     x, y, w, h = rect
     cr.save()
-    cr.select_font_face(font, slant, weight)
+    slant = weight = 0
+    if type(font) is str: fontname = font
+    elif len(font) == 3: fontname, slant, weight = font
+    elif len(font) == 2: fontname, slant = font
+    elif len(font) == 1: fontname = font[0]
+    cr.select_font_face(fontname, slant, weight)
     if not measure: measure = text
     te = cr.text_extents(measure)
     tw, th = te[2], te[3]

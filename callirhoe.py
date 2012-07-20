@@ -65,9 +65,11 @@ def import_plugin(cat, longcat, longcat2, listopt, preset):
 
 # TODO:
 # prog [[MONTH1-MONTH2 | MONTH:SPAN] YEAR] FILE
-parser = optparse.OptionParser(usage="usage: %prog [options] [YEAR [MONTH [SPAN]]] FILE", 
-       description="High quality calendar rendering with vector graphics.\n"
-       "By default, a pdf calendar of the current year will be written to FILE. Program version: " + _version)
+parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE", 
+       description="High quality calendar rendering with vector graphics. "
+       "By default, a calendar of the current year in pdf format is written to FILE. Alternatively, you can "
+       " select a specific YEAR (0=current), and a month range from MONTH (0-12,0=current) to MONTH2 "
+       "or for SPAN months. Program version: " + _version)
 parser.add_option("-l", "--lang",  dest="lang", default="EN",
                 help="choose language [EN]")
 parser.add_option("-t", "--template",  dest="template", default="tiles",
@@ -116,7 +118,7 @@ if options.list_templates:
 if (options.list_languages or options.list_styles or
     options.list_geometries or options.list_templates): sys.exit(0)    
 
-if len(args)==0:
+if len(args) < 1 or len(args) > 3:
     parser.print_help()
     sys.exit(0)
 
@@ -143,30 +145,48 @@ def get_orthodox_easter(y):
     r = 1 + 3 + y4 + y5;
     return (5, r - 30) if r > 30 else (4,r)
 
-ac = 0
-try:
-    if len(args) > 1: Year = int(args[ac]); ac += 1
-    else: Year = time.localtime()[0]
-except ValueError as e:
-    sys.exit("invalid year `" + args[ac] +"'")
-try:
-    if len(args) > 2: Month = int(args[ac]); ac += 1
-    else: Month = 1
-    if Month < 1: Month = time.localtime()[1]
-    if Month > 12: ac -= 1; raise ValueError() # nasty!
-except ValueError as e:
-    sys.exit("invalid month `" + args[ac] +"'")
-try:
-    if len(args) > 3: MonthSpan = int(args[ac]); ac += 1
-    else: MonthSpan = 12
-    if MonthSpan < 1: ac -= 1; raise ValueError() # nasty!
-except ValueError as e:
-    sys.exit("invalid month span `" + args[ac] +"'")
+def itoa(s):
+    try:
+        k = int(s);
+    except ValueError as e:
+        sys.exit("invalid integer value `" + s +"'")
+    return k
 
-print Year, Month, MonthSpan
+def parse_month(mstr):
+    m = itoa(mstr)
+    if m < 1: m = time.localtime()[1]
+    elif m > 12: sys.exit("invalid month value `" + str(mstr) + "'")
+    return m
+
+if len(args) == 1:
+    Year = time.localtime()[0]
+    Month, MonthSpan = 1, 12
+    Outfile = args[0]
+elif len(args) == 2:
+    Year = itoa(args[0])
+    Month, MonthSpan = 1, 12
+    Outfile = args[1]
+elif len(args) == 3:
+    if ':' in args[0]:
+        t = args[0].split(':')
+        if len(t) != 2: sys.exit("invalid month range `" + args[0] + "'")
+        Month = parse_month(t[0])
+        MonthSpan = itoa(t[1])
+        if MonthSpan < 0: sys.exit("invalid month range `" + args[0] + "'")
+    elif '-' in args[0]:
+        t = args[0].split('-')
+        if len(t) != 2: sys.exit("invalid month range `" + args[0] + "'")
+        Month = parse_month(t[0])
+        MonthSpan = itoa(t[1]) - Month + 1
+        if MonthSpan < 0: sys.exit("invalid month range `" + args[0] + "'")
+    else:
+        Month = parse_month(args[0])
+        MonthSpan = 1
+    Year = itoa(args[1])
+    Outfile = args[2]
 
 # TODO: maybe add warning when last arg looks like an int
-p = PDFPage(args[ac], options.landscape)
+p = PDFPage(Outfile, options.landscape)
 
 
 #1   1   1
@@ -190,7 +210,7 @@ else: cols = 3; rows = int(math.ceil(MonthSpan/3.0))
 # else x = floor(sqrt(span))... consider x*x, (x+1)*x, (x+1)*(x+1)
 
 # TODO: allow /usr/bin/date -like formatting %x... 
-# fix frame_thickness usage (add month. or use same everywhere)
+# fix frame_thickness usage (add month.* or use same everywhere)
 
 R0,R1 = rect_vsplit(p.Text_rect, 0.05)
 Rcal,Rc = rect_vsplit(R1,0.97)
@@ -201,6 +221,7 @@ shad = p.Size[0]*0.01 if Style.month.box_shadow else 0
 for i in range(min(foo.count(),MonthSpan),0,-1):
     draw_month(p.cr, foo.item_seq(i-1), month=i+Month-1, year=Year, 
                style = Style, geom = Geometry, box_shadow = shad)
-draw_str(p.cr, str(Year), R0, stroke_rgba = (0,0,0,0.3), align=2)
+draw_str(p.cr, str(Year), R0, stroke_rgba = (0,0,0,0.3), align=2, font=(extract_font_name(Style.month.font),0,0))
 draw_str(p.cr, "rendered by Callirhoe ver. %s" % _version, 
-         Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=1, slant=cairo.FONT_SLANT_ITALIC)
+         Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=1, 
+         font=(extract_font_name(Style.month.font),1,0))

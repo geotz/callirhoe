@@ -96,6 +96,7 @@ def draw_month(cr, rect, month, year, style, geom, box_shadow = 0):
     draw_box(cr, (0, 0, w, ch*3.0/5), style.month.frame, mcolor)
     R = (0, ch*3.0/5*1/4, w, ch*3.0/5*1/2)
     draw_str(cr, calendar.month_name[month], R, -1, mcolor_fg, 2, False,
-             style.month.font, measure=mmeasure, shadow=style.month.text_shadow)
+             style.month.font, measure=mmeasure, 
+             shadow=style.month.text_shadow)
     cr.restore()
         

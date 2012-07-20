@@ -1,0 +1,44 @@
+#    callirhoe - high quality calendar rendering
+#    Copyright (C) 2012 George M. Tzoumas
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see http://www.gnu.org/licenses/
+
+# --- style.default.gfs (Greek Font Society fonts) ---
+
+# day of week
+
+import default
+
+class dow(default.dow):
+    font = "GFS Neohellenic"
+    
+# day of month
+class dom(default.dom):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class dom_weekend(default.dom_weekend): 
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class dom_holiday(default.dom_holiday):
+    font = ("GFS Bodoni",)
+    header_font = footer_font = "GFS Elpis"
+    
+class dom_weekend_holiday_style(default.dom_weekend_holiday_style):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class month(default.month):
+    font = ("GFS Artemisia", 0, 1)

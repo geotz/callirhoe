@@ -29,7 +29,7 @@ class dom:
     frame = (0.8,0.8,0.8)
     frame_thickness = 1.0
     fg = (0.2,0.2,0.2)
-    font = "GFS Bodoni"
+    font = "Times New Roman"
     header = (0.5,0.5,0.5)
     footer = header
     header_font = footer_font = "Arial"
@@ -48,7 +48,7 @@ class dom_weekend_holiday_style(dom_holiday):
 from lib.render import color_mix
 
 class month:    
-    font = "GFS Artemisia Bold"
+    font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
     bg = (1,1,1)
     winter = (0,0.4,1)

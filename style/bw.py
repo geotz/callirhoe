@@ -37,12 +37,12 @@ class dom:
 class dom_weekend(dom):
     bg = (0.95,0.95,0.95)
     fg = (0,0,0)
-    font = "Times New Roman Bold"
+    font = ("Times New Roman", 0, 1)
 
 class dom_holiday(dom):
     fg = (0,0,0)
     header = (0,0,0)
-    font = "Times New Roman Bold"
+    font = ("Times New Roman", 0, 1)
     
 class dom_weekend_holiday_style(dom_holiday):
     bg = (0,0,0)
@@ -50,7 +50,7 @@ class dom_weekend_holiday_style(dom_holiday):
 from lib.render import color_mix
 
 class month:    
-    font = "Times New Roman Bold"
+    font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
     bg = (1,1,1)
     color_map = ((1,1,1),)*13
