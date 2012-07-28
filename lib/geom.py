@@ -22,10 +22,11 @@
 #                                         #
 # *****************************************
 
-def rect_rel_scale(r, fw, fh):
+def rect_rel_scale(r, fw, fh, align_x = 0, align_y = 0):
     x, y, w, h = r
-    return (x + w*(1 - fw)/2.0, y + h*(1 - fh)/2.0, w*fw, h*fh)
-        
+    return (x + (align_x + 1.0)*w*(1 - fw)/2.0,
+            y + (align_y + 1.0)*h*(1 - fh)/2.0, w*fw, h*fh)
+
 def rect_to_abs(r):
     x, y, w, h = r
     return (x, y, x + w, y + h)
@@ -33,6 +34,9 @@ def rect_to_abs(r):
 def abs_to_rect(a):
     x1, y1, x2, y2 = a
     return (x1, y1, x2 - x1, y2 - y1)
+
+def rect_from_origin(r):
+    return (0, 0, r[2], r[3])
 
 def rect_hull(r1,r2):
     x1, y1, x2, y2 = rect_to_abs(r1)
@@ -55,7 +59,7 @@ def rect_qsplit(r, fv = 0.5, fh = 0.5):
     x, y, w, h = r
     rv = rect_vsplit(r, fv)
     return rect_hsplit(rv[0], fh) + rect_hsplit(rv[1], fh)
-    
+
 def color_mix(a, b, frac):
     k = min(len(a), len(b))
     return map(lambda (x,y): x*frac + y*(1 - frac), zip(a,b))
@@ -65,57 +69,43 @@ def color_auto_fg(bg, light = (1,1,1), dark = (0,0,0)):
 
 # ********* layout managers ***********
 
-class VLayout:
+class VLayout(object):
     def __init__(self, rect, nitems = 1, pad = (0.0,0.0,0.0,0.0)): # TLBR
-        self.pos = (rect[0], rect[1])
-        self.size = (rect[2], rect[3])
-        self.items = nitems
+        self.rect = rect
+        self.nitems = nitems
         self.pad = pad
 
     def count(self):
-        return self.items
+        return self.nitems
 
     def resize(self, k):
-        self.items = k
+        self.nitems = k
 
     def grow(self, delta = 1):
-        self.items += delta
-
-    def move(newpos):
-        self.pos = newpos;
+        self.nitems += delta
 
     def item(self, i = 0):
         vinter = (self.pad[0] + self.pad[2])/2.0;
-        vsize = (self.size[1] - vinter)/self.items;
-        return (self.pos[0] + self.pad[1], self.pos[1] + self.pad[0] + i*vsize,
-                self.size[0] -self.pad[1] - self.pad[3], vsize - vinter)
+        vsize = (self.rect[3] - vinter)/self.nitems;
+        return (self.rect[0] + self.pad[1], self.rect[1] + self.pad[0] + i*vsize,
+                self.rect[2] -self.pad[1] - self.pad[3], vsize - vinter)
                 
     def item_span(self, n, k = -1):
         if k < 0: k = (self.count() - n) // 2
         return rect_hull(self.item(k), self.item(k + n - 1))
+        
+    def items(self):
+        return map(self.item, range(self.count()))
 
-class HLayout:
+class HLayout(VLayout): # transpose of VLayout
     def __init__(self, rect, nitems = 1, pad = (0.0,0.0,0.0,0.0)): # TLBR
-        self.pos = (rect[0],rect[1])
-        self.rep = VLayout((0.0, 0.0, rect[3], rect[2]), nitems, (pad[1], pad[0], pad[3], pad[2]))
-
-    def count(self):
-        return self.rep.count()
-
-    def resize(self, k):
-        self.rep.resize(k)
-
-    def move(newpos):
-        self.rep.move(newpos)
+        super(HLayout,self).__init__((rect[1],rect[0],rect[3],rect[2]), 
+                                      nitems, (pad[1], pad[0], pad[3], pad[2]))
 
     def item(self, i = 0):
-        t = self.rep.item(i)
-        return (t[1] + self.pos[0], t[0] + self.pos[1], t[3], t[2])
+        t = super(HLayout,self).item(i)
+        return (t[1], t[0], t[3], t[2])
         
-    def item_span(self, n, k = -1):
-        if k < 0: k = (self.rep.count() - n) // 2
-        return rect_hull(self.item(k), self.item(k + n - 1))
-
 class GLayout:
     def __init__(self, rect, nrows = 1, ncols = 1, pad = (0.0,0.0,0.0,0.0)): # TLBR
         self.vrep = VLayout(rect, nrows, (pad[0], 0.0, pad[2], 0.0))
@@ -136,10 +126,6 @@ class GLayout:
         t = self.vrep.item(0)
         self.hrep = HLayout(t[0:2], t[2:4], cols, (0.0, pad[1], 0.0, pad[3]))
 
-    def move(newpos):
-        self.vrep.move(newpos)
-        self.hrep.move(newpos)
-
     def item(self, row, col):
         ty = self.vrep.item(row)
         tx = self.hrep.item(col)
@@ -151,7 +137,17 @@ class GLayout:
         else:
             col, row = k // self.row_count(), k % self.row_count()
         return self.item(row, col)
+        
+    def items(self, column_wise = False):
+        return map(self.item_seq, range(self.count()))
 
+    def row_items(self, row):
+        return map(lambda x: self.item(row, x), range(self.col_count()))
+        
+    def col_items(self, col):
+        return map(lambda x: self.item(x, col), range(self.row_count()))
+        
+        
     def item_span(self, nr, nc, row = -1, col = -1):
         if row < 0: row = (self.row_count() - nr) // 2
         if col < 0: col = (self.col_count() - nc) // 2

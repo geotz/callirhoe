@@ -17,38 +17,46 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
+# TODO:
+
+# maybe add warning when last arg looks like an int
+# allow /usr/bin/date-like formatting %x... 
+# fix frame_thickness usage (add month.* or use same everywhere)
+# improve file matching with __init__ when lang known
+# wrap around years
+# optparse ... --version, epilog with examples
+# python source documentation
+# .callirhoe/config : default values for plugins (styles/templates/lang...)
+# RENDER: 
+# implement GEOMETRY, STYLE, DATA SOURCES...
+
+# styles and geometries could be merged, css-like
+# then we can apply a chain of --style a --style b ...
+# and b inherits from a and so on
+# however, this would require dynamically creating a class that inherits from others...
+
+# CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
+
+# Theme = (Style, Geometry)
+# fix func. args...
+
 _version = "0.1"
 
 import calendar
 import sys
 import time
-import os.path
 import optparse
-import glob
 
 from lib.xcairo import *
 from lib.render import *
-
-plugin_path = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]
-
-def available_files(parent, dir, fmatch = ""):
-    good = False
-    res = []
-    pattern = parent + "/" + dir + "/*.py"
-    # TODO: improve matching with __init__ when lang known
-    for x in glob.glob(pattern):
-        basex = os.path.basename(x)
-        if basex == "__init__.py": good = True
-        else: 
-            base = os.path.splitext(basex)[0]
-            if base and ((not fmatch) or (fmatch == base)): res.append((base,parent))
-    return res if good else []
+from lib.plugin import *
 
 # cat = lang   (category)
 # longcat = language
 # longcat2 = languages
 # listopt = --list-lang
 # preset = "EN"
+# TODO: CHECK WHY CANNOT BE MOVED INTO lib.plugin
 def import_plugin(cat, longcat, longcat2, listopt, preset):
     try:
         found = available_files(plugin_path[0], cat, preset) + available_files(plugin_path[1], cat, preset)
@@ -63,13 +71,11 @@ def import_plugin(cat, longcat, longcat2, listopt, preset):
                                preset,listopt,longcat2)
         sys.exit(1)
 
-# TODO:
-# prog [[MONTH1-MONTH2 | MONTH:SPAN] YEAR] FILE
 parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE", 
        description="High quality calendar rendering with vector graphics. "
        "By default, a calendar of the current year in pdf format is written to FILE. Alternatively, you can "
        " select a specific YEAR (0=current), and a month range from MONTH (0-12,0=current) to MONTH2 "
-       "or for SPAN months. Program version: " + _version)
+       "or for SPAN months.", version="callirhoe " + _version)
 parser.add_option("-l", "--lang",  dest="lang", default="EN",
                 help="choose language [EN]")
 parser.add_option("-t", "--template",  dest="template", default="tiles",
@@ -101,8 +107,6 @@ parser.add_option("--geom-var", action="append", dest="geom_assign",
         
 (options,args) = parser.parse_args()
 
-def plugin_list(cat):
-    return available_files(plugin_path[0], cat) + available_files(plugin_path[1], cat)
 if options.list_languages:
     for x in plugin_list("lang"): print x[0],
     print
@@ -126,6 +130,8 @@ Language = import_plugin("lang", "language", "languages", "--list-languages", op
 Style = import_plugin("style", "style", "styles", "--list-styles", options.style)
 Geometry = import_plugin("geom", "geometry", "geometries", "--list-geometries", options.geom)
 
+# the usual "beware of exec()" crap applies here... but come on, 
+# this is a SCRIPTING language, you can always hack the source code!!!
 if options.lang_assign:
     for x in options.lang_assign: exec "Language.%s" % x
 if options.style_assign:
@@ -158,12 +164,17 @@ def parse_month(mstr):
     elif m > 12: sys.exit("invalid month value `" + str(mstr) + "'")
     return m
 
+def parse_year(ystr):
+    y = itoa(ystr)
+    if y == 0: y = time.localtime()[0]
+    return y
+
 if len(args) == 1:
     Year = time.localtime()[0]
     Month, MonthSpan = 1, 12
     Outfile = args[0]
 elif len(args) == 2:
-    Year = itoa(args[0])
+    Year = parse_year(args[0])
     Month, MonthSpan = 1, 12
     Outfile = args[1]
 elif len(args) == 3:
@@ -182,10 +193,9 @@ elif len(args) == 3:
     else:
         Month = parse_month(args[0])
         MonthSpan = 1
-    Year = itoa(args[1])
+    Year = parse_year(args[1])
     Outfile = args[2]
 
-# TODO: maybe add warning when last arg looks like an int
 p = PDFPage(Outfile, options.landscape)
 
 
@@ -209,19 +219,16 @@ else: cols = 3; rows = int(math.ceil(MonthSpan/3.0))
 
 # else x = floor(sqrt(span))... consider x*x, (x+1)*x, (x+1)*(x+1)
 
-# TODO: allow /usr/bin/date -like formatting %x... 
-# fix frame_thickness usage (add month.* or use same everywhere)
-
 R0,R1 = rect_vsplit(p.Text_rect, 0.05)
 Rcal,Rc = rect_vsplit(R1,0.97)
 if options.landscape: rows,cols = cols,rows
-# TODO: wrap around years
 foo = GLayout(Rcal, rows, cols, pad = (p.Text_rect[2]*0.02,)*4)
 shad = p.Size[0]*0.01 if Style.month.box_shadow else 0
 for i in range(min(foo.count(),MonthSpan),0,-1):
     draw_month(p.cr, foo.item_seq(i-1), month=i+Month-1, year=Year, 
-               style = Style, geom = Geometry, box_shadow = shad)
-draw_str(p.cr, str(Year), R0, stroke_rgba = (0,0,0,0.3), align=2, font=(extract_font_name(Style.month.font),0,0))
-draw_str(p.cr, "rendered by Callirhoe ver. %s" % _version, 
-         Rc, stroke_rgba = (0,0,0,0.5), stretch=0, align=1, 
-         font=(extract_font_name(Style.month.font),1,0))
+               theme = (Style, Geometry), box_shadow = shad)
+draw_str(p.cr, text = str(Year), rect = R0, stroke_rgba = (0,0,0,0.3), align = 2,
+         font = (extract_font_name(Style.month.font),0,0))
+draw_str(p.cr, text = "rendered by Callirhoe ver. %s" % _version,
+         rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = 0, align = 1,
+         font = (extract_font_name(Style.month.font),1,0))

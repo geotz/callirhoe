@@ -19,8 +19,9 @@
 class dom:
     num_size = (0.5,0.5)
     header_size = footer_size = (0.8,0.1)
-    top_margin = bottom_margin = 0.05
-    
+    header_align = 0.1
+    footer_align = 0.15
+
 class month:
     sloppy_rot = 0.25
     sloppy_dx = 0

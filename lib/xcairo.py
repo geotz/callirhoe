@@ -25,27 +25,32 @@
 
 import cairo
 import math
+import random
 
-class PDFPage:
-    def __init__(self, filename, landscape = False, w = 210.0, h = 297.0, dpi = 72.0):
+class Page(object):
+    def __init__(self, landscape = False, w = 210.0, h = 297.0, dpi = 72.0):
         self.DPI = dpi  # default dpi
         if not landscape:
             self.Size_mm = (w, h) # (width, height) in mm
         else:
             self.Size_mm = (h, w)
         self.Size = (self.Size_mm[0]/25.4 * self.DPI, self.Size_mm[1]/25.4 * self.DPI) # size in dots
-        Mag = 72.0/self.DPI;
+        self._mag = 72.0/self.DPI;
         self.Margins = (self.Size[1]*0.025, self.Size[0]*0.025, 
                         self.Size[1]*0.025, self.Size[0]*0.025) # top left bottom right
         txs = (self.Size[0] - self.Margins[1] - self.Margins[3], 
                self.Size[1] - self.Margins[0] - self.Margins[2])
         self.Text_rect = (self.Margins[1], self.Margins[0], txs[0], txs[1])
+
+class PDFPage(Page):
+    def __init__(self, filename, landscape = False, w = 210.0, h = 297.0, dpi = 72.0):
+        super(PDFPage,self).__init__(landscape, w, h, dpi)
         if not landscape:
-            self.Surface = cairo.PDFSurface (filename, self.Size[0]*Mag, self.Size[1]*Mag)
+            self.Surface = cairo.PDFSurface (filename, self.Size[0]*self._mag, self.Size[1]*self._mag)
         else:
-            self.Surface = cairo.PDFSurface (filename, self.Size[1]*Mag, self.Size[0]*Mag)
+            self.Surface = cairo.PDFSurface (filename, self.Size[1]*self._mag, self.Size[0]*self._mag)
         self.cr = cairo.Context (self.Surface)
-        self.cr.scale (Mag, Mag) # Normalizing the canvas
+        self.cr.scale (self._mag, self._mag) # Normalizing the canvas
         if landscape:
             self.cr.translate(0,self.Size[0])
             self.cr.rotate(-math.pi/2)
@@ -61,6 +66,16 @@ def set_color(cr, rgba):
 
 def extract_font_name(f):
     return f if type(f) is str else f[0]
+
+def apply_rect(cr, rect, sdx = 0.0, sdy = 0.0, srot = 0.0):
+    x, y, w, h = rect
+    cr.save()
+    cr.translate(x,y)
+    if sdx != 0.0 or sdy != 0.0 or srot != 0.0:
+        cr.translate(w/2, h/2)
+        cr.translate(w*(random.random() - 0.5)*sdx, h*(random.random() - 0.5)*sdy)
+        cr.rotate((random.random() - 0.5)*srot)
+        cr.translate(-w/2.0, -h/2.0)
 
 def draw_shadow(cr, rect, thickness, shadow_color = (0,0,0,0.3)):
     if thickness <= 0: return
