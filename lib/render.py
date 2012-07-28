@@ -80,7 +80,7 @@ def draw_month(cr, rect, month, year, theme, box_shadow = 0):
     mcolor = S.month.color_map[month]
     mcolor_fg = color_auto_fg(mcolor)
     draw_box(cr, rect = rect_from_origin(rect), stroke_rgba = S.month.frame, fill_rgba = (),
-             width_scale = 2, shadow = box_shadow)
+             width_scale = S.month.frame_thickness, shadow = box_shadow)
     draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor)
     R_text = rect_rel_scale(R_mb, 1, 0.5)
     draw_str(cr, text = calendar.month_name[month], rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,

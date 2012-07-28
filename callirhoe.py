@@ -21,7 +21,6 @@
 
 # maybe add warning when last arg looks like an int
 # allow /usr/bin/date-like formatting %x... 
-# fix frame_thickness usage (add month.* or use same everywhere)
 # improve file matching with __init__ when lang known
 # wrap around years
 # optparse ... --version, epilog with examples
@@ -56,7 +55,7 @@ from lib.plugin import *
 # longcat2 = languages
 # listopt = --list-lang
 # preset = "EN"
-# TODO: CHECK WHY CANNOT BE MOVED INTO lib.plugin
+# TODO: CHECK WHY CANNOT BE MOVED INTO lib.plugin, maybe needs ".."
 def import_plugin(cat, longcat, longcat2, listopt, preset):
     try:
         found = available_files(plugin_path[0], cat, preset) + available_files(plugin_path[1], cat, preset)

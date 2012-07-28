@@ -50,6 +50,7 @@ from lib.render import color_mix
 class month:    
     font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
+    frame_thickness = 2.0
     bg = (1,1,1)
     winter = (0,0.4,1)
     spring = (0.0,0.5,0.0)

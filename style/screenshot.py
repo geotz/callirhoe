@@ -14,46 +14,52 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- style.bw ---
+# --- style.screenshot ---
 
 # day of week
 class dow:
-    fg = (.33,.33,.33)
-    frame_thickness = 1.0
-    frame = (0.8,0.8,0.8)
+    fg = (0,0,1)
+    frame_thickness = 10.0
+    frame = (0,0,0)
     font = "Arial"
     
 # day of month
 class dom:
     bg = (1,1,1)
-    frame = (0.8,0.8,0.8)
-    frame_thickness = 1.0
+    frame = (0,0,0)
+    frame_thickness = 10.0
     fg = (0.2,0.2,0.2)
-    font = "Times New Roman"
+    font = "GFS Bodoni"
     header = (0.5,0.5,0.5)
     footer = header
     header_font = footer_font = "Arial"
 
 class dom_weekend(dom):
-    bg = (0.95,0.95,0.95)
-    fg = (0,0,0)
-    font = ("Times New Roman", 0, 1)
+    bg = (0.7,1,1)
+    fg = (0,0,1)
 
 class dom_holiday(dom):
-    fg = (0,0,0)
-    header = (0,0,0)
-    font = ("Times New Roman", 0, 1)
+    fg = (1,0,0)
+    header = (1,0,0)
     
 class dom_weekend_holiday_style(dom_holiday):
-    bg = (0,0,0)
+    bg = (0.7,1,1)
 
 from lib.render import color_mix
 
 class month:    
-    font = ("Times New Roman", 0, 1)
+    font = "GFS Artemisia Bold"
     frame = (0,0,0)
-    frame_thickness = 1.0
+    frame_thickness = 10.0
     bg = (1,1,1)
-    color_map = ((1,1,1),)*13
-    box_shadow = False
-    text_shadow = False
+    winter = (0,0.4,1)
+    spring = (0.0,0.5,0.0)
+    summer = (1,0.3,0)
+    autumn = (0.9,0.9,0)
+    color_map = ((0,0,0), winter,
+        color_mix(winter,spring,0.66), color_mix(winter,spring,0.33), spring, # april
+        color_mix(spring,summer,0.66), color_mix(spring,summer,0.33), summer, # july
+        color_mix(summer,autumn,0.66), color_mix(summer,autumn,0.33), autumn, # october
+        color_mix(autumn,winter,0.66), color_mix(autumn,winter,0.33)) # december
+    text_shadow = True
+    box_shadow = True
