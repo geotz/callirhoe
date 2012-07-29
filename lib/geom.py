@@ -27,6 +27,11 @@ def rect_rel_scale(r, fw, fh, align_x = 0, align_y = 0):
     return (x + (align_x + 1.0)*w*(1 - fw)/2.0,
             y + (align_y + 1.0)*h*(1 - fh)/2.0, w*fw, h*fh)
 
+def rect_pad(r, pad):
+    x, y, w, h = r
+    t_, l_, b_, r_ = pad
+    return (x + l_, y + t_, w - r_ - l_, h - t_ - b_)
+
 def rect_to_abs(r):
     x, y, w, h = r
     return (x, y, x + w, y + h)
@@ -85,10 +90,13 @@ class VLayout(object):
         self.nitems += delta
 
     def item(self, i = 0):
-        vinter = (self.pad[0] + self.pad[2])/2.0;
-        vsize = (self.rect[3] - vinter)/self.nitems;
-        return (self.rect[0] + self.pad[1], self.rect[1] + self.pad[0] + i*vsize,
-                self.rect[2] -self.pad[1] - self.pad[3], vsize - vinter)
+        x, y, w, h = self.rect
+        h *= 1.0/self.nitems
+        y += i*h
+        t, l, b, r = self.pad
+        if i < self.nitems - 1: b *= 0.5
+        if i > 0: t *= 0.5
+        return rect_pad((x,y,w,h), (t,l,b,r))
                 
     def item_span(self, n, k = -1):
         if k < 0: k = (self.count() - n) // 2

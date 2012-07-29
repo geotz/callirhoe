@@ -28,22 +28,23 @@ import random
 from xcairo import *
 from geom import *
 
-def draw_day_cell(cr, rect, day_of_month, header, footer, style, geom):
+def draw_day_cell(cr, rect, day_of_month, header, footer, theme):
+    S,G = theme
     x, y, w, h = rect
-    draw_box(cr, rect, style.frame, style.bg, style.frame_thickness)
-    R = rect_rel_scale(rect, geom.num_size[0], geom.num_size[1])
-    draw_str(cr, text =day_of_month, rect = R, stretch = -1, stroke_rgba = style.fg, align = 2,
-             font = style.font, measure = "55")
+    draw_box(cr, rect, S.frame, S.bg, S.frame_thickness)
+    R = rect_rel_scale(rect, G.num_size[0], G.num_size[1])
+    draw_str(cr, text =day_of_month, rect = R, stretch = -1, stroke_rgba = S.fg, align = 2,
+             font = S.font, measure = "55")
     if header:
-        R = rect_rel_scale(rect, geom.header_size[0], geom.header_size[1], 0, -1.0+geom.header_align)
-        draw_str(cr, text = header, rect = R, stretch = -1, stroke_rgba = style.header, align = 2,
-             font = style.header_font)
+        R = rect_rel_scale(rect, G.header_size[0], G.header_size[1], 0, -1.0+G.header_align)
+        draw_str(cr, text = header, rect = R, stretch = -1, stroke_rgba = S.header, align = 2,
+             font = S.header_font)
     if footer:
-        R = rect_rel_scale(rect, geom.footer_size[0], geom.footer_size[1], 0, 1.0-geom.footer_align)
-        draw_str(cr, text = footer, rect = R, stretch = -1, stroke_rgba = style.footer, align = 2,
-             font = style.footer_font)
+        R = rect_rel_scale(rect, G.footer_size[0], G.footer_size[1], 0, 1.0-G.footer_align)
+        draw_str(cr, text = footer, rect = R, stretch = -1, stroke_rgba = S.footer, align = 2,
+             font = S.footer_font)
 
-def draw_month(cr, rect, month, year, theme, box_shadow = 0):
+def draw_month(cr, rect, month, year, theme):
     S,G = theme
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
@@ -57,6 +58,11 @@ def draw_month(cr, rect, month, year, theme, box_shadow = 0):
     # 61.8% - 38.2% split (golden)
     R_mb, R_db = rect_vsplit(grid.item_span(1, 7, 0, 0), 0.618)  # month name bar, day name bar
     R_dnc = HLayout(R_db, 7) # day name cells = 1/7-th of day name bar
+    
+    if S.month.box_shadow:
+        f = G.box_shadow_size
+        shad = (f,-f) if G.landscape else (f,f)
+        draw_shadow(cr, rect_from_origin(rect), shad)
     for col in range(7):
         R = R_dnc.item(col)
         draw_box(cr, rect = R, stroke_rgba = S.dom.frame,
@@ -70,8 +76,8 @@ def draw_month(cr, rect, month, year, theme, box_shadow = 0):
             day_style = S.dom_weekend if col >= 5 else S.dom
             R = grid.item(row + 1, col)
             if dom > 0 and dom <= cal[1]:
-                draw_day_cell(cr, rect = R, day_of_month = str(dom), header = None, footer = None,
-                              style = day_style, geom = G.dom)
+                draw_day_cell(cr, rect = R, day_of_month = str(dom), 
+                              header = None, footer = None, theme = (day_style, G.dom))
             else:
                 draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
                          width_scale = day_style.frame_thickness)
@@ -80,10 +86,13 @@ def draw_month(cr, rect, month, year, theme, box_shadow = 0):
     mcolor = S.month.color_map[month]
     mcolor_fg = color_auto_fg(mcolor)
     draw_box(cr, rect = rect_from_origin(rect), stroke_rgba = S.month.frame, fill_rgba = (),
-             width_scale = S.month.frame_thickness, shadow = box_shadow)
+             width_scale = S.month.frame_thickness)
     draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor)
     R_text = rect_rel_scale(R_mb, 1, 0.5)
+    mshad = None
+    if S.month.text_shadow:
+        mshad = (0.5,-0.5) if G.landscape else (0.5,0.5)
     draw_str(cr, text = calendar.month_name[month], rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
-             align = 2, font = S.month.font, measure = mmeasure, shadow = S.month.text_shadow)
+             align = 2, font = S.month.font, measure = mmeasure, shadow = mshad)
     cr.restore()
-        
+

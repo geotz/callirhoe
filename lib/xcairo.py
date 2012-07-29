@@ -26,6 +26,7 @@
 import cairo
 import math
 import random
+from geom import *
 
 class Page(object):
     def __init__(self, landscape = False, w = 210.0, h = 297.0, dpi = 72.0):
@@ -77,17 +78,28 @@ def apply_rect(cr, rect, sdx = 0.0, sdy = 0.0, srot = 0.0):
         cr.rotate((random.random() - 0.5)*srot)
         cr.translate(-w/2.0, -h/2.0)
 
-def draw_shadow(cr, rect, thickness, shadow_color = (0,0,0,0.3)):
-    if thickness <= 0: return
-    f = thickness
-    x, y, w, h = rect
-    cr.move_to(x + f, y + h)
-    cr.rel_line_to(0, f); cr.rel_line_to(w, 0); cr.rel_line_to(0, -h)
-    cr.rel_line_to(-f, 0); cr.rel_line_to(0, h - f); cr.rel_line_to(-w + f, 0);
+def draw_shadow(cr, rect, thickness = None, shadow_color = (0,0,0,0.3)):
+    if thickness is None: return
+    fx, fy = thickness
+    x1, y1, x3, y3 = rect_to_abs(rect)
+    x2, y2 = x1, y3
+    x4, y4 = x3, y1
+    u1, v1 = cr.user_to_device(x1,y1)
+    u2, v2 = cr.user_to_device(x2,y2)
+    u3, v3 = cr.user_to_device(x3,y3)
+    u4, v4 = cr.user_to_device(x4,y4)
+    u1 += fx; v1 += fy; u2 += fx; v2 += fy;
+    u3 += fx; v3 += fy; u4 += fx; v4 += fy;
+    x1, y1 = cr.device_to_user(u1, v1)
+    x2, y2 = cr.device_to_user(u2, v2)
+    x3, y3 = cr.device_to_user(u3, v3)
+    x4, y4 = cr.device_to_user(u4, v4)
+    cr.move_to(x1, y1)
+    cr.line_to(x2, y2); cr.line_to(x3, y3); cr.line_to(x4, y4)
     set_color(cr, shadow_color)
     cr.close_path(); cr.fill();
 
-def draw_box(cr, rect, stroke_rgba = (), fill_rgba = (), width_scale = 1.0, shadow = 0):
+def draw_box(cr, rect, stroke_rgba = (), fill_rgba = (), width_scale = 1.0, shadow = None):
     if (width_scale <= 0): return
     draw_shadow(cr, rect, shadow)
     x, y, w, h = rect
@@ -105,7 +117,7 @@ def draw_box(cr, rect, stroke_rgba = (), fill_rgba = (), width_scale = 1.0, shad
     cr.stroke()
 
 def draw_str(cr, text, rect, stretch = -1, stroke_rgba = (), align = 0, bbox = False,
-             font = "Times", measure = '', shadow = False):
+             font = "Times", measure = '', shadow = None):
     x, y, w, h = rect
     cr.save()
     slant = weight = 0
@@ -131,9 +143,12 @@ def draw_str(cr, text, rect, stretch = -1, stroke_rgba = (), align = 0, bbox = F
     elif align == 2: px, py = (bbw-tw)/2.0, 0
     else: px, py = 0, 0
     cr.set_line_width(default_width(cr))
-    if shadow:
+    if shadow is not None:
         cr.set_source_rgba(0, 0, 0, 0.5)
-        cr.move_to(px + default_width(cr, 5), py + default_width(cr, 5))
+        u1, v1 = cr.user_to_device(px, py)
+        u1 += shadow[0]; v1 += shadow[1]
+        x1, y1 = cr.device_to_user(u1, v1)
+        cr.move_to(x1, y1)
         cr.show_text(text)
     cr.move_to(px, py)
     if stroke_rgba: set_color(cr, stroke_rgba)

@@ -19,15 +19,15 @@
 # day of week
 class dow:
     fg = (0,0,1)
-    frame_thickness = 10.0
+    frame_thickness = 5.0
     frame = (0,0,0)
     font = "Arial"
     
 # day of month
 class dom:
     bg = (1,1,1)
-    frame = (0,0,0)
-    frame_thickness = 10.0
+    frame = (0.5,0.5,0.5)
+    frame_thickness = 5.0
     fg = (0.2,0.2,0.2)
     font = "GFS Bodoni"
     header = (0.5,0.5,0.5)
@@ -50,7 +50,7 @@ from lib.render import color_mix
 class month:    
     font = "GFS Artemisia Bold"
     frame = (0,0,0)
-    frame_thickness = 10.0
+    frame_thickness = 5.0
     bg = (1,1,1)
     winter = (0,0.4,1)
     spring = (0.0,0.5,0.0)

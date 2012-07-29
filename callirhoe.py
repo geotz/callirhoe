@@ -36,10 +36,7 @@
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-# Theme = (Style, Geometry)
-# fix func. args...
-
-_version = "0.1"
+_version = "0.1.12"
 
 import calendar
 import sys
@@ -221,11 +218,13 @@ else: cols = 3; rows = int(math.ceil(MonthSpan/3.0))
 R0,R1 = rect_vsplit(p.Text_rect, 0.05)
 Rcal,Rc = rect_vsplit(R1,0.97)
 if options.landscape: rows,cols = cols,rows
+Geometry.landscape = options.landscape
+Geometry.box_shadow_size = 5
+
 foo = GLayout(Rcal, rows, cols, pad = (p.Text_rect[2]*0.02,)*4)
-shad = p.Size[0]*0.01 if Style.month.box_shadow else 0
 for i in range(min(foo.count(),MonthSpan),0,-1):
     draw_month(p.cr, foo.item_seq(i-1), month=i+Month-1, year=Year, 
-               theme = (Style, Geometry), box_shadow = shad)
+               theme = (Style, Geometry))
 draw_str(p.cr, text = str(Year), rect = R0, stroke_rgba = (0,0,0,0.3), align = 2,
          font = (extract_font_name(Style.month.font),0,0))
 draw_str(p.cr, text = "rendered by Callirhoe ver. %s" % _version,
