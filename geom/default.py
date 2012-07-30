@@ -17,12 +17,17 @@
 # --- geom.default ---
 
 class dom:
-    num_size = (0.5,0.5)
+    size = (0.5,0.5,0.8,0.5)   # short 0-1, long 2-3
+    mw_split = (0.618,0.1)
+    
     header_size = footer_size = (0.8,0.1)
     header_align = 0.1
     footer_align = 0.15
+    hf_hsplit = (0.33,0.1)
+    hf_vsplit = (0.5,0.4)
     
 class month:
+    asymmetric = True
     sloppy_rot = 0
     sloppy_dx = 0
     sloppy_dy = 0

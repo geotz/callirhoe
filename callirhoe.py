@@ -36,7 +36,7 @@
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-_version = "0.1.12"
+_version = "0.1.13"
 
 import calendar
 import sys
@@ -213,16 +213,19 @@ if MonthSpan < 4: cols = 1; rows = MonthSpan
 elif MonthSpan < 9: cols = 2; rows = int(math.ceil(MonthSpan/2.0))
 else: cols = 3; rows = int(math.ceil(MonthSpan/3.0))
 
-# else x = floor(sqrt(span))... consider x*x, (x+1)*x, (x+1)*(x+1)
+# else x = floor(sqrt(span))... consider x^2, (x+1)*x, (x+1)^2
 
-R0,R1 = rect_vsplit(p.Text_rect, 0.05)
+R0,R1 = rect_vsplit(p.Text_rect, 0.05, 0.01)
 Rcal,Rc = rect_vsplit(R1,0.97)
 if options.landscape: rows,cols = cols,rows
 Geometry.landscape = options.landscape
-Geometry.box_shadow_size = 5
+Geometry.box_shadow_size = 6
 
-foo = GLayout(Rcal, rows, cols, pad = (p.Text_rect[2]*0.02,)*4)
+#rows = 1
+#cols = 6
+foo = GLayout(Rcal, rows, cols, pad = (p.Text_rect[2]*0.005,)*4)
 for i in range(min(foo.count(),MonthSpan),0,-1):
+#for i in range(1,min(foo.count(),MonthSpan)+1):
     draw_month(p.cr, foo.item_seq(i-1), month=i+Month-1, year=Year, 
                theme = (Style, Geometry))
 draw_str(p.cr, text = str(Year), rect = R0, stroke_rgba = (0,0,0,0.3), align = 2,

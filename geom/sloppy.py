@@ -16,13 +16,11 @@
 
 # --- geom.sloppy ---
 
-class dom:
-    num_size = (0.5,0.5)
-    header_size = footer_size = (0.8,0.1)
-    header_align = 0.1
-    footer_align = 0.15
+import default
 
-class month:
+class dom(default.dom): pass
+
+class month(default.month):
     sloppy_rot = 0.25
     sloppy_dx = 0
     sloppy_dy = 0

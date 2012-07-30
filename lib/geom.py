@@ -22,6 +22,9 @@
 #                                         #
 # *****************************************
 
+def rect_ratio(r):
+    return r[2]*1.0/r[3]
+
 def rect_rel_scale(r, fw, fh, align_x = 0, align_y = 0):
     x, y, w, h = r
     return (x + (align_x + 1.0)*w*(1 - fw)/2.0,
@@ -48,22 +51,19 @@ def rect_hull(r1,r2):
     x3, y3, x4, y4 = rect_to_abs(r2)
     return abs_to_rect((min(x1,x3), min(y1,y3), max(x2,x4), max(y2,y4)))
 
-def rect_hsplit(r, f = 0.5):
+def rect_hsplit(r, f = 0.5, fdist = 0.0):
     x, y, w, h = r
-    r1 = (x, y, w*f, h)
-    r2 =(x + w*f, y, w*(1 - f), h)
+    rw = w*(1.0 - fdist)
+    r1 = (x + w*fdist/3.0, y, rw*f, h)
+    r2 =(x + rw*f + w*fdist*2.0/3, y, rw*(1 - f), h)
     return (r1, r2)
 
-def rect_vsplit(r, f = 0.5):
+def rect_vsplit(r, f = 0.5, fdist = 0.0):
     x, y, w, h = r
-    r1 = (x, y, w, h*f)
-    r2 = (x, y + h*f, w, h*(1 - f))
+    rh = h*(1.0 - fdist)
+    r1 = (x, y + h*fdist/3.0, w, rh*f)
+    r2 = (x, y + rh*f + h*fdist*2.0/3, w, rh*(1 - f))
     return (r1, r2)
-
-def rect_qsplit(r, fv = 0.5, fh = 0.5):
-    x, y, w, h = r
-    rv = rect_vsplit(r, fv)
-    return rect_hsplit(rv[0], fh) + rect_hsplit(rv[1], fh)
 
 def color_mix(a, b, frac):
     k = min(len(a), len(b))
@@ -93,10 +93,7 @@ class VLayout(object):
         x, y, w, h = self.rect
         h *= 1.0/self.nitems
         y += i*h
-        t, l, b, r = self.pad
-        if i < self.nitems - 1: b *= 0.5
-        if i > 0: t *= 0.5
-        return rect_pad((x,y,w,h), (t,l,b,r))
+        return rect_pad((x,y,w,h), self.pad)
                 
     def item_span(self, n, k = -1):
         if k < 0: k = (self.count() - n) // 2
