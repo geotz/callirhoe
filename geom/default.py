@@ -18,7 +18,7 @@
 
 class dom:
     size = (0.5,0.5,0.8,0.5)   # short 0-1, long 2-3
-    mw_split = (0.618,0.1)
+    mw_split = (0.7,0.2)
     
     header_size = footer_size = (0.8,0.1)
     header_align = 0.1

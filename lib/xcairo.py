@@ -37,8 +37,7 @@ class Page(object):
             self.Size_mm = (h, w)
         self.Size = (self.Size_mm[0]/25.4 * self.DPI, self.Size_mm[1]/25.4 * self.DPI) # size in dots
         self._mag = 72.0/self.DPI;
-        self.Margins = (self.Size[1]*0.025, self.Size[0]*0.025, 
-                        self.Size[1]*0.025, self.Size[0]*0.025) # top left bottom right
+        self.Margins = (15,)*4 # 15 mm
         txs = (self.Size[0] - self.Margins[1] - self.Margins[3], 
                self.Size[1] - self.Margins[0] - self.Margins[2])
         self.Text_rect = (self.Margins[1], self.Margins[0], txs[0], txs[1])
@@ -116,8 +115,8 @@ def draw_box(cr, rect, stroke_rgba = (), fill_rgba = (), width_scale = 1.0, shad
         cr.set_line_width(default_width(cr, width_scale))
     cr.stroke()
 
-def draw_str(cr, text, rect, stretch = -1, stroke_rgba = (), align = 0, bbox = False,
-             font = "Times", measure = '', shadow = None):
+def draw_str(cr, text, rect, stretch = -1, stroke_rgba = (), align = (2,0), bbox = False,
+             font = "Times", measure = None, shadow = None):
     x, y, w, h = rect
     cr.save()
     slant = weight = 0
@@ -126,32 +125,41 @@ def draw_str(cr, text, rect, stretch = -1, stroke_rgba = (), align = 0, bbox = F
     elif len(font) == 2: fontname, slant = font
     elif len(font) == 1: fontname = font[0]
     cr.select_font_face(fontname, slant, weight)
-    if not measure: measure = text
+    if measure is None: measure = text
     te = cr.text_extents(measure)
-    tw, th = te[2], te[3]
-    cr.translate(x, y + h)
-    ratio, tratio = w*1.0/h, tw*1.0/th;
-    xratio, yratio = tw*1.0/w, th*1.0/h;
+    mw, mh = te[2], te[3]
+    ratio, tratio = w*1.0/h, mw*1.0/mh;
+    xratio, yratio = mw*1.0/w, mh*1.0/h;
     if stretch < 0: stretch = 1 if xratio >= yratio else 2
-    if stretch == 0: bbw, bbh = w, h;
-    elif stretch == 1: bbw, bbh = tw, tw/ratio; cr.scale(1.0/xratio, 1.0/xratio)
-    elif stretch == 2: bbw, bbh = th*ratio, th; cr.scale(1.0/yratio, 1.0/yratio)
-    elif stretch == 3: bbw, bbh = tw, th; cr.scale(1.0/xratio, 1.0/yratio)
+    if stretch == 0: crs = (1,1)
+    elif stretch == 1: crs = (1.0/xratio, 1.0/xratio)
+    elif stretch == 2: crs = (1.0/yratio, 1.0/yratio)
+    elif stretch == 3: crs = (1.0/xratio, 1.0/yratio)
     te = cr.text_extents(text)
     tw,th = te[2], te[3]
-    if align == 1: px, py = bbw - tw, 0
-    elif align == 2: px, py = (bbw-tw)/2.0, 0
-    else: px, py = 0, 0
+    tw *= crs[0]
+    th *= crs[1]
+    px, py = x, y + h
+    if align[0] == 1: px += w - tw
+    elif align[0] == 2: px += (w-tw)/2.0
+    if align[1] == 1: py -= h - th
+    elif align[1] == 2: py -= (h-th)/2.0
+    
     cr.set_line_width(default_width(cr))
+    cr.translate(px,py)
+    cr.scale(*crs)
     if shadow is not None:
         cr.set_source_rgba(0, 0, 0, 0.5)
-        u1, v1 = cr.user_to_device(px, py)
+        u1, v1 = cr.user_to_device(0, 0)
         u1 += shadow[0]; v1 += shadow[1]
         x1, y1 = cr.device_to_user(u1, v1)
         cr.move_to(x1, y1)
         cr.show_text(text)
-    cr.move_to(px, py)
+    cr.move_to(0, 0)
     if stroke_rgba: set_color(cr, stroke_rgba)
     cr.show_text(text)
-    if bbox: draw_box(cr, (0, 0, bbw, -bbh), stroke_rgba)
     cr.restore()
+    if bbox: 
+        draw_box(cr, (x, y, w, h), stroke_rgba)
+        #draw_box(cr, (x, y+h, mw*crs[0], -mh*crs[1]), stroke_rgba)
+        draw_box(cr, (px, py, tw, -th), stroke_rgba)

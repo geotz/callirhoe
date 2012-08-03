@@ -66,11 +66,13 @@ def rect_vsplit(r, f = 0.5, fdist = 0.0):
     return (r1, r2)
 
 def color_mix(a, b, frac):
-    k = min(len(a), len(b))
     return map(lambda (x,y): x*frac + y*(1 - frac), zip(a,b))
 
+def color_scale(a, frac):
+    return map(lambda x: min(1.0,x*frac), a)
+
 def color_auto_fg(bg, light = (1,1,1), dark = (0,0,0)):
-    return light if bg[0] + bg[1] + bg[2] < 1.5 else dark
+    return light if (1*bg[0] + 2*bg[1] + 3*bg[2])/6.0 < 0.24 else dark
 
 # ********* layout managers ***********
 

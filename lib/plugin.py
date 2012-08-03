@@ -41,5 +41,10 @@ def available_files(parent, dir, fmatch = ""):
 def plugin_list(cat):
     return available_files(plugin_path[0], cat) + available_files(plugin_path[1], cat)
 
+# cat = lang   (category)
+# longcat = language
+# longcat2 = languages
+# listopt = --list-lang
+# preset = "EN"
 
 plugin_path = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]

@@ -45,7 +45,7 @@ class dom_holiday(dom):
 class dom_weekend_holiday_style(dom_holiday):
     bg = (0.7,1,1)
 
-from lib.render import color_mix
+from lib.geom import color_mix
 
 class month:    
     font = "GFS Artemisia Bold"

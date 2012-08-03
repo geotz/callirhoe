@@ -19,15 +19,15 @@
 
 # TODO:
 
-# maybe add warning when last arg looks like an int
 # allow /usr/bin/date-like formatting %x... 
 # improve file matching with __init__ when lang known
-# wrap around years
+# odd/even year coloring
+# fix message style not found --> could not load...
+# auto-landscape ? should aim for matrix or bars?
 # optparse ... --version, epilog with examples
 # python source documentation
-# .callirhoe/config : default values for plugins (styles/templates/lang...)
-# RENDER: 
-# implement GEOMETRY, STYLE, DATA SOURCES...
+# .callirhoe/config : default values for plugins (styles/layouts/lang...)
+# implement DATA SOURCES
 
 # styles and geometries could be merged, css-like
 # then we can apply a chain of --style a --style b ...
@@ -36,23 +36,15 @@
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-_version = "0.1.13"
+_version = "0.2.0.r14"
 
 import calendar
 import sys
 import time
 import optparse
 
-from lib.xcairo import *
-from lib.render import *
 from lib.plugin import *
-
-# cat = lang   (category)
-# longcat = language
-# longcat2 = languages
-# listopt = --list-lang
-# preset = "EN"
-# TODO: CHECK WHY CANNOT BE MOVED INTO lib.plugin, maybe needs ".."
+# TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
 def import_plugin(cat, longcat, longcat2, listopt, preset):
     try:
         found = available_files(plugin_path[0], cat, preset) + available_files(plugin_path[1], cat, preset)
@@ -74,8 +66,10 @@ parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SP
        "or for SPAN months.", version="callirhoe " + _version)
 parser.add_option("-l", "--lang",  dest="lang", default="EN",
                 help="choose language [EN]")
-parser.add_option("-t", "--template",  dest="template", default="tiles",
-                help="choose template [tiles]")
+parser.add_option("-t", "--layout",  dest="layout", default="classic",
+                help="choose layout [classic]")
+parser.add_option("-H", "--layout-help",  dest="layouthelp", action="store_true", default=False,
+                help="show layout-specific help")
 parser.add_option("-s", "--style",  dest="style", default="default",
                 help="choose style [default]")
 parser.add_option("-g", "--geometry",  dest="geom", default="default",
@@ -86,7 +80,7 @@ parser.add_option("--landscape", action="store_true", dest="landscape", default=
 def add_list_option(parser, opt):
     parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
                        help="list available %s" % opt)
-for x in ["languages", "templates", "styles", "geometries"]:
+for x in ["languages", "layouts", "styles", "geometries"]:
     add_list_option(parser, x)
 
 parser.add_option("--lang-var", action="append", dest="lang_assign",
@@ -96,10 +90,14 @@ parser.add_option("--style-var", action="append", dest="style_assign",
 parser.add_option("--geom-var", action="append", dest="geom_assign",
                 help="modify a geometry variable")
 
-#for x in sys.argv:
-#    if x[0] == '-' and not parser.has_option(x):
-#        print "possibly bad option", x
-# ./callirhoe --lang fr year=2010 months=1-6 foo.pdf
+argv1 = []
+argv2 = []
+for x in sys.argv:
+     if x[0] == '-' and not parser.has_option(x):
+         argv2.append(x)
+     else:
+         argv1.append(x)
+sys.argv = argv1
         
 (options,args) = parser.parse_args()
 
@@ -112,19 +110,36 @@ if options.list_styles:
 if options.list_geometries:
     for x in plugin_list("geom"): print x[0],
     print
-if options.list_templates:
-    for x in plugin_list("templates"): print x[0],
+if options.list_layouts:
+    for x in plugin_list("layouts"): print x[0],
     print
 if (options.list_languages or options.list_styles or
-    options.list_geometries or options.list_templates): sys.exit(0)    
-
-if len(args) < 1 or len(args) > 3:
-    parser.print_help()
-    sys.exit(0)
+    options.list_geometries or options.list_layouts): sys.exit(0)    
 
 Language = import_plugin("lang", "language", "languages", "--list-languages", options.lang)
 Style = import_plugin("style", "style", "styles", "--list-styles", options.style)
 Geometry = import_plugin("geom", "geometry", "geometries", "--list-geometries", options.geom)
+Layout = import_plugin("layouts", "layout", "layouts", "--list-layouts", options.layout)
+
+for x in argv2:
+    if '=' in x: x = x[0:x.find('=')]
+    if not Layout.parser.has_option(x):
+        parser.error("invalid option %s; use --help (-h) or --layout-help (-H) to see available options" % x)
+
+(Layout.options,largs) = Layout.parser.parse_args(argv2)
+if options.layouthelp:
+    #print "Help for layout:", options.layout
+    Layout.parser.print_help()
+    sys.exit(0)
+
+
+# we can put it separately together with Layout; but we load Layout *after* lang,style,geom
+if len(args) < 1 or len(args) > 3:
+    parser.print_help()
+    sys.exit(0)
+
+if (len(args[-1]) == 4 and args[-1].isdigit()):
+    print "WARNING: file name '%s' looks like a year, writing anyway..." % args[-1]
 
 # the usual "beware of exec()" crap applies here... but come on, 
 # this is a SCRIPTING language, you can always hack the source code!!!
@@ -192,44 +207,7 @@ elif len(args) == 3:
     Year = parse_year(args[1])
     Outfile = args[2]
 
-p = PDFPage(Outfile, options.landscape)
-
-
-#1   1   1
-#2   2   1
-#3   3   1
-
-#4   2   2
-#5   3   2
-#6   3   2
-#7   4   2
-#8   4   2
-
-#9   3   3
-#10  4   3
-#11  4   3
-#12  4   3
-if MonthSpan < 4: cols = 1; rows = MonthSpan
-elif MonthSpan < 9: cols = 2; rows = int(math.ceil(MonthSpan/2.0))
-else: cols = 3; rows = int(math.ceil(MonthSpan/3.0))
-
-# else x = floor(sqrt(span))... consider x^2, (x+1)*x, (x+1)^2
-
-R0,R1 = rect_vsplit(p.Text_rect, 0.05, 0.01)
-Rcal,Rc = rect_vsplit(R1,0.97)
-if options.landscape: rows,cols = cols,rows
 Geometry.landscape = options.landscape
-Geometry.box_shadow_size = 6
 
-#rows = 1
-#cols = 6
-foo = GLayout(Rcal, rows, cols, pad = (p.Text_rect[2]*0.005,)*4)
-for i in range(min(foo.count(),MonthSpan),0,-1):
-#for i in range(1,min(foo.count(),MonthSpan)+1):
-    draw_month(p.cr, foo.item_seq(i-1), month=i+Month-1, year=Year, 
-               theme = (Style, Geometry))
-draw_str(p.cr, text = str(Year), rect = R0, stroke_rgba = (0,0,0,0.3), align = 2,
-         font = (extract_font_name(Style.month.font),0,0))
-draw_str(p.cr, text = "rendered by Callirhoe ver. %s" % _version,
-         rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = 0, align = 1,
-         font = (extract_font_name(Style.month.font),1,0))
+Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), _version)
+

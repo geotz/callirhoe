@@ -47,8 +47,6 @@ class dom_holiday(dom):
 class dom_weekend_holiday_style(dom_holiday):
     bg = (0,0,0)
 
-from lib.render import color_mix
-
 class month:    
     font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
