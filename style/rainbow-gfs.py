@@ -14,52 +14,35 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- style.screenshot ---
+# --- style.rainbow ---
 
 # day of week
-class dow:
-    fg = (0,0,1)
-    frame_thickness = 5.0
-    frame = (0,0,0)
-    font = "Arial"
+
+import gfs
+
+class dow(gfs.dow): pass
     
 # day of month
-class dom:
-    bg = (1,1,1)
-    frame = (0.5,0.5,0.5)
-    frame_thickness = 5.0
-    fg = (0.2,0.2,0.2)
-    font = "GFS Bodoni"
-    header = (0.5,0.5,0.5)
-    footer = header
-    header_font = footer_font = "Arial"
+class dom(gfs.dom): pass
 
-class dom_weekend(dom):
-    bg = (0.7,1,1)
-    fg = (0,0,1)
+class dom_weekend(gfs.dom_weekend): pass 
 
-class dom_holiday(dom):
-    fg = (1,0,0)
-    header = (1,0,0)
+class dom_holiday(gfs.dom_holiday): pass
     
-class dom_weekend_holiday_style(dom_holiday):
-    bg = (0.7,1,1)
+class dom_weekend_holiday_style(gfs.dom_weekend_holiday_style): pass
 
-from lib.geom import color_mix
+from lib.geom import color_mix, color_scale, color_auto_fg
 
-class month:    
-    font = "GFS Artemisia Bold"
-    frame = (0,0,0)
-    frame_thickness = 5.0
-    bg = (1,1,1)
-    winter = (0,0.4,1)
-    spring = (0.0,0.5,0.0)
+class month(gfs.month):
+    winter = (0,0.5,1)
+    spring = (0.0,0.7,0.0)
     summer = (1,0.3,0)
     autumn = (0.9,0.9,0)
-    color_map = ((0,0,0), winter,
+    _c1 = ((0,0,0), winter,
         color_mix(winter,spring,0.66), color_mix(winter,spring,0.33), spring, # april
         color_mix(spring,summer,0.66), color_mix(spring,summer,0.33), summer, # july
         color_mix(summer,autumn,0.66), color_mix(summer,autumn,0.33), autumn, # october
         color_mix(autumn,winter,0.66), color_mix(autumn,winter,0.33)) # december
-    text_shadow = True
-    box_shadow = True
+    color_map_bg = (map(lambda x: color_scale(x, 0.5), _c1), _c1)
+    color_map_fg = (((1,1,1),)*13, ((0,0,0),)*13)
+#                    map(lambda x: color_auto_fg(x), color_map_bg[1]

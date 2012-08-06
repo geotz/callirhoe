@@ -19,15 +19,15 @@
 # day of week
 class dow:
     fg = (0,0,1)
-    frame_thickness = 1.0
-    frame = (0.8,0.8,0.8)
+    frame_thickness = 0.1
+    frame = (0.75,0.75,0.75)
     font = "Arial"
     
 # day of month
 class dom:
     bg = (1,1,1)
-    frame = (0.8,0.8,0.8)
-    frame_thickness = 1.0
+    frame = (0.75,0.75,0.75)
+    frame_thickness = 0.1
     fg = (0.2,0.2,0.2)
     font = "Times New Roman"
     header = (0.5,0.5,0.5)
@@ -45,21 +45,14 @@ class dom_holiday(dom):
 class dom_weekend_holiday_style(dom_holiday):
     bg = (0.7,1,1)
 
-from lib.geom import color_mix
-
 class month:    
     font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
-    frame_thickness = 2.0
+    frame_thickness = 0.2
     bg = (1,1,1)
-    winter = (0,0.4,1)
-    spring = (0.0,0.5,0.0)
-    summer = (1,0.3,0)
-    autumn = (0.9,0.9,0)
-    color_map = ((0,0,0), winter,
-        color_mix(winter,spring,0.66), color_mix(winter,spring,0.33), spring, # april
-        color_mix(spring,summer,0.66), color_mix(spring,summer,0.33), summer, # july
-        color_mix(summer,autumn,0.66), color_mix(summer,autumn,0.33), autumn, # october
-        color_mix(autumn,winter,0.66), color_mix(autumn,winter,0.33)) # december
     text_shadow = True
+    text_shadow_size = 0.2
     box_shadow = True
+    box_shadow_size = 2
+    color_map_bg = (((.1,.3,.6),)*13,((.1,.5,.6),)*13)
+    color_map_fg = (((1,1,1),)*13,((1,1,1),)*13)

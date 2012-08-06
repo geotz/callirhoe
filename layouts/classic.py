@@ -22,21 +22,21 @@ from lib.geom import *
 from math import floor, ceil, sqrt
 import calendar
 import optparse
+import sys
 
 parser = optparse.OptionParser(usage="%prog (...) --layout classic [options] (...)",add_help_option=False)
-parser.add_option("--rows", type="int", default=0, help="force grid rows [0]")
+parser.add_option("--rows", type="int", default=0, help="force grid rows [%default]")
 parser.add_option("--cols", type="int", default=0, 
-                  help="force grid columns [0]; if ROWS and COLS are both non-zero, "
+                  help="force grid columns [%default]; if ROWS and COLS are both non-zero, "
                   "calendar will span multiple pages as needed; if one value is zero, it "
                   "will be computed automatically in order to fill exactly 1 page")
-parser.add_option("--padding", type="float", default=4, help="padding (in mm) around month boxes [4]")
 parser.add_option("--grid-order", choices=["row","column"],default="row",
-                  help="either 'row' or 'column' to set grid placing order row-wise or column-wise [row]")
+                  help="either `row' or `column' to set grid placing order row-wise or column-wise [%default]")
 parser.add_option("--z-order", choices=["auto", "increasing", "decreasing"], default="auto",
-                  help="either 'increasing' or 'decreasing' to set whether next month (in grid order) "
+                  help="either `increasing' or `decreasing' to set whether next month (in grid order) "
                   "lies above or below the previously drawn month; this affects shadow casting, "
-                  "since rendering is always performed in increasing z-order; specifying 'auto' "
-                  "selects increasing order if and only if sloppy boxes are enabled [auto]")
+                  "since rendering is always performed in increasing z-order; specifying `auto' "
+                  "selects increasing order if and only if sloppy boxes are enabled [%default]")
 parser.add_option("--month-with-year", action="store_true", default=False, 
                   help="displays year together with month name, e.g. January 1980; suppresses year from footer line")
 parser.add_option("--long-daycells", action="store_const", const=0.0, dest="short_daycell_ratio",
@@ -48,11 +48,27 @@ parser.add_option("--bar", action="store_const", const=1.0e6, dest="month_bar_ra
 parser.add_option("--matrix", action="store_const", const=0, dest="month_bar_ratio",
                   help="force month drawing in matrix mode")
 parser.add_option("--short-daycell-ratio", type="float", default=2.5,
-                  help="ratio threshold for day cells below which short version is drawn [2.5]")
+                  help="ratio threshold for day cells below which short version is drawn [%default]")
 parser.add_option("--month-bar-ratio", type="float", default=0.7,
-                  help="ratio threshold for month box, below which bar is drawn [0.7]")
+                  help="ratio threshold for month box, below which bar is drawn [%default]")
 parser.add_option("--no-footer", action="store_true", default=False,
                   help="disable footer line (with year and rendered-by message)")
+parser.add_option("--symmetric", action="store_true", default=False,
+                  help="force symmetric mode (equivalent to --geom-var=month.symmetric=1). "
+                  "In symmetric mode, day cells are equally sized and all month boxes contain "
+                  "the same number of (possibly empty) cells, independently of how many days or "
+                  "weeks per month. In asymmetric mode, empty rows are eliminated, by slightly "
+                  "resizing day cells, in order to have uniform month boxes.")
+parser.add_option("--padding", type="float", default=None,
+                  help="set month box padding (equivalent to --geom-var=month.padding=PADDING); "
+                  "month bars look better with smaller padding, while matrix mode looks better with "
+                  "larger padding")
+parser.add_option("--no-shadow", action="store_true", default=None,
+                  help="disable box shadows")
+parser.add_option("--opaque", action="store_true", default=False,
+                  help="make background opaque (white fill)")
+parser.add_option("--swap-colors", action="store_true", default=None,
+                  help="swap month colors for even/odd years")
 
 
 def weekrows_of_month(year, month):
@@ -66,7 +82,7 @@ def _draw_day_cell_short(cr, rect, day, header, footer, theme, show_day_name):
     S,G = theme
     x, y, w, h = rect
     day_of_month, day_of_week = day
-    draw_box(cr, rect, S.frame, S.bg, S.frame_thickness)
+    draw_box(cr, rect, S.frame, S.bg, mm_to_dots(S.frame_thickness))
     R = rect_rel_scale(rect, G.size[0], G.size[1])
     if show_day_name:
         Rdom, Rdow = rect_hsplit(R, *G.mw_split)
@@ -93,7 +109,7 @@ def _draw_day_cell_long(cr, rect, day, header, footer, theme, show_day_name):
     S,G = theme
     x, y, w, h = rect
     day_of_month, day_of_week = day
-    draw_box(cr, rect, S.frame, S.bg, S.frame_thickness)
+    draw_box(cr, rect, S.frame, S.bg, mm_to_dots(S.frame_thickness))
     R1, Rhf = rect_hsplit(rect, *G.hf_hsplit)
     if show_day_name:
         R = rect_rel_scale(R1, G.size[2], G.size[3])
@@ -130,19 +146,20 @@ def draw_month_matrix(cr, rect, month, year, theme, daycell_thres):
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
     day, span = calendar.monthrange(year, month)
-    weekrows = weekrows_of_month(year, month) if G.month.asymmetric else 6
+    weekrows = 6 if G.month.symmetric else weekrows_of_month(year, month)
     dom = -day + 1;
     wmeasure = 'A'*max(map(len,calendar.day_name))
     mmeasure = 'A'*max(map(len,calendar.month_name))
     
-    grid = GLayout(rect_from_origin(rect), weekrows+1, 7)
+    grid = GLayout(rect_from_origin(rect), 7, 7)
     # 61.8% - 38.2% split (golden)
     R_mb, R_db = rect_vsplit(grid.item_span(1, 7, 0, 0), 0.618)  # month name bar, day name bar
     R_dnc = HLayout(R_db, 7) # day name cells = 1/7-th of day name bar
+    dom_grid = GLayout(grid.item_span(6, 7, 1, 0), weekrows, 7)
     
     # draw box shadow
     if S.month.box_shadow:
-        f = G.box_shadow_size
+        f = S.month.box_shadow_size
         shad = (f,-f) if G.landscape else (f,f)
         draw_shadow(cr, rect_from_origin(rect), shad)
         
@@ -151,7 +168,7 @@ def draw_month_matrix(cr, rect, month, year, theme, daycell_thres):
         R = R_dnc.item(col)
         draw_box(cr, rect = R, stroke_rgba = S.dom.frame,
                  fill_rgba = S.dom.bg if col < 5 else S.dom_weekend.bg,
-                 width_scale = S.dow.frame_thickness)
+                 stroke_width = mm_to_dots(S.dow.frame_thickness))
         R_text = rect_rel_scale(R, 1, 0.5)
         draw_str(cr, text = calendar.day_name[col], rect = R_text, stretch = -1, stroke_rgba = S.dow.fg,
                  align = (2,0), font = S.dow.font, measure = wmeasure)
@@ -160,28 +177,28 @@ def draw_month_matrix(cr, rect, month, year, theme, daycell_thres):
     for row in range(weekrows):
         for col in range(7):
             day_style = S.dom_weekend if col >= 5 else S.dom
-            R = grid.item(row + 1, col)
+            R = dom_grid.item(row, col)
             if dom > 0 and dom <= span:
                 draw_day_cell(cr, rect = R, day = (dom, col), 
                               header = None, footer = None, theme = (day_style, G.dom), show_day_name = False,
                               short_thres = daycell_thres)
             else:
                 draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
-                         width_scale = day_style.frame_thickness)
+                         stroke_width = mm_to_dots(day_style.frame_thickness))
             dom += 1
             
     # draw month title (name)
-    mcolor = S.month.color_map[month]
-#    if year % 2 == 1: mcolor = color_scale(mcolor, 0.75)
-#    else: mcolor = color_scale(mcolor, 1.33)
-    mcolor_fg = color_auto_fg(mcolor)
+    mcolor = S.month.color_map_bg[year%2][month]
+    mcolor_fg = S.month.color_map_fg[year%2][month]
+    draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor,
+             stroke_width = mm_to_dots(S.month.frame_thickness)) # title box
     draw_box(cr, rect = rect_from_origin(rect), stroke_rgba = S.month.frame, fill_rgba = (),
-             width_scale = S.month.frame_thickness)
-    draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor)
+             stroke_width = mm_to_dots(S.month.frame_thickness)) # full box
     R_text = rect_rel_scale(R_mb, 1, 0.5)
     mshad = None
     if S.month.text_shadow:
-        mshad = (0.5,-0.5) if G.landscape else (0.5,0.5)
+        f = S.month.text_shadow_size
+        mshad = (f,-f) if G.landscape else (f,f)
     title_str = calendar.month_name[month]
     if options.month_with_year: title_str += ' ' + str(year)
     draw_str(cr, text = title_str, rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
@@ -196,38 +213,41 @@ def draw_month_bar(cr, rect, month, year, theme, daycell_thres):
     wmeasure = 'A'*max(map(len,calendar.day_name))
     mmeasure = 'A'*max(map(len,calendar.month_name))
     
-    rows = (span + 1) if G.month.asymmetric else 32 
-    grid = VLayout(rect_from_origin(rect), rows)
+    rows = 31 if G.month.symmetric else span 
+    grid = VLayout(rect_from_origin(rect), 32) # title bar always symmetric
+    dom_grid = VLayout(grid.item_span(31,1), rows)
 
     # draw box shadow    
     if S.month.box_shadow:
-        f = G.box_shadow_size
+        f = S.month.box_shadow_size
         shad = (f,-f) if G.landscape else (f,f)
         draw_shadow(cr, rect_from_origin(rect), shad)
         
     # draw day cells
-    for dom in range(1,rows):
+    for dom in range(1,rows+1):
         day_style = S.dom_weekend if day >= 5 and dom <= span else S.dom
-        R = grid.item(dom)
+        R = dom_grid.item(dom-1)
         if dom <= span:
             draw_day_cell(cr, rect = R, day = (dom, day), header = None, footer = None, 
                           theme = (day_style, G.dom), show_day_name = True, short_thres = daycell_thres)
         else:
             draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
-                     width_scale = day_style.frame_thickness)
+                     stroke_width = mm_to_dots(day_style.frame_thickness))
         day = (day + 1) % 7
         
     # draw month title (name)
-    mcolor = S.month.color_map[month]
-    mcolor_fg = color_auto_fg(mcolor)
-    draw_box(cr, rect = rect_from_origin(rect), stroke_rgba = S.month.frame, fill_rgba = (),
-             width_scale = S.month.frame_thickness)
+    mcolor = S.month.color_map_bg[year%2][month]
+    mcolor_fg = S.month.color_map_fg[year%2][month]
     R_mb = grid.item(0)
-    draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor)
+    draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor,
+             stroke_width = mm_to_dots(S.month.frame_thickness)) # title box
+    draw_box(cr, rect = rect_from_origin(rect), stroke_rgba = S.month.frame, fill_rgba = (),
+             stroke_width = mm_to_dots(S.month.frame_thickness)) # full box
     R_text = rect_rel_scale(R_mb, 1, 0.5)
     mshad = None
     if S.month.text_shadow:
-        mshad = (0.5,-0.5) if G.landscape else (0.5,0.5)
+        f = S.month.text_shadow_size
+        mshad = (f,-f) if G.landscape else (f,f)
     draw_str(cr, text = calendar.month_name[month], rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
              align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
     cr.restore()
@@ -258,10 +278,23 @@ def draw_month(cr, rect, month, year, theme, bar_thres = 0.7, daycell_thres = 2.
 
 def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, version_string):
     S,G = Theme
-    G.box_shadow_size = 6
     rows, cols = options.rows, options.cols
 
-    page = PDFPage(Outfile, G.landscape)
+    if options.symmetric:
+        G.month.symmetric = True
+    if options.padding is not None:
+        G.month.padding = options.padding
+    if options.no_shadow == True:
+        S.month.box_shadow = False
+    if options.swap_colors:
+        S.month.color_map_bg = (S.month.color_map_bg[1], S.month.color_map_bg[0]) 
+        S.month.color_map_fg = (S.month.color_map_fg[1], S.month.color_map_fg[0]) 
+        
+    try:
+        page = PageWriter(Outfile, G.landscape, G.pagespec, G.border, not options.opaque)
+    except InvalidFormat as e:
+        print >> sys.stderr, "invalid output format", e.args[0]
+        sys.exit(1)
     
     if rows == 0 and cols == 0:
 #        if MonthSpan < 4: 
@@ -280,15 +313,16 @@ def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, version_string):
         rows = int(ceil(MonthSpan*1.0/cols))
     elif cols == 0:
         cols = int(ceil(MonthSpan*1.0/rows))
+    G.landscape = page.landscape  # PNG is pseudo-landscape (portrait with width>height)
     
     if not options.no_footer:
         V0 = VLayout(page.Text_rect, 40, (1,)*4)
         Rcal = V0.item_span(39,0)
-        Rc = V0.item(39)
+        Rc = rect_rel_scale(V0.item(39),1,0.5,0,0)
     else:
         Rcal = page.Text_rect
 
-    grid = GLayout(Rcal, rows, cols, pad = (options.padding,)*4)
+    grid = GLayout(Rcal, rows, cols, pad = (mm_to_dots(G.month.padding),)*4)
     mpp = grid.count() # months per page
     num_pages = int(ceil(MonthSpan*1.0/mpp))
     cur_month = Month
@@ -325,12 +359,13 @@ def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, version_string):
             if (y > yy[-1]): yy.append(y)
         if not options.month_with_year and not options.no_footer:
             year_str = str(yy[0]) if yy[0] == yy[-1] else "%s – %s" % (yy[0],yy[-1])
-            draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = 0, 
+            draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = -1, 
                      align = (0,0), font = (extract_font_name(S.month.font),0,0))
         if not options.no_footer:
             draw_str(page.cr, text = "rendered by Callirhoe ver. %s" % version_string,
-                     rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = 0, align = (1,0),
+                     rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = -1, align = (1,0),
                      font = (extract_font_name(S.month.font),1,0))
         num_pages_written += 1
+        page.end_page()
         if num_pages_written < num_pages:
-            page.cr.show_page()
+            page.new_page()

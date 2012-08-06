@@ -19,64 +19,105 @@
 
 # TODO:
 
+# allow to change background color (fill), other than white
+# mobile themes (e.g. 800x480)
+# photo support
+# implement DATA SOURCES
+# python source documentation
+# .callirhoe/config : default values for plugins (styles/layouts/lang...) and cmdline
+
+# MAYBE-TODO:
+# auto-landscape? should aim for matrix or bars?
 # allow /usr/bin/date-like formatting %x... 
 # improve file matching with __init__ when lang known
-# odd/even year coloring
-# fix message style not found --> could not load...
-# auto-landscape ? should aim for matrix or bars?
-# optparse ... --version, epilog with examples
-# python source documentation
-# .callirhoe/config : default values for plugins (styles/layouts/lang...)
-# implement DATA SOURCES
-
 # styles and geometries could be merged, css-like
-# then we can apply a chain of --style a --style b ...
-# and b inherits from a and so on
-# however, this would require dynamically creating a class that inherits from others...
+#  then we can apply a chain of --style a --style b ...
+#  and b inherits from a and so on
+#  however, this would require dynamically creating a class that inherits from others...
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-_version = "0.2.0.r14"
+_version = "0.2.1.r15"
 
 import calendar
 import sys
 import time
 import optparse
+import lib.xcairo as xcairo
 
 from lib.plugin import *
 # TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
 def import_plugin(cat, longcat, longcat2, listopt, preset):
     try:
         found = available_files(plugin_path[0], cat, preset) + available_files(plugin_path[1], cat, preset)
-        if len(found) == 0: raise ImportError
+        if len(found) == 0: raise IOError
         old = sys.path[0];
         sys.path[0] = found[0][1]
         m = __import__("%s.%s" % (cat,preset), globals(), locals(), [ "*" ])
         sys.path[0] = old
         return m
+    except IOError:
+        print >> sys.stderr, "%s definition `%s' not found, use %s to see available definitions" % (longcat,
+                               preset,listopt)
+        sys.exit(1)
     except ImportError:
-        print >> sys.stderr, "%s definition `%s' not found, use %s to see available %s" % (longcat,
-                               preset,listopt,longcat2)
+        print >> sys.stderr, "error loading %s definition `%s'" % (longcat, preset)
         sys.exit(1)
 
 parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE", 
-       description="High quality calendar rendering with vector graphics. "
-       "By default, a calendar of the current year in pdf format is written to FILE. Alternatively, you can "
-       " select a specific YEAR (0=current), and a month range from MONTH (0-12,0=current) to MONTH2 "
-       "or for SPAN months.", version="callirhoe " + _version)
+       description="""High quality calendar rendering with vector graphics.
+By default, a calendar of the current year in pdf format is written to FILE.
+Alternatively, you can select a specific YEAR (0=current), 
+and a month range from MONTH (0-12, 0=current) to MONTH2 or for SPAN months.
+""", version="callirhoe " + _version)
 parser.add_option("-l", "--lang",  dest="lang", default="EN",
-                help="choose language [EN]")
+                help="choose language [%default]")
 parser.add_option("-t", "--layout",  dest="layout", default="classic",
-                help="choose layout [classic]")
+                help="choose layout [%default]")
 parser.add_option("-H", "--layout-help",  dest="layouthelp", action="store_true", default=False,
                 help="show layout-specific help")
+parser.add_option("--examples", dest="examples", action="store_true",
+                help="display some usage examples")
 parser.add_option("-s", "--style",  dest="style", default="default",
-                help="choose style [default]")
+                help="choose style [%default]")
 parser.add_option("-g", "--geometry",  dest="geom", default="default",
-                help="choose geometry [default]")
+                help="choose geometry [%default]")
 parser.add_option("--landscape", action="store_true", dest="landscape", default=False,
                 help="landscape mode")
-                
+parser.add_option("--dpi", type="float", default=72.0,
+                help="set DPI (for raster output) [%default]")
+parser.add_option("--paper", default="a4",
+                help="set paper type; PAPER can be an ISO paper type (a0..a9) or of the "
+                "form W:H; positive values correspond to W or H mm, negative values correspond to "
+                "-W or -H pixels [%default]")
+parser.add_option("--border", type="float", default=3,
+                help="set border size (in mm) [%default]")
+
+def print_examples():
+    print """Examples:
+
+Create a calendar of the current year (by default in a 4x3 grid):
+    $ callirhoe my_calendar.pdf 
+
+Same as above, but in landscape mode (3x4):
+    $ callirhoe --landscape my_calendar.pdf 
+
+Forcing 1 row only, we get month bars instead of boxes:
+    $ callirhoe --landscape --rows=1 my_calendar.pdf
+    
+Calendar of 24 consecutive months, starting from current month:
+    $ callirhoe 0:24 0 my_calendar.pdf
+    
+Create a 600-dpi PNG file so that we can edit it with some effects and print an A3 poster:
+    $ callirhoe my_poster.png --paper=a3 --dpi=600 --opaque
+
+Create a calendar as a full-hd wallpaper (1920x1080):
+    $ callirhoe wallpaper.png --paper=-1920:-1080 --opaque --rows=3 --no-shadow -s rainbow-gfs
+and do some magick with ImageMagick! ;)
+    $ convert wallpaper.png -negate fancy.png
+    
+"""
+
 def add_list_option(parser, opt):
     parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
                        help="list available %s" % opt)
@@ -93,7 +134,8 @@ parser.add_option("--geom-var", action="append", dest="geom_assign",
 argv1 = []
 argv2 = []
 for x in sys.argv:
-     if x[0] == '-' and not parser.has_option(x):
+     y = x[0:x.find('=')] if '=' in x else x 
+     if x[0] == '-' and not parser.has_option(y):
          argv2.append(x)
      else:
          argv1.append(x)
@@ -132,14 +174,17 @@ if options.layouthelp:
     Layout.parser.print_help()
     sys.exit(0)
 
+if options.examples:
+    print_examples()
+    sys.exit(0)
 
 # we can put it separately together with Layout; but we load Layout *after* lang,style,geom
 if len(args) < 1 or len(args) > 3:
     parser.print_help()
     sys.exit(0)
 
-if (len(args[-1]) == 4 and args[-1].isdigit()):
-    print "WARNING: file name '%s' looks like a year, writing anyway..." % args[-1]
+#if (len(args[-1]) == 4 and args[-1].isdigit()):
+#    print "WARNING: file name `%s' looks like a year, writing anyway..." % args[-1]
 
 # the usual "beware of exec()" crap applies here... but come on, 
 # this is a SCRIPTING language, you can always hack the source code!!!
@@ -208,6 +253,8 @@ elif len(args) == 3:
     Outfile = args[2]
 
 Geometry.landscape = options.landscape
+xcairo.XDPI = options.dpi
+Geometry.pagespec = options.paper
+Geometry.border = options.border
 
 Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), _version)
-

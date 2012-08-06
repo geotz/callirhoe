@@ -27,7 +27,10 @@ class dom:
     hf_vsplit = (0.5,0.4)
     
 class month:
-    asymmetric = True
+    symmetric = False
     sloppy_rot = 0
     sloppy_dx = 0
     sloppy_dy = 0
+    padding = 1.5
+
+#class page:
