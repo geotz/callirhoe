@@ -108,12 +108,12 @@ Forcing 1 row only, we get month bars instead of boxes:
 Calendar of 24 consecutive months, starting from current month:
     $ callirhoe 0:24 0 my_calendar.pdf
     
-Create a 600-dpi PNG file so that we can edit it with some effects and print an A3 poster:
+Create a 600-dpi PNG file so that we can edit it with some effects in order to print an A3 poster:
     $ callirhoe my_poster.png --paper=a3 --dpi=600 --opaque
 
 Create a calendar as a full-hd wallpaper (1920x1080):
     $ callirhoe wallpaper.png --paper=-1920:-1080 --opaque --rows=3 --no-shadow -s rainbow-gfs
-and do some magick with ImageMagick! ;)
+and do some magic with ImageMagick! ;)
     $ convert wallpaper.png -negate fancy.png
     
 """
