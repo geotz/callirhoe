@@ -38,6 +38,9 @@ def page_spec(spec = None):
     if len(spec) == 2 and spec[0].lower() == 'a':
         k = int(spec[1])
         return (ISOPAGE[k+1], ISOPAGE[k])
+    if len(spec) == 3 and spec[0].lower() == 'a' and spec[2].lower() == 'w':
+        k = int(spec[1])
+        return (ISOPAGE[k], ISOPAGE[k+1])
     if ':' in spec:
         s = spec.split(':')
         w, h = float(s[0]), float(s[1])

@@ -21,7 +21,7 @@ class dom:
     mw_split = (0.7,0.2)
     
     header_size = footer_size = (0.8,0.1)
-    header_align = 0.1
+    header_align = 0.15
     footer_align = 0.15
     hf_hsplit = (0.33,0.1)
     hf_vsplit = (0.5,0.4)

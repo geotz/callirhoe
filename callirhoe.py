@@ -20,6 +20,7 @@
 # TODO:
 
 # allow to change background color (fill), other than white
+# page spec parse errors
 # mobile themes (e.g. 800x480)
 # photo support
 # implement DATA SOURCES
@@ -87,9 +88,9 @@ parser.add_option("--landscape", action="store_true", dest="landscape", default=
 parser.add_option("--dpi", type="float", default=72.0,
                 help="set DPI (for raster output) [%default]")
 parser.add_option("--paper", default="a4",
-                help="set paper type; PAPER can be an ISO paper type (a0..a9) or of the "
+                help="set paper type; PAPER can be an ISO paper type (a0..a9 or a0w..a9w) or of the "
                 "form W:H; positive values correspond to W or H mm, negative values correspond to "
-                "-W or -H pixels [%default]")
+                "-W or -H pixels; 'w' suffix swaps width & height [%default]")
 parser.add_option("--border", type="float", default=3,
                 help="set border size (in mm) [%default]")
 
