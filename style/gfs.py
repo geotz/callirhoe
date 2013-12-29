@@ -16,10 +16,9 @@
 
 # --- style.gfs (Greek Font Society fonts) ---
 
-# day of week
-
 import default
 
+# day of week
 class dow(default.dow):
     font = "GFS Neohellenic"
     
@@ -37,6 +36,14 @@ class dom_holiday(default.dom_holiday):
     header_font = footer_font = "GFS Elpis"
     
 class dom_weekend_holiday(default.dom_weekend_holiday):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class dom_multi(default.dom_multi):
+    font = ("GFS Bodoni",)
+    header_font = footer_font = "GFS Elpis"
+
+class dom_weekend_multi(default.dom_weekend_multi):
     font = "GFS Bodoni"
     header_font = footer_font = "GFS Elpis"
 

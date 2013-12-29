@@ -38,6 +38,7 @@ class dom_weekend(dom):
     bg = (0.7,1,1)
     fg = (0,0,1)
 
+# OFF flag
 class dom_holiday(dom):
     bg = (0.7,1,1)
     fg = (1,0,0)
@@ -45,7 +46,12 @@ class dom_holiday(dom):
     
 class dom_weekend_holiday(dom_holiday):
     pass
-    #bg = (0.7,1,1)
+
+class dom_multi(dom):
+    bg = (0.7,1,1)
+
+class dom_weekend_multi(dom_multi):
+    pass
 
 class month:    
     font = ("Times New Roman", 0, 1)

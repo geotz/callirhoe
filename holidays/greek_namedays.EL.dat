@@ -1,3 +1,12 @@
+# a: holiday occurs annually fixed day/month
+# m: holiday occurs monthly, fixed day
+# f: fixed day/month/year combination (e.g. deadline, trip, etc.)
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+
+# type|day*span|month|year|footer|header|off
+# day*span supported only for f
 a|1|1||Βασίλης||
 a|6|1||Φώτης, Φάνης, Ιορδάνης||
 a|7|1||Ιωάννης Πρόδρομος||

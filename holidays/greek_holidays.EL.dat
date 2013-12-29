@@ -5,7 +5,8 @@
 # ge: Georgios' name day, Orthodox Easter dependent holiday, annually
 # ce: Catholic Easter holiday
 
-# type|day|month|year|footer|header|off
+# type|day*span|month|year|footer|header|off
+# day*span supported only for f
 
 a|1|1|||ΠΡΩΤΟΧΡΟΝΙΑ|off
 a|6|1|||ΘΕΟΦΑΝΕΙΑ|off

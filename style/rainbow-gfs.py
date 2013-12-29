@@ -16,10 +16,10 @@
 
 # --- style.rainbow ---
 
-# day of week
 
 import gfs
 
+# day of week
 class dow(gfs.dow): pass
     
 # day of month
@@ -30,6 +30,10 @@ class dom_weekend(gfs.dom_weekend): pass
 class dom_holiday(gfs.dom_holiday): pass
     
 class dom_weekend_holiday(gfs.dom_weekend_holiday): pass
+
+class dom_multi(gfs.dom_multi): pass
+
+class dom_weekend_multi(gfs.dom_weekend_multi): pass
 
 from lib.geom import color_mix, color_scale, color_auto_fg
 

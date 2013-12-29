@@ -5,7 +5,8 @@
 # ge: Georgios' name day, Orthodox Easter dependent holiday, annually
 # ce: Catholic Easter holiday
 
-# type|day|month|year|footer|header|off
+# type|day*span|month|year|footer|header|off
+# day*span supported only for f
 
 a|1|1|||Nouvel an|off
 a|1|5|||Fête du Travail|off
@@ -21,3 +22,6 @@ ce|0||||Pâques|off
 ce|1||||Lundi de Pâques|off
 ce|39||||Ascension|off
 ce|50||||Lundi de Pentecôte|off
+
+f|23*15|2|2013||Vacances d'hiver (B)|multi
+f|22*15|2|2014||Vacances d'hiver (B)|multi

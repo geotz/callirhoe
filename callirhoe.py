@@ -19,6 +19,9 @@
 
 # TODO:
 
+# fix overlapping multi-day events:
+# use 'EVENT..', '..EVENT..', '..EVENT' formatting or sth. similar
+
 # allow to change background color (fill), other than white
 # page spec parse errors
 # mobile themes (e.g. 800x480)
@@ -173,7 +176,7 @@ Layout = import_plugin("layouts", "layout", "layouts", "--list-layouts", options
 for x in argv2:
     if '=' in x: x = x[0:x.find('=')]
     if not Layout.parser.has_option(x):
-        parser.error("invalid option %s; use --help (-h) or --layout-help (-H) to see available options" % x)
+        parser.error("invalid option %s; use --help (-h) or --layout-help (-?) to see available options" % x)
 
 (Layout.options,largs) = Layout.parser.parse_args(argv2)
 if options.layouthelp:
@@ -256,11 +259,11 @@ Geometry.pagespec = options.paper
 Geometry.border = options.border
 
 hp = holiday.HolidayProvider(Style.dom, Style.dom_weekend,
-                             Style.dom_holiday, Style.dom_weekend_holiday)
+                             Style.dom_holiday, Style.dom_weekend_holiday,
+                             Style.dom_multi, Style.dom_weekend_multi)
 
 print "Holidays: ", options.holidays
-#hp.load_holiday_file("./holidays/greek_holidays.EL.dat")
-#hp.load_holiday_file("./holidays/greek_namedays.EL.dat")
-#hp.load_holiday_file("./holidays/french_holidays.FR.dat")
+for f in options.holidays:
+    hp.load_holiday_file(f)
 
 Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), hp, _version)
