@@ -1,0 +1,31 @@
+# a: holiday occurs annually fixed day/month
+# m: holiday occurs monthly, fixed day
+# f: fixed day/month/year combination (e.g. deadline, trip, etc.)
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+
+# type|day|month|year|footer|header|off
+
+a|1|1|||ΠΡΩΤΟΧΡΟΝΙΑ|off
+a|6|1|||ΘΕΟΦΑΝΕΙΑ|off
+a|25|3|||ΕΥΑΓΓΕΛΙΣΜΟΣ|off
+a|1|5|||ΠΡΩΤΟΜΑΓΙΑ|off
+a|15|8|||ΚΟΙΜΗΣΗ ΘΕΟΤΟΚΟΥ|off
+a|28|10|||ΕΠΕΤΕΙΟΣ ΤΟΥ «ΟΧΙ»|off
+a|17|11|||ΠΟΛΥΤΕΧΝΕΙΟ|
+a|25|12|||ΧΡΙΣΤΟΥΓΕΝΝΑ|off
+a|26|12|||2η ΜΕΡΑ ΧΡΙΣΤΟΥΓ.|off
+oe|-70||||Αρχή Τριωδίου|off
+oe|-59||||Τσικνοπέμπτη|
+oe|-56||||Της Απόκρεω|
+oe|-49||||Της Τυροφάγου|off
+oe|-48||||ΚΑΘΑΡΑ ΔΕΥΤΕΡΑ|off
+oe|-8||||Σαβ. Λαζάρου|
+oe|-7||||Κυρ. Βαϊων|
+oe|-2||||ΜΕΓ. ΠΑΡΑΣΚΕΥΗ|off
+oe|0||||ΑΓΙΟ ΠΑΣΧΑ|off
+oe|1||||2η ΜΕΡΑ ΠΑΣΧΑ|off
+oe|49||||ΠΕΝΤΗΚΟΣΤΗ|
+oe|50||||ΑΓΙΟΥ ΠΝΕΥΜΑΤΟΣ|off
+ce|0||||Καθολικό Πάσχα|

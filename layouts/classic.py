@@ -23,6 +23,7 @@ from math import floor, ceil, sqrt
 import calendar
 import optparse
 import sys
+from datetime import date, timedelta
 
 parser = optparse.OptionParser(usage="%prog (...) --layout classic [options] (...)",add_help_option=False)
 parser.add_option("--rows", type="int", default=0, help="force grid rows [%default]")
@@ -139,9 +140,8 @@ def draw_day_cell(cr, rect, day, header, footer, theme, show_day_name, short_thr
         _draw_day_cell_short(cr, rect, day, header, footer, theme, show_day_name)
     else:
         _draw_day_cell_long(cr, rect, day, header, footer, theme, show_day_name)
-    
 
-def draw_month_matrix(cr, rect, month, year, theme, daycell_thres):
+def draw_month_matrix(cr, rect, month, year, theme, holiday_provider, daycell_thres):
     S,G = theme
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
@@ -176,13 +176,15 @@ def draw_month_matrix(cr, rect, month, year, theme, daycell_thres):
     # draw day cells
     for row in range(weekrows):
         for col in range(7):
-            day_style = S.dom_weekend if col >= 5 else S.dom
             R = dom_grid.item(row, col)
             if dom > 0 and dom <= span:
-                draw_day_cell(cr, rect = R, day = (dom, col), 
-                              header = None, footer = None, theme = (day_style, G.dom), show_day_name = False,
+                holiday_tuple = holiday_provider(year, month, dom, col)
+                day_style = holiday_tuple[2]
+                draw_day_cell(cr, rect = R, day = (dom, col),
+                              header = holiday_tuple[0], footer = holiday_tuple[1], theme = (day_style, G.dom), show_day_name = False,
                               short_thres = daycell_thres)
             else:
+                day_style = S.dom_weekend if col >= 5 else S.dom
                 draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
                          stroke_width = mm_to_dots(day_style.frame_thickness))
             dom += 1
@@ -205,7 +207,7 @@ def draw_month_matrix(cr, rect, month, year, theme, daycell_thres):
              align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
     cr.restore()
 
-def draw_month_bar(cr, rect, month, year, theme, daycell_thres):
+def draw_month_bar(cr, rect, month, year, theme, holiday_provider, daycell_thres):
     S,G = theme
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
@@ -225,12 +227,14 @@ def draw_month_bar(cr, rect, month, year, theme, daycell_thres):
         
     # draw day cells
     for dom in range(1,rows+1):
-        day_style = S.dom_weekend if day >= 5 and dom <= span else S.dom
         R = dom_grid.item(dom-1)
         if dom <= span:
-            draw_day_cell(cr, rect = R, day = (dom, day), header = None, footer = None, 
+            holiday_tuple = holiday_provider(year, month, dom, day)
+            day_style = holiday_tuple[2]
+            draw_day_cell(cr, rect = R, day = (dom, day), header = holiday_tuple[0], footer = holiday_tuple[1],
                           theme = (day_style, G.dom), show_day_name = True, short_thres = daycell_thres)
         else:
+            day_style = S.dom
             draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
                      stroke_width = mm_to_dots(day_style.frame_thickness))
         day = (day + 1) % 7
@@ -252,11 +256,11 @@ def draw_month_bar(cr, rect, month, year, theme, daycell_thres):
              align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
     cr.restore()
 
-def draw_month(cr, rect, month, year, theme, bar_thres = 0.7, daycell_thres = 2.5):
+def draw_month(cr, rect, month, year, theme, holiday_provider, bar_thres = 0.7, daycell_thres = 2.5):
     if rect_ratio(rect) >= bar_thres:
-        draw_month_matrix(cr, rect, month, year, theme, daycell_thres)
+        draw_month_matrix(cr, rect, month, year, theme, holiday_provider, daycell_thres)
     else:
-        draw_month_bar(cr, rect, month, year, theme, daycell_thres)
+        draw_month_bar(cr, rect, month, year, theme, holiday_provider, daycell_thres)
 
 #1   1   1
 #2   2   1
@@ -276,7 +280,7 @@ def draw_month(cr, rect, month, year, theme, bar_thres = 0.7, daycell_thres = 2.
 #rows = 0
 #cols = 0
 
-def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, version_string):
+def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, holiday_provider, version_string):
     S,G = Theme
     rows, cols = options.rows, options.cols
 
@@ -353,7 +357,7 @@ def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, version_string):
         for (m,y) in p:
             k = len(p) - num_placed - 1 if z_order == "decreasing" else num_placed 
             draw_month(page.cr, grid.item_seq(k, options.grid_order == "column"), 
-                       month=m, year=y, theme = Theme, 
+                       month=m, year=y, theme = Theme, holiday_provider = holiday_provider,
                        bar_thres = options.month_bar_ratio, daycell_thres = options.short_daycell_ratio)
             num_placed += 1
             if (y > yy[-1]): yy.append(y)

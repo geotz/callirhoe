@@ -1,0 +1,23 @@
+# a: holiday occurs annually fixed day/month
+# m: holiday occurs monthly, fixed day
+# f: fixed day/month/year combination (e.g. deadline, trip, etc.)
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+
+# type|day|month|year|footer|header|off
+
+a|1|1|||New year's|off
+a|1|5|||Labour day|off
+a|8|5|||Victory in Europe|off
+a|14|7|||Bastille|off
+a|15|8|||Assumption of Mary|off
+a|1|11|||All Saints|off
+a|11|11|||Armistice|off
+a|25|12|||Christmas|off
+a|26|12|||St. Stephen's|off
+ce|-2||||Good Friday|
+ce|0||||Easter|off
+ce|1||||Easter Monday|off
+ce|39||||Ascension|off
+ce|50||||Whit Monday|off

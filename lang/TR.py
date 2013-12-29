@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
+
 #    callirhoe - high quality calendar rendering
 #    Copyright (C) 2012 George M. Tzoumas
+
+#    Turkish language data
+#    Copyright (C) 2013 Ece Neslihan Aybeke
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -14,31 +19,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- style.gfs (Greek Font Society fonts) ---
+day_name = [ u'Pazartesi', u'Salı', u' Çarşamba ',
+             u'Perşembe', u'Cuma', u'Cumartesi', u'Pazar' ]
 
-# day of week
+short_day_name = [ u'Pt', u'Sa', u'Ça', u'Pe', u'Cu', u'Ct', u'Pa' ]
 
-import default
+month_name = [ '', u'Ocak', 'Şubat', u'Mart', u'Nisan',
+               u'Mayıs', u'Haziran', u'Temmuz', u'Ağustos',
+               u'Eylül', u'Ekim', u'Kasım', u'Aralık' ]
 
-class dow(default.dow):
-    font = "GFS Neohellenic"
-    
-# day of month
-class dom(default.dom):
-    font = "GFS Bodoni"
-    header_font = footer_font = "GFS Elpis"
-
-class dom_weekend(default.dom_weekend): 
-    font = "GFS Bodoni"
-    header_font = footer_font = "GFS Elpis"
-
-class dom_holiday(default.dom_holiday):
-    font = ("GFS Bodoni",)
-    header_font = footer_font = "GFS Elpis"
-    
-class dom_weekend_holiday(default.dom_weekend_holiday):
-    font = "GFS Bodoni"
-    header_font = footer_font = "GFS Elpis"
-
-class month(default.month):
-    font = ("GFS Artemisia", 0, 1)
+short_month_name = month_name

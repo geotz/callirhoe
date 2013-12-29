@@ -44,7 +44,7 @@ class dom_holiday(dom):
     header = (0,0,0)
     font = ("Times New Roman", 0, 1)
     
-class dom_weekend_holiday_style(dom_holiday):
+class dom_weekend_holiday(dom_holiday):
     bg = (0,0,0)
 
 class month:    

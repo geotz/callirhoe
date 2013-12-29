@@ -22,12 +22,12 @@
 # allow to change background color (fill), other than white
 # page spec parse errors
 # mobile themes (e.g. 800x480)
-# photo support
-# implement DATA SOURCES
+# photo support (like ImageMagick's polaroid effect)
 # python source documentation
 # .callirhoe/config : default values for plugins (styles/layouts/lang...) and cmdline
 
 # MAYBE-TODO:
+# implement various data sources
 # auto-landscape? should aim for matrix or bars?
 # allow /usr/bin/date-like formatting %x... 
 # improve file matching with __init__ when lang known
@@ -38,13 +38,14 @@
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-_version = "0.2.1.r15"
+_version = "0.2.2"
 
 import calendar
 import sys
 import time
 import optparse
 import lib.xcairo as xcairo
+import lib.holiday as holiday
 
 from lib.plugin import *
 # TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
@@ -75,7 +76,7 @@ parser.add_option("-l", "--lang",  dest="lang", default="EN",
                 help="choose language [%default]")
 parser.add_option("-t", "--layout",  dest="layout", default="classic",
                 help="choose layout [%default]")
-parser.add_option("-H", "--layout-help",  dest="layouthelp", action="store_true", default=False,
+parser.add_option("-?", "--layout-help",  dest="layouthelp", action="store_true", default=False,
                 help="show layout-specific help")
 parser.add_option("--examples", dest="examples", action="store_true",
                 help="display some usage examples")
@@ -93,6 +94,8 @@ parser.add_option("--paper", default="a4",
                 "-W or -H pixels; 'w' suffix swaps width & height [%default]")
 parser.add_option("--border", type="float", default=3,
                 help="set border size (in mm) [%default]")
+parser.add_option("-H", "--with-holidays", action="append", dest="holidays",
+                help="load holiday file (can be used multiple times)")
 
 def print_examples():
     print """Examples:
@@ -100,8 +103,11 @@ def print_examples():
 Create a calendar of the current year (by default in a 4x3 grid):
     $ callirhoe my_calendar.pdf 
 
-Same as above, but in landscape mode (3x4):
+Same as above, but in landscape mode (3x4) (for printing):
     $ callirhoe --landscape my_calendar.pdf 
+
+Landscape via rotation (for screen):
+    $ callirhoe --paper=a4w --rows=3 my_calendar.pdf
 
 Forcing 1 row only, we get month bars instead of boxes:
     $ callirhoe --landscape --rows=1 my_calendar.pdf
@@ -199,15 +205,6 @@ if options.geom_assign:
 calendar.month_name = Language.month_name
 calendar.day_name = Language.day_name
 
-def get_orthodox_easter(y):
-    y1, y2, y3 = y - y//4 * 4, y - y//7 * 7, y - y//19 * 19
-    a = 19*y3 + 15
-    y4 = a - a//30 * 30
-    b = 2*y1 + 4*y2 + 6*(y4 + 1)
-    y5 = b - b/7 * 7
-    r = 1 + 3 + y4 + y5;
-    return (5, r - 30) if r > 30 else (4,r)
-
 def itoa(s):
     try:
         k = int(s);
@@ -258,4 +255,12 @@ xcairo.XDPI = options.dpi
 Geometry.pagespec = options.paper
 Geometry.border = options.border
 
-Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), _version)
+hp = holiday.HolidayProvider(Style.dom, Style.dom_weekend,
+                             Style.dom_holiday, Style.dom_weekend_holiday)
+
+print "Holidays: ", options.holidays
+#hp.load_holiday_file("./holidays/greek_holidays.EL.dat")
+#hp.load_holiday_file("./holidays/greek_namedays.EL.dat")
+#hp.load_holiday_file("./holidays/french_holidays.FR.dat")
+
+Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), hp, _version)
