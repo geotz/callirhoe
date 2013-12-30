@@ -19,7 +19,7 @@
 day_name = [ u'Lundi', u'Mardi', u'Mercredi', 
              u'Jeudi', u'Vendredi', u'Samedi', u'Dimanche' ]
 
-short_day_name = [ u'Lun', u'Mar', u'Mer', u'Jeu', u'Ven', u'Sam', u'Dim' ]
+short_day_name = [ u'Lu', u'Ma', u'Me', u'Je', u'Ve', u'Sa', u'Di' ]
 
 month_name = [ '', 
                u'Janvier', u'Février', u'Mars', u'Avril', 

@@ -123,7 +123,7 @@ def _draw_day_cell_long(cr, rect, day, header, footer, theme, show_day_name):
              align = (2,valign), font = S.font, measure = "88")
     # draw name of day
     if show_day_name:
-        draw_str(cr, text = calendar.day_name[day_of_week][0], rect = Rdow, stretch = -1, stroke_rgba = S.fg,
+        draw_str(cr, text = calendar.short_day_name[day_of_week], rect = Rdow, stretch = -1, stroke_rgba = S.fg,
                  align = (2,valign), font = S.font, measure = "M")
     Rh, Rf = rect_vsplit(Rhf, *G.hf_vsplit)
     # draw header

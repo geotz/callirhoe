@@ -19,8 +19,8 @@
 
 # TODO:
 
-# fix overlapping multi-day events:
-# use 'EVENT..', '..EVENT..', '..EVENT' formatting or sth. similar
+# fix day names (length)
+# fix odd-even year color (always start from dark)
 
 # allow to change background color (fill), other than white
 # page spec parse errors
@@ -207,6 +207,7 @@ if options.geom_assign:
 
 calendar.month_name = Language.month_name
 calendar.day_name = Language.day_name
+calendar.short_day_name = Language.short_day_name
 
 def itoa(s):
     try:
@@ -262,8 +263,8 @@ hp = holiday.HolidayProvider(Style.dom, Style.dom_weekend,
                              Style.dom_holiday, Style.dom_weekend_holiday,
                              Style.dom_multi, Style.dom_weekend_multi)
 
-print "Holidays: ", options.holidays
-for f in options.holidays:
-    hp.load_holiday_file(f)
+if options.holidays:
+    for f in options.holidays:
+        hp.load_holiday_file(f)
 
 Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), hp, _version)

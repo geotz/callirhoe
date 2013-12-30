@@ -3,6 +3,9 @@
 #    callirhoe - high quality calendar rendering
 #    Copyright (C) 2012 George M. Tzoumas
 
+#    German language data
+#    Copyright (C) 2013 Neels Hofmeyr
+
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +19,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-day_name = [ u'Monday', u'Tuesday', u'Wednesday', 
-             u'Thursday', u'Friday', u'Saturday', u'Sunday' ]
+day_name = [ u'Montag', u'Dienstag', u'Mittwoch', 
+             u'Donnerstag', u'Freitag', u'Samstag', u'Sonntag' ]
 
-short_day_name = [ u'Mo', u'Tu', u'We', u'Th', u'Fr', u'Sa', u'Su' ]
+short_day_name = [ u'Mo', u'Di', u'Mi', u'Do', u'Fr', u'Sa', u'So' ]
 
 month_name = [ '', 
-               u'January', u'February', u'March', u'April', 
-               u'May', u'June', u'July', u'August', 
-               u'September', u'October', u'November', u'December' ]
+               u'Januar', u'Februar', u'März', u'April', 
+               u'Mai', u'Juni', u'Juli', u'August', 
+               u'September', u'Oktober', u'November', u'Dezember' ]
 
 short_month_name = [ '', 
-               u'Jan', u'Feb', u'Mar', u'Apr', u'May', u'Jun', 
-               u'Jul', u'Aug', u'Sep', u'Oct', u'Nov', u'Dec' ]
+               u'Jan', u'Feb', u'Mrz', u'Apr', u'Mai', u'Jun', 
+               u'Jul', u'Aug', u'Sep', u'Okt', u'Nov', u'Dez' ]
