@@ -52,7 +52,7 @@ class dom_weekend_holiday(dom_holiday):
 class dom_multi(dom_holiday):
     pass
 
-class dom_weekend_multi(dom_weekend_holiday)
+class dom_weekend_multi(dom_weekend_holiday):
     pass
 
 class month:    

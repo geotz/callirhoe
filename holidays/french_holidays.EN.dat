@@ -6,6 +6,7 @@
 # ce: Catholic Easter holiday
 
 # type|day*span|month|year|footer|header|off
+# type|day|month|year|footer|header|off
 # day*span supported only for f
 
 a|1|1|||New year's|off
@@ -23,5 +24,5 @@ ce|1||||Easter Monday|off
 ce|39||||Ascension|off
 ce|50||||Whit Monday|off
 
-f|23*15|2|2013||Winter vacations (B)|multi
-f|22*15|2|2014||Winter vacations (B)|multi
+f|23*15|2|2013|winter vacations (B)||multi
+f|22*15|2|2014|winter vacations (B)||multi

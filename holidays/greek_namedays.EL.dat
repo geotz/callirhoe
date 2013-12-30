@@ -6,7 +6,9 @@
 # ce: Catholic Easter holiday
 
 # type|day*span|month|year|footer|header|off
+# type|day|month|year|footer|header|off
 # day*span supported only for f
+
 a|1|1||Βασίλης||
 a|6|1||Φώτης, Φάνης, Ιορδάνης||
 a|7|1||Ιωάννης Πρόδρομος||

@@ -125,22 +125,40 @@ class HolidayProvider(object):
         self.s_weekend_multi = s_weekend_multi
 
     def parse_day_record(self, fields):
-        """return tuple (etype,d,m,y,footer,header,flags)"""
+        """return tuple (etype,d,m,y,span,footer,header,flags)"""
         if len(fields) != 7:
             raise ValueError("Too many fields: " + str(fields))
         for i in range(len(fields)):
             if len(fields[i]) == 0: fields[i] = None
         if fields[1]:
             if '*' in fields[1]:
-                d = map(int,fields[1].split('*'))
                 if fields[0] != 'f':
                     raise ValueError("multi-day events not allowed with event type '%s'" % fields[0])
-            else: d = int(fields[1])
-        else: d = 0
+                d,span = map(int,fields[1].split('*'))
+            else: d,span = int(fields[1]), 1
+        else: d,span = 0,0
         m = int(fields[2]) if fields[2] else 0
         y = int(fields[3]) if fields[3] else 0
-        return (fields[0],d,m,y,fields[4],fields[5],fields[6])
+        return (fields[0],d,m,y,span,fields[4],fields[5],fields[6])
 
+    def multi_holiday_tuple(self, date1, date2, header, footer, flags):
+        """returns Holiday objects for (beginning, end, first_dom, rest)"""
+        if header:
+            header_tuple = (header+'..', '..'+header, '..'+header+'..', None)
+        else:
+            header_tuple = (None, None, None, None)
+        if footer:
+            footer_tuple = (footer+'..', '..'+footer, '..'+footer+'..', None)
+        else:
+            footer_tuple = (None, None, None, None)
+        return tuple(map(lambda k: Holiday([header_tuple[k]], [footer_tuple[k]], flags),
+                         range(4)))
+
+    # File Format:
+    # type|day*span|month|year|footer|header|off
+    # type|day|month|year|footer|header|off
+    # day*span supported only for f
+    # Type:
     # a: holiday occurs annually fixed day/month
     # m: holiday occurs monthly, fixed day
     # f: fixed day/month/year combination (e.g. deadline, trip, etc.)
@@ -154,7 +172,7 @@ class HolidayProvider(object):
                 if not line: continue
                 if line[0] == '#': continue
                 fields = line.split('|')
-                etype,d,m,y,footer,header,flags = self.parse_day_record(fields)
+                etype,d,m,y,span,footer,header,flags = self.parse_day_record(fields)
                 hol = Holiday([header], [footer], flags)
                 if etype == 'a':
                     if (d,m) not in self.annual: self.annual[(d,m)] = []
@@ -163,18 +181,22 @@ class HolidayProvider(object):
                     if d not in self.monthly: self.monthly[d] = []
                     self.monthly[d].append(hol)
                 elif etype == 'f':
-                    day = d if type(d) is int else d[0]
-                    if date(y,m,day) not in self.fixed: self.fixed[date(y,m,day)] = []
-                    self.fixed[date(y,m,day)].append(hol)
-                    # use header/footer only on first day of multi-day events,
-                    # or on the first day of month (proposed by Neels)
-                    if type(d) is list:
-                        dt = date(y,m,d[0]) + timedelta(1)
-                        dt2 = dt + timedelta(d[1])
-                        hol2 = Holiday([], [], flags)
-                        while dt != dt2:
+                    if span == 1:
+                        if date(y,m,d) not in self.fixed: self.fixed[date(y,m,d)] = []
+                        self.fixed[date(y,m,d)].append(hol)
+                    else:
+                        # properly annotate multi-day events
+                        dt1 = date(y,m,d)
+                        dt2 = dt1 + timedelta(span-1)
+                        hols = self.multi_holiday_tuple(dt1, dt2, header, footer, flags)
+                        dt = dt1
+                        while dt <= dt2:
                             if dt not in self.fixed: self.fixed[dt] = []
-                            self.fixed[dt].append(hol2 if dt.day > 1 else hol)
+                            if dt == dt1: hol = hols[0]
+                            elif dt == dt2: hol = hols[1]
+                            elif dt.day == 1: hol = hols[2]
+                            else: hol = hols[3]
+                            self.fixed[dt].append(hol)
                             dt += timedelta(1)
 
                 elif etype == 'oe':

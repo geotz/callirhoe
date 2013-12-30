@@ -6,6 +6,7 @@
 # ce: Catholic Easter holiday
 
 # type|day*span|month|year|footer|header|off
+# type|day|month|year|footer|header|off
 # day*span supported only for f
 
 a|1|1|||Nouvel an|off
@@ -23,5 +24,5 @@ ce|1||||Lundi de Pâques|off
 ce|39||||Ascension|off
 ce|50||||Lundi de Pentecôte|off
 
-f|23*15|2|2013||Vacances d'hiver (B)|multi
-f|22*15|2|2014||Vacances d'hiver (B)|multi
+f|23*16|2|2013|vacances d'hiver (B)||multi
+f|22*16|2|2014|vacances d'hiver (B)||multi

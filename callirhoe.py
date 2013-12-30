@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #    callirhoe - high quality calendar rendering
-#    Copyright (C) 2012 George M. Tzoumas
+#    Copyright (C) 2012-2013 George M. Tzoumas
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
