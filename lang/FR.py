@@ -16,12 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-day_name = [ u'Lundi', u'Mardi', u'Mercredi', 
+long_day_name = [ u'Lundi', u'Mardi', u'Mercredi',
              u'Jeudi', u'Vendredi', u'Samedi', u'Dimanche' ]
 
 short_day_name = [ u'Lu', u'Ma', u'Me', u'Je', u'Ve', u'Sa', u'Di' ]
 
-month_name = [ '', 
+long_month_name = [ '',
                u'Janvier', u'Février', u'Mars', u'Avril', 
                u'Mai', u'Juin', u'Juillet', u'Août', 
                u'Septembre', u'Octobre', u'Novembre', u'Décembre' ]

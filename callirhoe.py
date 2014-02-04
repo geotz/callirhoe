@@ -205,8 +205,9 @@ if options.style_assign:
 if options.geom_assign:
     for x in options.geom_assign: exec "Geometry.%s" % x
 
-calendar.month_name = Language.month_name
-calendar.day_name = Language.day_name
+calendar.long_month_name = Language.long_month_name
+calendar.long_day_name = Language.long_day_name
+calendar.short_month_name = Language.short_month_name
 calendar.short_day_name = Language.short_day_name
 
 def itoa(s):

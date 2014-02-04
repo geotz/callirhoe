@@ -16,12 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-day_name = [ u'Δευτέρα', u'Τρίτη', u'Τετάρτη', 
+long_day_name = [ u'Δευτέρα', u'Τρίτη', u'Τετάρτη',
              u'Πέμπτη', u'Παρασκευή', u'Σάββατο', u'Κυριακή' ]
 
 short_day_name = [ u'Δε', u'Τρ', u'Τε', u'Πε', u'Πα', u'Σα', u'Κυ' ]
 
-month_name = [ '', u'Ιανουάριος', u'Φεβρουάριος', u'Μάρτιος', u'Απρίλιος', 
+long_month_name = [ '', u'Ιανουάριος', u'Φεβρουάριος', u'Μάρτιος', u'Απρίλιος',
                u'Μάιος', u'Ιούνιος', u'Ιούλιος', u'Αύγουστος', 
                u'Σεπτέμβριος', u'Οκτώβριος', u'Νοέμβριος', u'Δεκέμβριος' ]
 

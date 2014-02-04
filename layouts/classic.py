@@ -40,6 +40,10 @@ parser.add_option("--z-order", choices=["auto", "increasing", "decreasing"], def
                   "selects increasing order if and only if sloppy boxes are enabled [%default]")
 parser.add_option("--month-with-year", action="store_true", default=False, 
                   help="displays year together with month name, e.g. January 1980; suppresses year from footer line")
+parser.add_option("--short-monthnames", action="store_true", default=False,
+                  help="user the short version of month names (defined in language file) [%default]")
+parser.add_option("--long-daynames", action="store_true", default=False,
+                help="user the long version of day names (defined in language file) [%default]")
 parser.add_option("--long-daycells", action="store_const", const=0.0, dest="short_daycell_ratio",
                   help="force use of only long daycells")
 parser.add_option("--short-daycells", action="store_const", const=1.0e6, dest="short_daycell_ratio",
@@ -72,7 +76,7 @@ parser.add_option("--swap-colors", action="store_true", default=None,
                   help="swap month colors for even/odd years")
 
 
-def weekrows_of_month(year, month):
+def _weekrows_of_month(year, month):
     day,span = calendar.monthrange(year, month)
     if day == 0 and span == 28: return 4
     if day == 5 and span == 31: return 6
@@ -123,8 +127,8 @@ def _draw_day_cell_long(cr, rect, day, header, footer, theme, show_day_name):
              align = (2,valign), font = S.font, measure = "88")
     # draw name of day
     if show_day_name:
-        draw_str(cr, text = calendar.short_day_name[day_of_week], rect = Rdow, stretch = -1, stroke_rgba = S.fg,
-                 align = (2,valign), font = S.font, measure = "M")
+        draw_str(cr, text = calendar.day_name[day_of_week], rect = Rdow, stretch = -1, stroke_rgba = S.fg,
+                 align = (0,valign), font = S.font, measure = "M")
     Rh, Rf = rect_vsplit(Rhf, *G.hf_vsplit)
     # draw header
     if header:
@@ -146,11 +150,13 @@ def draw_month_matrix(cr, rect, month, year, theme, holiday_provider, daycell_th
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
     day, span = calendar.monthrange(year, month)
-    weekrows = 6 if G.month.symmetric else weekrows_of_month(year, month)
+    weekrows = 6 if G.month.symmetric else _weekrows_of_month(year, month)
     dom = -day + 1;
     wmeasure = 'A'*max(map(len,calendar.day_name))
     mmeasure = 'A'*max(map(len,calendar.month_name))
-    
+    if options.month_with_year:
+        mmeasure += 'A'*(len(str(year))+1)
+
     grid = GLayout(rect_from_origin(rect), 7, 7)
     # 61.8% - 38.2% split (golden)
     R_mb, R_db = rect_vsplit(grid.item_span(1, 7, 0, 0), 0.618)  # month name bar, day name bar
@@ -212,9 +218,10 @@ def draw_month_bar(cr, rect, month, year, theme, holiday_provider, daycell_thres
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
     day, span = calendar.monthrange(year, month)
-    wmeasure = 'A'*max(map(len,calendar.day_name))
     mmeasure = 'A'*max(map(len,calendar.month_name))
-    
+    if options.month_with_year:
+        mmeasure += 'A'*(len(str(year))+1)
+
     rows = 31 if G.month.symmetric else span 
     grid = VLayout(rect_from_origin(rect), 32) # title bar always symmetric
     dom_grid = VLayout(grid.item_span(31,1), rows)
@@ -252,7 +259,9 @@ def draw_month_bar(cr, rect, month, year, theme, holiday_provider, daycell_thres
     if S.month.text_shadow:
         f = S.month.text_shadow_size
         mshad = (f,-f) if G.landscape else (f,f)
-    draw_str(cr, text = calendar.month_name[month], rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
+    title_str = calendar.month_name[month]
+    if options.month_with_year: title_str += ' ' + str(year)
+    draw_str(cr, text = title_str, rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
              align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
     cr.restore()
 
@@ -290,9 +299,19 @@ def draw_calendar(Outfile, Year, Month, MonthSpan, Theme, holiday_provider, vers
         G.month.padding = options.padding
     if options.no_shadow == True:
         S.month.box_shadow = False
+    if Year % 2: options.swap_colors = not options.swap_colors
     if options.swap_colors:
         S.month.color_map_bg = (S.month.color_map_bg[1], S.month.color_map_bg[0]) 
         S.month.color_map_fg = (S.month.color_map_fg[1], S.month.color_map_fg[0]) 
+
+    if options.long_daynames:
+        calendar.day_name = calendar.long_day_name
+    else:
+        calendar.day_name = calendar.short_day_name
+    if options.short_monthnames:
+        calendar.month_name = calendar.short_month_name
+    else:
+        calendar.month_name = calendar.long_month_name
         
     try:
         page = PageWriter(Outfile, G.landscape, G.pagespec, G.border, not options.opaque)
