@@ -107,6 +107,16 @@ class Holiday(object):
             res += ', ' + s
         return res
 
+
+def _decode_date_str(ddef):
+    if len(ddef) == 2:
+        return (0,0,int(ddef))
+    if len(ddef) == 4:
+        return (0,int(ddef[:2]),int(ddef[-2:]))
+    if len(ddef) == 8:
+        return (int(ddef[:4]),int(ddef[4:6]),int(ddef[-2:]))
+    raise ValueError("invalid date definition '%s'" % ddef)
+
 class HolidayProvider(object):
     def __init__(self, s_normal, s_weekend, s_holiday, s_weekend_holiday, s_multi, s_weekend_multi):
         self.annual = dict() # key = (d,m)
@@ -125,21 +135,51 @@ class HolidayProvider(object):
         self.s_weekend_multi = s_weekend_multi
 
     def parse_day_record(self, fields):
-        """return tuple (etype,d,m,y,span,footer,header,flags)"""
-        if len(fields) != 7:
+        """return tuple (etype,ddef,footer,header,flags)
+
+           Remarks:
+               ddef is either None
+               or int
+               or ((y,m,d),)
+               or ((y,m,d),(y,m,d))
+        """
+        if len(fields) != 5:
             raise ValueError("Too many fields: " + str(fields))
         for i in range(len(fields)):
             if len(fields[i]) == 0: fields[i] = None
-        if fields[1]:
-            if '*' in fields[1]:
-                if fields[0] != 'f':
-                    raise ValueError("multi-day events not allowed with event type '%s'" % fields[0])
-                d,span = map(int,fields[1].split('*'))
-            else: d,span = int(fields[1]), 1
-        else: d,span = 0,0
-        m = int(fields[2]) if fields[2] else 0
-        y = int(fields[3]) if fields[3] else 0
-        return (fields[0],d,m,y,span,fields[4],fields[5],fields[6])
+        if fields[0] == 'd':
+            if fields[1]:
+                if '*' in fields[1]:
+                    if fields[0] != 'd':
+                        raise ValueError("multi-day events not allowed with event type '%s'" % fields[0])
+                    dstr,spanstr = fields[1].split('*')
+                    if len(dstr) != 8:
+                        raise ValueError("multi-day events allowed only with full date, not '%s'" % dstr)
+                    span = int(spanstr)
+                    y,m,d = _decode_date_str(dstr)
+                    dt1 = date(y,m,d)
+                    dt2 = dt1 + timedelta(span-1)
+                    res = ((y,m,d),(dt2.year,dt2.month,dt2.day))
+                elif '-' in fields[1]:
+                    if fields[0] != 'd':
+                        raise ValueError("multi-day events not allowed with event type '%s'" % fields[0])
+                    dstr,dstr2 = fields[1].split('-')
+                    if len(dstr) != 8:
+                        raise ValueError("multi-day events allowed only with full date, not '%s'" % dstr)
+                    y,m,d = _decode_date_str(dstr)
+                    y2,m2,d2 = _decode_date_str(dstr2)
+                    res = ((y,m,d),(y2,m2,d2))
+                else:
+                    y,m,d = _decode_date_str(fields[1])
+                    if len(fields[1]) == 8:
+                        res = ((y,m,d),(y,m,d))
+                    else:
+                        res = ((y,m,d),)
+            else:
+                res = None
+        else:
+            res = int(fields[1])
+        return (fields[0],res,fields[2],fields[3],fields[4])
 
     def multi_holiday_tuple(self, date1, date2, header, footer, flags):
         """returns Holiday objects for (beginning, end, first_dom, rest)"""
@@ -155,16 +195,20 @@ class HolidayProvider(object):
                          range(4)))
 
     # File Format:
-    # type|day*span|month|year|footer|header|off
-    # type|day|month|year|footer|header|off
-    # day*span supported only for f
-    # Type:
-    # a: holiday occurs annually fixed day/month
-    # m: holiday occurs monthly, fixed day
-    # f: fixed day/month/year combination (e.g. deadline, trip, etc.)
+    # type|DATE*span|footer|header|flags
+    # type|DATE1-DATE2|footer|header|flags
+    # type|DATE|footer|header|flags
+    #
+    # type:
+    # d: event occurs annually fixed day/month: MMDD
+    # d: event occurs monthly, fixed day: DD
+    # d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
     # oe: Orthodox Easter-dependent holiday, annually
     # ge: Georgios' name day, Orthodox Easter dependent holiday, annually
     # ce: Catholic Easter holiday
+    #
+    # DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+    # flags = {off, multi}
     def load_holiday_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
@@ -172,39 +216,45 @@ class HolidayProvider(object):
                 if not line: continue
                 if line[0] == '#': continue
                 fields = line.split('|')
-                etype,d,m,y,span,footer,header,flags = self.parse_day_record(fields)
+                etype,ddef,footer,header,flags = self.parse_day_record(fields)
                 hol = Holiday([header], [footer], flags)
-                if etype == 'a':
-                    if (d,m) not in self.annual: self.annual[(d,m)] = []
-                    self.annual[(d,m)].append(hol)
-                elif etype == 'm':
-                    if d not in self.monthly: self.monthly[d] = []
-                    self.monthly[d].append(hol)
-                elif etype == 'f':
-                    if span == 1:
-                        if date(y,m,d) not in self.fixed: self.fixed[date(y,m,d)] = []
-                        self.fixed[date(y,m,d)].append(hol)
-                    else:
-                        # properly annotate multi-day events
-                        dt1 = date(y,m,d)
-                        dt2 = dt1 + timedelta(span-1)
-                        hols = self.multi_holiday_tuple(dt1, dt2, header, footer, flags)
-                        dt = dt1
-                        while dt <= dt2:
-                            if dt not in self.fixed: self.fixed[dt] = []
-                            if dt == dt1: hol = hols[0]
-                            elif dt == dt2: hol = hols[1]
-                            elif dt.day == 1: hol = hols[2]
-                            else: hol = hols[3]
-                            self.fixed[dt].append(hol)
-                            dt += timedelta(1)
+                if etype == 'd':
+                    if len(ddef) == 1:
+                        y,m,d = ddef[0]
+                        if m > 0:           # annual event
+                            if (d,m) not in self.annual: self.annual[(d,m)] = []
+                            self.annual[(d,m)].append(hol)
+                        else:               # monthly event
+                            if d not in self.monthly: self.monthly[d] = []
+                            self.monthly[d].append(hol)
+                    else:                   # fixed date event
+                        dt1,dt2 = date(*ddef[0]),date(*ddef[1])
+                        span = (dt2-dt1).days + 1
+                        if span == 1:
+                            if dt1 not in self.fixed: self.fixed[dt1] = []
+                            self.fixed[dt1].append(hol)
+                        else:
+                            # properly annotate multi-day events
+                            hols = self.multi_holiday_tuple(dt1, dt2, header, footer, flags)
+                            dt = dt1
+                            while dt <= dt2:
+                                if dt not in self.fixed: self.fixed[dt] = []
+                                if dt == dt1: hol = hols[0]
+                                elif dt == dt2: hol = hols[1]
+                                elif dt.day == 1: hol = hols[2]
+                                else: hol = hols[3]
+                                self.fixed[dt].append(hol)
+                                dt += timedelta(1)
 
                 elif etype == 'oe':
+                    d = ddef
                     if d not in self.orth_easter: self.orth_easter[d] = []
                     self.orth_easter[d].append(hol)
                 elif etype == 'ge':
+                    d = ddef
                     self.george.append(hol)
                 elif etype == 'ce':
+                    d = ddef
                     if d not in self.cath_easter: self.cath_easter[d] = []
                     self.cath_easter[d].append(hol)
 

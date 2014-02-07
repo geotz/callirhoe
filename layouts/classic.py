@@ -104,11 +104,13 @@ def _draw_day_cell_short(cr, rect, day, header, footer, theme, show_day_name):
     # draw header
     if header:
         R = rect_rel_scale(rect, G.header_size[0], G.header_size[1], 0, -1.0 + G.header_align)
-        draw_str(cr, text = header, rect = R, stretch = -1, stroke_rgba = S.header, font = S.header_font)
+        draw_str(cr, text = header, rect = R, stretch = -1, stroke_rgba = S.header,
+            font = S.header_font) # , measure = "MgMgMgMgMgMg"
     # draw footer
     if footer:
         R = rect_rel_scale(rect, G.footer_size[0], G.footer_size[1], 0, 1.0 - G.footer_align)
-        draw_str(cr, text = footer, rect = R, stretch = -1, stroke_rgba = S.footer, font = S.footer_font)
+        draw_str(cr, text = footer, rect = R, stretch = -1, stroke_rgba = S.footer,
+            font = S.footer_font)
 
 def _draw_day_cell_long(cr, rect, day, header, footer, theme, show_day_name):
     S,G = theme

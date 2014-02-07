@@ -19,7 +19,7 @@
 
 # TODO:
 
-# fix day names (length)
+# fix auto-measure rendering (cairo)
 
 # allow to change background color (fill), other than white
 # page spec parse errors

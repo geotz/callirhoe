@@ -1,28 +1,33 @@
-# a: holiday occurs annually fixed day/month
-# m: holiday occurs monthly, fixed day
-# f: fixed day/month/year combination (e.g. deadline, trip, etc.)
+# type|DATE*span|footer|header|flags
+# type|DATE1-DATE2|footer|header|flags
+# type|DATE|footer|header|flags
+#
+# type:
+# d: event occurs annually fixed day/month: MMDD
+# d: event occurs monthly, fixed day: DD
+# d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
 # oe: Orthodox Easter-dependent holiday, annually
 # ge: Georgios' name day, Orthodox Easter dependent holiday, annually
 # ce: Catholic Easter holiday
+#
+# DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+# flags = {off, multi}
 
-# type|day*span|month|year|footer|header|off
-# type|day|month|year|footer|header|off
-# day*span supported only for f
+d|0101||Nouvel an|off
+d|0501||Fête du Travail|off
+d|0508||Fête de la Victoire|off
+d|0714||Fête nationale|off
+d|0815||Assomption|off
+d|1101||Toussaint|off
+d|1111||Armistice de 1918|off
+d|1225||Noël|off
+d|1226||Saint-Étienne|off
 
-a|1|1|||Nouvel an|off
-a|1|5|||Fête du Travail|off
-a|8|5|||Fête de la Victoire|off
-a|14|7|||Fête nationale|off
-a|15|8|||Assomption|off
-a|1|11|||Toussaint|off
-a|11|11|||Armistice de 1918|off
-a|25|12|||Noël|off
-a|26|12|||Saint-Étienne|off
-ce|-2||||Vendredi saint|
-ce|0||||Pâques|off
-ce|1||||Lundi de Pâques|off
-ce|39||||Ascension|off
-ce|50||||Lundi de Pentecôte|off
+ce|-2||Vendredi saint|
+ce|0||Pâques|off
+ce|1||Lundi de Pâques|off
+ce|39||Ascension|off
+ce|50||Lundi de Pentecôte|off
 
-f|23*16|2|2013|vacances d'hiver (B)||multi
-f|22*16|2|2014|vacances d'hiver (B)||multi
+d|20130223-20130310|vacances d'hiver (B)||multi
+d|20140222-20140309|vacances d'hiver (B)||multi

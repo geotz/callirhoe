@@ -1,28 +1,33 @@
-# a: holiday occurs annually fixed day/month
-# m: holiday occurs monthly, fixed day
-# f: fixed day/month/year combination (e.g. deadline, trip, etc.)
+# type|DATE*span|footer|header|flags
+# type|DATE1-DATE2|footer|header|flags
+# type|DATE|footer|header|flags
+#
+# type:
+# d: event occurs annually fixed day/month: MMDD
+# d: event occurs monthly, fixed day: DD
+# d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
 # oe: Orthodox Easter-dependent holiday, annually
 # ge: Georgios' name day, Orthodox Easter dependent holiday, annually
 # ce: Catholic Easter holiday
+#
+# DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+# flags = {off, multi}
 
-# type|day*span|month|year|footer|header|off
-# type|day|month|year|footer|header|off
-# day*span supported only for f
+d|0101||New year's|off
+d|0501||Labour day|off
+d|0508||Victory in Europe|off
+d|0714||Bastille|off
+d|0815||Assumption of Mary|off
+d|1101||All Saints|off
+d|1111||Armistice|off
+d|1225||Christmas|off
+d|1226||St. Stephen's|off
 
-a|1|1|||New year's|off
-a|1|5|||Labour day|off
-a|8|5|||Victory in Europe|off
-a|14|7|||Bastille|off
-a|15|8|||Assumption of Mary|off
-a|1|11|||All Saints|off
-a|11|11|||Armistice|off
-a|25|12|||Christmas|off
-a|26|12|||St. Stephen's|off
-ce|-2||||Good Friday|
-ce|0||||Easter|off
-ce|1||||Easter Monday|off
-ce|39||||Ascension|off
-ce|50||||Whit Monday|off
+ce|-2||Good Friday|
+ce|0||Easter|off
+ce|1||Easter Monday|off
+ce|39||Ascension|off
+ce|50||Whit Monday|off
 
-f|23*16|2|2013|winter vacations (B)||multi
-f|22*16|2|2014|winter vacations (B)||multi
+d|20130223-20130310|winter vacations (B)||multi
+f|20140222-20140309|winter vacations (B)||multi
