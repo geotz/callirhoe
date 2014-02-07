@@ -20,7 +20,6 @@
 # TODO:
 
 # fix day names (length)
-# fix odd-even year color (always start from dark)
 
 # allow to change background color (fill), other than white
 # page spec parse errors
