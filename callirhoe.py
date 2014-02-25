@@ -19,7 +19,9 @@
 
 # TODO:
 
+# separate bar/matrix [WIP] - move common code aside (base class?)
 # fix auto-measure rendering (cairo)
+
 
 # allow to change background color (fill), other than white
 # page spec parse errors
@@ -259,12 +261,22 @@ xcairo.XDPI = options.dpi
 Geometry.pagespec = options.paper
 Geometry.border = options.border
 
-hp = holiday.HolidayProvider(Style.dom, Style.dom_weekend,
+hprovider = holiday.HolidayProvider(Style.dom, Style.dom_weekend,
                              Style.dom_holiday, Style.dom_weekend_holiday,
                              Style.dom_multi, Style.dom_weekend_multi)
 
 if options.holidays:
     for f in options.holidays:
-        hp.load_holiday_file(f)
+        hprovider.load_holiday_file(f)
 
-Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry), hp, _version)
+if options.long_daynames:
+    Language.day_name = Language.long_day_name
+else:
+    Language.day_name = Language.short_day_name
+    
+if options.short_monthnames:
+    Language.month_name = Language.short_month_name
+else:
+    Language.month_name = Language.long_month_name
+
+Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry,Language), hprovider, _version)

@@ -55,10 +55,11 @@ class Holiday(object):
     Properties:
         header: string for header
         footer: string for footer
-        flags : bit combination of {OFF=1, MULTI=2}
+        flags : bit combination of {OFF=1, MULTI=2, REMINDER=4}
             OFF: day off (real holiday)
             MULTI: multi-day event (used to mark long day ranges,
                                     not necessarily holidays)
+            REMINDER: do not mark the day as holiday
 
     Remarks:
         Rendering style is considered in the following order:
@@ -68,6 +69,7 @@ class Holiday(object):
     """
     OFF = 1
     MULTI = 2
+    REMINDER = 4
     def __init__(self, header = [], footer = [], flags_str = None):
         self.header_list = self._strip_empty(header)
         self.footer_list = self._strip_empty(footer)
@@ -95,6 +97,8 @@ class Holiday(object):
         for s in fs:
             if s == 'off': val |= Holiday.OFF
             elif s == 'multi': val |= Holiday.MULTI
+            # allow for prefix abbrev.
+            elif 'reminder'.startswith(s): val |= Holiday.REMINDER
         return val
 
     def _strip_empty(self, sl):
@@ -118,7 +122,7 @@ def _decode_date_str(ddef):
     raise ValueError("invalid date definition '%s'" % ddef)
 
 class HolidayProvider(object):
-    def __init__(self, s_normal, s_weekend, s_holiday, s_weekend_holiday, s_multi, s_weekend_multi):
+    def __init__(self, s_normal, s_weekend, s_holiday, s_weekend_holiday, s_multi, s_weekend_multi, verbose=True):
         self.annual = dict() # key = (d,m)
         self.monthly = dict() # key = d
         self.fixed = dict() # key = date()
@@ -133,6 +137,7 @@ class HolidayProvider(object):
         self.s_weekend_holiday = s_weekend_holiday
         self.s_multi = s_multi
         self.s_weekend_multi = s_weekend_multi
+        self.verbose = verbose
 
     def parse_day_record(self, fields):
         """return tuple (etype,ddef,footer,header,flags)
@@ -184,11 +189,17 @@ class HolidayProvider(object):
     def multi_holiday_tuple(self, date1, date2, header, footer, flags):
         """returns Holiday objects for (beginning, end, first_dom, rest)"""
         if header:
-            header_tuple = (header+'..', '..'+header, '..'+header+'..', None)
+            if self.verbose:
+              header_tuple = (header+'..', '..'+header, '..'+header+'..', None)
+            else:
+              header_tuple = (header, None, header, None)
         else:
             header_tuple = (None, None, None, None)
         if footer:
-            footer_tuple = (footer+'..', '..'+footer, '..'+footer+'..', None)
+            if self.verbose:
+              footer_tuple = (footer+'..', '..'+footer, '..'+footer+'..', None)
+            else:
+              footer_tuple = (footer, None, footer, None)
         else:
             footer_tuple = (None, None, None, None)
         return tuple(map(lambda k: Holiday([header_tuple[k]], [footer_tuple[k]], flags),

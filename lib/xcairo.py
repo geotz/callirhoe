@@ -172,6 +172,17 @@ def draw_shadow(cr, rect, thickness = None, shadow_color = (0,0,0,0.3)):
     set_color(cr, shadow_color)
     cr.close_path(); cr.fill();
 
+def draw_line(cr, rect, stroke_rgba = None, stroke_width = 1.0):
+    if (stroke_width <= 0): return
+    x, y, w, h = rect
+    cr.move_to(x, y)
+    cr.rel_line_to(w, h)
+    cr.close_path()
+    if stroke_rgba:
+        set_color(cr, stroke_rgba)
+        cr.set_line_width(stroke_width)
+    cr.stroke()
+
 def draw_box(cr, rect, stroke_rgba = None, fill_rgba = None, stroke_width = 1.0, shadow = None):
     if (stroke_width <= 0): return
     draw_shadow(cr, rect, shadow)
@@ -202,6 +213,10 @@ def draw_str(cr, text, rect, stretch = -1, stroke_rgba = None, align = (2,0), bb
     if measure is None: measure = text
     te = cr.text_extents(measure)
     mw, mh = te[2], te[3]
+    if mw < 5:
+      mw = 5.
+    if mh < 5:
+      mh = 5.
     ratio, tratio = w*1.0/h, mw*1.0/mh;
     xratio, yratio = mw*1.0/w, mh*1.0/h;
     if stretch < 0: stretch = 1 if xratio >= yratio else 2

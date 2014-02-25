@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- layouts.classic ---
+# --- layouts.bars ---
 
 from lib.xcairo import *
 from lib.geom import *
@@ -69,13 +69,6 @@ parser.add_option("--opaque", action="store_true", default=False,
 parser.add_option("--swap-colors", action="store_true", default=None,
                   help="swap month colors for even/odd years")
 
-
-def _weekrows_of_month(year, month):
-    day,span = calendar.monthrange(year, month)
-    if day == 0 and span == 28: return 4
-    if day == 5 and span == 31: return 6
-    if day == 6 and span >= 30: return 6
-    return 5
 
 def _draw_day_cell_short(cr, rect, day, header, footer, theme, show_day_name):
     S,G,L = theme
@@ -146,54 +139,38 @@ def draw_month(cr, rect, month, year, theme, holiday_provider, daycell_thres = 2
     apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
     day, span = calendar.monthrange(year, month)
-    weekrows = 6 if G.month.symmetric else _weekrows_of_month(year, month)
-    dom = -day + 1;
-    wmeasure = 'A'*max(map(len,L.day_name))
     mmeasure = 'A'*max(map(len,L.month_name))
     if options.month_with_year:
         mmeasure += 'A'*(len(str(year))+1)
 
-    grid = GLayout(rect_from_origin(rect), 7, 7)
-    # 61.8% - 38.2% split (golden)
-    R_mb, R_db = rect_vsplit(grid.item_span(1, 7, 0, 0), 0.618)  # month name bar, day name bar
-    R_dnc = HLayout(R_db, 7) # day name cells = 1/7-th of day name bar
-    dom_grid = GLayout(grid.item_span(6, 7, 1, 0), weekrows, 7)
-    
-    # draw box shadow
+    rows = 31 if G.month.symmetric else span 
+    grid = VLayout(rect_from_origin(rect), 32) # title bar always symmetric
+    dom_grid = VLayout(grid.item_span(31,1), rows)
+
+    # draw box shadow    
     if S.month.box_shadow:
         f = S.month.box_shadow_size
         shad = (f,-f) if G.landscape else (f,f)
         draw_shadow(cr, rect_from_origin(rect), shad)
         
-    # draw day names
-    for col in range(7):
-        R = R_dnc.item(col)
-        draw_box(cr, rect = R, stroke_rgba = S.dom.frame,
-                 fill_rgba = S.dom.bg if col < 5 else S.dom_weekend.bg,
-                 stroke_width = mm_to_dots(S.dow.frame_thickness))
-        R_text = rect_rel_scale(R, 1, 0.5)
-        draw_str(cr, text = L.day_name[col], rect = R_text, stretch = -1, stroke_rgba = S.dow.fg,
-                 align = (2,0), font = S.dow.font, measure = wmeasure)
-        
     # draw day cells
-    for row in range(weekrows):
-        for col in range(7):
-            R = dom_grid.item(row, col)
-            if dom > 0 and dom <= span:
-                holiday_tuple = holiday_provider(year, month, dom, col)
-                day_style = holiday_tuple[2]
-                draw_day_cell(cr, rect = R, day = (dom, col),
-                              header = holiday_tuple[0], footer = holiday_tuple[1], theme = (day_style, G.dom, L), show_day_name = False,
-                              short_thres = daycell_thres)
-            else:
-                day_style = S.dom_weekend if col >= 5 else S.dom
-                draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
-                         stroke_width = mm_to_dots(day_style.frame_thickness))
-            dom += 1
-            
+    for dom in range(1,rows+1):
+        R = dom_grid.item(dom-1)
+        if dom <= span:
+            holiday_tuple = holiday_provider(year, month, dom, day)
+            day_style = holiday_tuple[2]
+            draw_day_cell(cr, rect = R, day = (dom, day), header = holiday_tuple[0], footer = holiday_tuple[1],
+                          theme = (day_style, G.dom, L), show_day_name = True, short_thres = daycell_thres)
+        else:
+            day_style = S.dom
+            draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
+                     stroke_width = mm_to_dots(day_style.frame_thickness))
+        day = (day + 1) % 7
+        
     # draw month title (name)
     mcolor = S.month.color_map_bg[year%2][month]
     mcolor_fg = S.month.color_map_fg[year%2][month]
+    R_mb = grid.item(0)
     draw_box(cr, rect = R_mb, stroke_rgba = S.month.frame, fill_rgba = mcolor,
              stroke_width = mm_to_dots(S.month.frame_thickness)) # title box
     draw_box(cr, rect = rect_from_origin(rect), stroke_rgba = S.month.frame, fill_rgba = (),
@@ -208,6 +185,7 @@ def draw_month(cr, rect, month, year, theme, holiday_provider, daycell_thres = 2
     draw_str(cr, text = title_str, rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
              align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
     cr.restore()
+
 
 #1   1   1
 #2   2   1
