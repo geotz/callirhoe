@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #    callirhoe - high quality calendar rendering
-#    Copyright (C) 2012-2013 George M. Tzoumas
+#    Copyright (C) 2012-2014 George M. Tzoumas
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -179,7 +179,9 @@ for x in argv2:
     if not Layout.parser.has_option(x):
         parser.error("invalid option %s; use --help (-h) or --layout-help (-?) to see available options" % x)
 
-(Layout.options,largs) = Layout.parser.parse_args(argv2)
+(loptions,largs) = Layout.parser.parse_args(argv2)
+Layout.setoptions(loptions)
+
 if options.layouthelp:
     #print "Help for layout:", options.layout
     Layout.parser.print_help()

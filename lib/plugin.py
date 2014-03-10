@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #    callirhoe - high quality calendar rendering
-#    Copyright (C) 2012 George M. Tzoumas
+#    Copyright (C) 2012-2014 George M. Tzoumas
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,10 @@ def available_files(parent, dir, fmatch = ""):
     for x in glob.glob(pattern):
         basex = os.path.basename(x)
         if basex == "__init__.py": good = True
+        elif basex.startswith('_'):
+            # ignore files aimed for internal use
+            # safer than [a-z]-style matching...
+            continue
         else: 
             base = os.path.splitext(basex)[0]
             if base and ((not fmatch) or (fmatch == base)): res.append((base,parent))
