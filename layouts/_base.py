@@ -20,9 +20,11 @@
 import optparse
 from lib.xcairo import *
 from lib.geom import *
+from math import floor, ceil, sqrt
 
-def get_parser():
-    parser = optparse.OptionParser(usage="%prog (...) --layout classic [options] (...)",add_help_option=False)
+def get_parser(layout_name):
+    lname = layout_name.split(".")[1]
+    parser = optparse.OptionParser(usage="%prog (...) --layout " + lname + " [options] (...)",add_help_option=False)
     parser.add_option("--rows", type="int", default=0, help="force grid rows [%default]")
     parser.add_option("--cols", type="int", default=0,
                       help="force grid columns [%default]; if ROWS and COLS are both non-zero, "
@@ -69,7 +71,7 @@ def get_parser():
 
 
 class DayCell(object):
-    def __init__(day, header, footer, theme, show_day_name):
+    def __init__(self, day, header, footer, theme, show_day_name):
         self.day = day
         self.header = header
         self.footer = footer
@@ -136,7 +138,132 @@ class DayCell(object):
 
     def draw(self, cr, rect, short_thres):
         if rect_ratio(rect) < short_thres:
-            _draw_short(cr, rect)
+            self._draw_short(cr, rect)
         else:
-            _draw_long(cr, rect)
+            self._draw_long(cr, rect)
 
+
+class CalendarRenderer(object):
+    def __init__(self, Outfile, Year, Month, MonthSpan, Theme, holiday_provider, version_string, options):
+        self.Outfile = Outfile
+        self.Year = Year
+        self.Month = Month
+        self.MonthSpan = MonthSpan
+        self.Theme = Theme
+        self.holiday_provider = holiday_provider
+        self.version_string = version_string
+        self.options = options
+        
+    def _draw_month(self, cr, rect, month, year, daycell_thres):
+        raise NotImplementedError("base _draw_month() should be overridden")
+        
+#1   1   1
+#2   2   1
+#3   3   1
+
+#4   2   2
+#5   3   2
+#6   3   2
+#7   4   2
+#8   4   2
+
+#9   3   3
+#10  4   3
+#11  4   3
+#12  4   3
+
+#rows = 0
+#cols = 0
+    def render(self):
+        S,G,L = self.Theme
+        rows, cols = self.options.rows, self.options.cols
+
+        if self.options.symmetric:
+            G.month.symmetric = True
+        if self.options.padding is not None:
+            G.month.padding = self.options.padding
+        if self.options.no_shadow == True:
+            S.month.box_shadow = False
+        if self.Year % 2: self.options.swap_colors = not self.options.swap_colors
+        if self.options.swap_colors:
+            S.month.color_map_bg = (S.month.color_map_bg[1], S.month.color_map_bg[0]) 
+            S.month.color_map_fg = (S.month.color_map_fg[1], S.month.color_map_fg[0]) 
+
+        try:
+            page = PageWriter(self.Outfile, G.landscape, G.pagespec, G.border, not self.options.opaque)
+        except InvalidFormat as e:
+            print >> sys.stderr, "invalid output format", e.args[0]
+            sys.exit(1)
+        
+        if rows == 0 and cols == 0:
+    #        if MonthSpan < 4: 
+    #            cols = 1; rows = MonthSpan
+    #        elif MonthSpan < 9: 
+    #            cols = 2; rows = int(math.ceil(MonthSpan/2.0))
+    #        else:
+                # TODO: improve this heuristic
+                cols = int(floor(sqrt(self.MonthSpan)))
+                rows = cols
+                if rows*cols < self.MonthSpan: rows += 1
+                if rows*cols < self.MonthSpan: rows += 1
+                if rows*cols < self.MonthSpan: cols += 1; rows -= 1
+                if G.landscape: rows, cols = cols, rows
+        elif rows == 0:
+            rows = int(ceil(self.MonthSpan*1.0/cols))
+        elif cols == 0:
+            cols = int(ceil(self.MonthSpan*1.0/rows))
+        G.landscape = page.landscape  # PNG is pseudo-landscape (portrait with width>height)
+        
+        if not self.options.no_footer:
+            V0 = VLayout(page.Text_rect, 40, (1,)*4)
+            Rcal = V0.item_span(39,0)
+            Rc = rect_rel_scale(V0.item(39),1,0.5,0,0)
+        else:
+            Rcal = page.Text_rect
+
+        grid = GLayout(Rcal, rows, cols, pad = (mm_to_dots(G.month.padding),)*4)
+        mpp = grid.count() # months per page
+        num_pages = int(ceil(self.MonthSpan*1.0/mpp))
+        cur_month = self.Month
+        cur_year = self.Year
+        num_placed = 0
+        page_layout = []
+        for k in xrange(num_pages):
+            page_layout.append([])
+            for i in xrange(mpp):
+                page_layout[k].append((cur_month,cur_year))
+                num_placed += 1
+                cur_month += 1
+                if cur_month > 12: cur_month = 1; cur_year += 1
+                if num_placed >= self.MonthSpan: break
+                
+        num_pages_written = 0
+        
+        z_order = self.options.z_order
+        if z_order == "auto":
+            if G.month.sloppy_dx != 0 or G.month.sloppy_dy != 0 or G.month.sloppy_rot != 0:
+                z_order = "decreasing"
+            else:
+                z_order = "increasing"
+        for p in page_layout:
+            num_placed = 0
+            yy = [p[0][1]]
+            if z_order == "decreasing": p.reverse()
+            for (m,y) in p:
+                k = len(p) - num_placed - 1 if z_order == "decreasing" else num_placed 
+                self._draw_month(page.cr, grid.item_seq(k, self.options.grid_order == "column"), 
+                           month=m, year=y, daycell_thres = self.options.short_daycell_ratio)
+                num_placed += 1
+                if (y > yy[-1]): yy.append(y)
+            if not self.options.month_with_year and not self.options.no_footer:
+                year_str = str(yy[0]) if yy[0] == yy[-1] else "%s – %s" % (yy[0],yy[-1])
+                draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = -1, 
+                         align = (0,0), font = (extract_font_name(S.month.font),0,0))
+            if not self.options.no_footer:
+                draw_str(page.cr, text = "rendered by Callirhoe ver. %s" % self.version_string,
+                         rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = -1, align = (1,0),
+                         font = (extract_font_name(S.month.font),1,0))
+            num_pages_written += 1
+            page.end_page()
+            if num_pages_written < num_pages:
+                page.new_page()

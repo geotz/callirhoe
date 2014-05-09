@@ -180,7 +180,6 @@ for x in argv2:
         parser.error("invalid option %s; use --help (-h) or --layout-help (-?) to see available options" % x)
 
 (loptions,largs) = Layout.parser.parse_args(argv2)
-Layout.setoptions(loptions)
 
 if options.layouthelp:
     #print "Help for layout:", options.layout
@@ -271,14 +270,16 @@ if options.holidays:
     for f in options.holidays:
         hprovider.load_holiday_file(f)
 
-if options.long_daynames:
+if loptions.long_daynames:
     Language.day_name = Language.long_day_name
 else:
     Language.day_name = Language.short_day_name
     
-if options.short_monthnames:
+if loptions.short_monthnames:
     Language.month_name = Language.short_month_name
 else:
     Language.month_name = Language.long_month_name
 
-Layout.draw_calendar(Outfile, Year, Month, MonthSpan, (Style,Geometry,Language), hprovider, _version)
+renderer = Layout.CalendarRenderer(Outfile, Year, Month, MonthSpan, 
+                                    (Style,Geometry,Language), hprovider, _version, loptions)
+renderer.render()
