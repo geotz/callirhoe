@@ -18,14 +18,14 @@
 
 # *****************************************
 #                                         #
-#       holiday support routines          #
+"""       holiday support routines       """
 #                                         #
 # *****************************************
 
 from datetime import date, timedelta
 
 def _get_orthodox_easter(year):
-    """compute date of orthodox easter"""
+    """Compute date of orthodox easter."""
     y1, y2, y3 = year % 4 , year % 7, year % 19
     a = 19*y3 + 15
     y4 = a % 30
@@ -37,7 +37,7 @@ def _get_orthodox_easter(year):
 #    return res
 
 def _get_catholic_easter(year):
-    """compute date of catholic easter"""
+    """Compute date of catholic easter."""
     a, b, c = year % 19, year // 100, year % 100
     d, e = divmod(b,4)
     f = (b + 8) // 25
@@ -50,22 +50,24 @@ def _get_catholic_easter(year):
     return date(year, emonth, edate+1)
 
 class Holiday(object):
-    """class holding a Holiday object (date is not stored!)
+    """class holding a Holiday object (date is I{not} stored!)
 
-    Properties:
-        header: string for header
-        footer: string for footer
-        flags : bit combination of {OFF=1, MULTI=2, REMINDER=4}
-            OFF: day off (real holiday)
-            MULTI: multi-day event (used to mark long day ranges,
-                                    not necessarily holidays)
-            REMINDER: do not mark the day as holiday
+    @ivar header: string for header (primary text)
+    @ivar footer: string for footer (secondary text)
+    @ivar flags: bit combination of {OFF=1, MULTI=2, REMINDER=4}
 
-    Remarks:
-        Rendering style is considered in the following order:
-            1) OFF
-            2) MULTI
-        First flag that matches determines the style
+            I{OFF}: day off (real holiday)
+
+            I{MULTI}: multi-day event (used to mark long day ranges,
+            not necessarily holidays)
+
+            I{REMINDER}: do not mark the day as holiday
+
+    @note: Rendering style is determined considering L{flags} in this order:
+                1. OFF
+                2. MULTI
+
+            First flag that matches determines the style.
     """
     OFF = 1
     MULTI = 2
@@ -76,6 +78,7 @@ class Holiday(object):
         self.flags = self._parse_flags(flags_str)
 
     def merge_with(self, hol_list):
+        """Merge a list of holiday objects into this object."""
         for hol in hol_list:
             self.header_list.extend(hol.header_list)
             self.footer_list.extend(hol.footer_list)
@@ -142,11 +145,11 @@ class HolidayProvider(object):
     def parse_day_record(self, fields):
         """return tuple (etype,ddef,footer,header,flags)
 
-           Remarks:
-               ddef is either None
-               or int
-               or ((y,m,d),)
-               or ((y,m,d),(y,m,d))
+           @note: I{ddef} is one of the following:
+               None
+               int
+               ((y,m,d),)
+               ((y,m,d),(y,m,d))
         """
         if len(fields) != 5:
             raise ValueError("Too many fields: " + str(fields))
@@ -187,7 +190,7 @@ class HolidayProvider(object):
         return (fields[0],res,fields[2],fields[3],fields[4])
 
     def multi_holiday_tuple(self, date1, date2, header, footer, flags):
-        """returns Holiday objects for (beginning, end, first_dom, rest)"""
+        """Returns Holiday objects for (beginning, end, first_dom, rest)"""
         if header:
             if self.verbose:
               header_tuple = (header+'..', '..'+header, '..'+header+'..', None)
@@ -319,12 +322,11 @@ class HolidayProvider(object):
         return self.s_weekend if dow >= 5 else self.s_normal
 
     def __call__(self, year, month, dom, dow):
-        """returns (header,footer,day_style)
+        """Returns (header,footer,day_style)
 
-        Args:
-            month: month (0-12)
-            dom: day of month (1-31)
-            dow: day of week (0-6)
+        @param month: month (0-12)
+        @param dom: day of month (1-31)
+        @param dow: day of week (0-6)
         """
         hol = self.get_holiday(year,month,dom)
         if hol:

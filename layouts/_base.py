@@ -39,10 +39,6 @@ def get_parser(layout_name):
                       "selects increasing order if and only if sloppy boxes are enabled [%default]")
     parser.add_option("--month-with-year", action="store_true", default=False,
                       help="displays year together with month name, e.g. January 1980; suppresses year from footer line")
-    parser.add_option("--short-monthnames", action="store_true", default=False,
-                      help="user the short version of month names (defined in language file) [%default]")
-    parser.add_option("--long-daynames", action="store_true", default=False,
-                    help="user the long version of day names (defined in language file) [%default]")
     parser.add_option("--long-daycells", action="store_const", const=0.0, dest="short_daycell_ratio",
                       help="force use of only long daycells")
     parser.add_option("--short-daycells", action="store_const", const=1.0e6, dest="short_daycell_ratio",
