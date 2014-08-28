@@ -55,7 +55,7 @@ class CalendarRenderer(_base.CalendarRenderer):
             if dom <= span:
                 holiday_tuple = self.holiday_provider(year, month, dom, day)
                 day_style = holiday_tuple[2]
-                dcell = _base.DayCell(day = (dom, col), header = holiday_tuple[0], footer = holiday_tuple[1],
+                dcell = _base.DayCell(day = (dom, day), header = holiday_tuple[0], footer = holiday_tuple[1],
                                       theme = (day_style, G.dom, L), show_day_name = True)
                 dcell.draw(cr, R, daycell_thres)
             else:
