@@ -16,6 +16,7 @@
 
 # --- style.rainbow ---
 
+"""module defining rainbow color & gfs style"""
 
 import gfs
 

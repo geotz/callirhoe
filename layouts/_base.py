@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- layouts._base ---
+"""base layout module -- others may inherit from this one"""
 
 import optparse
 from lib.xcairo import *
@@ -23,6 +23,10 @@ from lib.geom import *
 from math import floor, ceil, sqrt
 
 def get_parser(layout_name):
+    """get the parser object for the layout command-line arguments
+
+    @param layout_name: corresponding python module (.py file)
+    """
     lname = layout_name.split(".")[1]
     parser = optparse.OptionParser(usage="%prog (...) --layout " + lname + " [options] (...)",add_help_option=False)
     parser.add_option("--rows", type="int", default=0, help="force grid rows [%default]")
@@ -67,6 +71,16 @@ def get_parser(layout_name):
 
 
 class DayCell(object):
+    """class Holding a day cell to be drawn
+
+    @type day: int
+    @ivar day: day of week
+    @ivar header: header string
+    @ivar footer: footer string
+    @ivar theme: (Style,Geometry,Language) tuple
+    @type show_day_name: bool
+    @ivar show_day_name: whether day name is displayed
+    """
     def __init__(self, day, header, footer, theme, show_day_name):
         self.day = day
         self.header = header
@@ -75,6 +89,7 @@ class DayCell(object):
         self.show_day_name = show_day_name
 
     def _draw_short(self, cr, rect):
+        """render the day cell in short mode"""
         S,G,L = self.theme
         x, y, w, h = rect
         day_of_month, day_of_week = self.day
@@ -86,24 +101,25 @@ class DayCell(object):
             Rdom = R
         valign = 0 if self.show_day_name else 2
         # draw day of month (number)
-        draw_str(cr, text = str(day_of_month), rect = Rdom, stretch = -1, stroke_rgba = S.fg,
+        draw_str(cr, text = str(day_of_month), rect = Rdom, scaling = -1, stroke_rgba = S.fg,
                  align = (2,valign), font = S.font, measure = "88")
         # draw name of day
         if self.show_day_name:
-            draw_str(cr, text = L.day_name[day_of_week][0], rect = Rdow, stretch = -1, stroke_rgba = S.fg,
+            draw_str(cr, text = L.day_name[day_of_week][0], rect = Rdow, scaling = -1, stroke_rgba = S.fg,
                      align = (2,valign), font = S.font, measure = "88")
         # draw header
         if self.header:
             R = rect_rel_scale(rect, G.header_size[0], G.header_size[1], 0, -1.0 + G.header_align)
-            draw_str(cr, text = self.header, rect = R, stretch = -1, stroke_rgba = S.header,
+            draw_str(cr, text = self.header, rect = R, scaling = -1, stroke_rgba = S.header,
                 font = S.header_font) # , measure = "MgMgMgMgMgMg"
         # draw footer
         if self.footer:
             R = rect_rel_scale(rect, G.footer_size[0], G.footer_size[1], 0, 1.0 - G.footer_align)
-            draw_str(cr, text = self.footer, rect = R, stretch = -1, stroke_rgba = S.footer,
+            draw_str(cr, text = self.footer, rect = R, scaling = -1, stroke_rgba = S.footer,
                 font = S.footer_font)
 
     def _draw_long(self, cr, rect):
+        """render the day cell in long mode"""
         S,G,L = self.theme
         x, y, w, h = rect
         day_of_month, day_of_week = self.day
@@ -116,23 +132,27 @@ class DayCell(object):
             Rdom = rect_rel_scale(R1, G.size[0], G.size[1])
         valign = 0 if self.show_day_name else 2
         # draw day of month (number)
-        draw_str(cr, text = str(day_of_month), rect = Rdom, stretch = -1, stroke_rgba = S.fg,
+        draw_str(cr, text = str(day_of_month), rect = Rdom, scaling = -1, stroke_rgba = S.fg,
                  align = (2,valign), font = S.font, measure = "88")
         # draw name of day
         if self.show_day_name:
-            draw_str(cr, text = L.day_name[day_of_week], rect = Rdow, stretch = -1, stroke_rgba = S.fg,
+            draw_str(cr, text = L.day_name[day_of_week], rect = Rdow, scaling = -1, stroke_rgba = S.fg,
                      align = (0,valign), font = S.font, measure = "M")
         Rh, Rf = rect_vsplit(Rhf, *G.hf_vsplit)
         # draw header
         if self.header:
-            draw_str(cr, text = self.header, rect = Rh, stretch = -1, stroke_rgba = S.header, align = (1,2),
+            draw_str(cr, text = self.header, rect = Rh, scaling = -1, stroke_rgba = S.header, align = (1,2),
                  font = S.header_font)
         # draw footer
         if self.footer:
-            draw_str(cr, text = self.footer, rect = Rf, stretch = -1, stroke_rgba = S.footer, align = (1,2),
+            draw_str(cr, text = self.footer, rect = Rf, scaling = -1, stroke_rgba = S.footer, align = (1,2),
                  font = S.footer_font)
 
     def draw(self, cr, rect, short_thres):
+        """automatically render a short or long day cell depending on threshold I{short_thres}
+
+        If C{rect} ratio is less than C{short_thres} then short mode is chosen, otherwise long mode.
+        """
         if rect_ratio(rect) < short_thres:
             self._draw_short(cr, rect)
         else:
@@ -140,6 +160,17 @@ class DayCell(object):
 
 
 class CalendarRenderer(object):
+    """base monthly calendar renderer - others inherit from this
+
+    @ivar Outfile: output file
+    @ivar Year: year of first month
+    @ivar Month: first month
+    @ivar MonthSpan: month span
+    @ivar Theme: (Style,Geometry,Language) tuple
+    @ivar holiday_provider: L{HolidayProvider} object
+    @ivar version_string: callirhoe version string
+    @ivar options: parser options object
+    """
     def __init__(self, Outfile, Year, Month, MonthSpan, Theme, holiday_provider, version_string, options):
         self.Outfile = Outfile
         self.Year = Year
@@ -151,6 +182,14 @@ class CalendarRenderer(object):
         self.options = options
         
     def _draw_month(self, cr, rect, month, year, daycell_thres):
+        """this method renders a calendar month, it B{should be overridden} in any subclass
+
+        @param cr: cairo context
+        @param rect: rendering rect
+        @param month: month
+        @param year: year
+        @param daycell_thres: short/long day cell threshold
+        """
         raise NotImplementedError("base _draw_month() should be overridden")
         
 #1   1   1
@@ -171,6 +210,7 @@ class CalendarRenderer(object):
 #rows = 0
 #cols = 0
     def render(self):
+        """main calendar rendering routine"""
         S,G,L = self.Theme
         rows, cols = self.options.rows, self.options.cols
 
@@ -186,7 +226,7 @@ class CalendarRenderer(object):
             S.month.color_map_fg = (S.month.color_map_fg[1], S.month.color_map_fg[0]) 
 
         try:
-            page = PageWriter(self.Outfile, G.landscape, G.pagespec, G.border, not self.options.opaque)
+            page = PageWriter(self.Outfile, G.pagespec, not self.options.opaque, G.landscape, G.border)
         except InvalidFormat as e:
             print >> sys.stderr, "invalid output format", e.args[0]
             sys.exit(1)
@@ -253,11 +293,11 @@ class CalendarRenderer(object):
                 if (y > yy[-1]): yy.append(y)
             if not self.options.month_with_year and not self.options.no_footer:
                 year_str = str(yy[0]) if yy[0] == yy[-1] else "%s – %s" % (yy[0],yy[-1])
-                draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = -1, 
+                draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), scaling = -1,
                          align = (0,0), font = (extract_font_name(S.month.font),0,0))
             if not self.options.no_footer:
                 draw_str(page.cr, text = "rendered by Callirhoe ver. %s" % self.version_string,
-                         rect = Rc, stroke_rgba = (0,0,0,0.5), stretch = -1, align = (1,0),
+                         rect = Rc, stroke_rgba = (0,0,0,0.5), scaling = -1, align = (1,0),
                          font = (extract_font_name(S.month.font),1,0))
             num_pages_written += 1
             page.end_page()

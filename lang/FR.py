@@ -16,6 +16,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
+"""French language definition file"""
+
 long_day_name = [ u'Lundi', u'Mardi', u'Mercredi',
              u'Jeudi', u'Vendredi', u'Samedi', u'Dimanche' ]
 

@@ -16,8 +16,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
+"""English language definition file"""
+
 long_day_name = [ u'Monday', u'Tuesday', u'Wednesday',
-             u'Thursday', u'Friday', u'Saturday', u'Sunday' ]
+             u'Thursday', u'Friday', u'Saturday', u'Sunday' ]         
 
 short_day_name = [ u'Mo', u'Tu', u'We', u'Th', u'Fr', u'Sa', u'Su' ]
 

@@ -16,6 +16,8 @@
 
 # --- geom.sloppy ---
 
+"""module defining the sloppy geometry"""
+
 import default
 
 class dom(default.dom): pass

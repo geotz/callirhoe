@@ -16,15 +16,17 @@
 
 # --- style.default ---
 
-# day of week
+"""module defining the default style"""
+
 class dow:
+    """day of week style"""
     fg = (0,0,1)
     frame_thickness = 0.1
     frame = (0.75,0.75,0.75)
     font = "Arial"
     
-# day of month
 class dom:
+    """day of month style"""
     bg = (1,1,1)
     frame = (0.75,0.75,0.75)
     frame_thickness = 0.1
@@ -35,25 +37,30 @@ class dom:
     header_font = footer_font = "Arial"
 
 class dom_weekend(dom):
+    """day of month style (weekend)"""
     bg = (0.7,1,1)
     fg = (0,0,1)
 
-# OFF flag
 class dom_holiday(dom):
+    """day of month (holiday, indicated by the OFF flag in the holiday file)"""
     bg = (0.7,1,1)
     fg = (1,0,0)
     header = (1,0,0)
     
 class dom_weekend_holiday(dom_holiday):
+    """day of month (weekend & holiday)"""
     pass
 
 class dom_multi(dom):
+    """day of month (multi-day holiday)"""
     bg = (0.7,1,1)
 
 class dom_weekend_multi(dom_multi):
+    """day of month (weekend in multi-day holiday)"""
     pass
 
 class month:    
+    """month style"""
     font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
     frame_thickness = 0.2

@@ -3,7 +3,7 @@
 #    callirhoe - high quality calendar rendering
 #    Copyright (C) 2012 George M. Tzoumas
 
-#    German language data
+"""  German language definition file"""
 #    Copyright (C) 2013 Neels Hofmeyr
 
 #    This program is free software: you can redistribute it and/or modify

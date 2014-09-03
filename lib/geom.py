@@ -170,7 +170,7 @@ class HLayout(VLayout):
         t = super(HLayout,self).item(i)
         return (t[1], t[0], t[3], t[2])
         
-class GLayout:
+class GLayout(object):
     """grid layout manager
 
     @ivar vrep: internal L{VLayout} for row computations

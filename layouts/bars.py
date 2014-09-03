@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #    callirhoe - high quality calendar rendering
-#    Copyright (C) 2012-2013 George M. Tzoumas
+#    Copyright (C) 2012-2014 George M. Tzoumas
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- layouts.bars ---
+"""bars layout"""
 
 from lib.xcairo import *
 from lib.geom import *
@@ -29,10 +29,11 @@ import _base
 parser = _base.get_parser(__name__)
 
 class CalendarRenderer(_base.CalendarRenderer):
+    """bars layout class"""
     #default thres = 2.5
     def _draw_month(self, cr, rect, month, year, daycell_thres):
         S,G,L = self.Theme
-        apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
+        make_sloppy_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
         day, span = calendar.monthrange(year, month)
         mmeasure = 'A'*max(map(len,L.month_name))
@@ -79,7 +80,7 @@ class CalendarRenderer(_base.CalendarRenderer):
             mshad = (f,-f) if G.landscape else (f,f)
         title_str = L.month_name[month]
         if self.options.month_with_year: title_str += ' ' + str(year)
-        draw_str(cr, text = title_str, rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
+        draw_str(cr, text = title_str, rect = R_text, scaling = -1, stroke_rgba = mcolor_fg,
                  align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
         cr.restore()
 

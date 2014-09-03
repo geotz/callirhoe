@@ -16,15 +16,17 @@
 
 # --- style.bw ---
 
-# day of week
+"""module defining the black-& white style"""
+
 class dow:
+    """day of week style"""
     fg = (.33,.33,.33)
     frame_thickness = 0.1
     frame = (0.8,0.8,0.8)
     font = "Arial"
     
-# day of month
 class dom:
+    """day of month style"""
     bg = (1,1,1)
     frame = (0.8,0.8,0.8)
     frame_thickness = 0.1
@@ -35,27 +37,33 @@ class dom:
     header_font = footer_font = "Arial"
 
 class dom_weekend(dom):
+    """day of month style (weekend)"""
     bg = (0.95,0.95,0.95)
     fg = (0,0,0)
     font = ("Times New Roman", 0, 1)
 
 class dom_holiday(dom):
+    """day of month (holiday, indicated by the OFF flag in the holiday file)"""
     fg = (0,0,0)
     bg = (0.95,0.95,0.95)
     header = (0,0,0)
     font = ("Times New Roman", 0, 1)
     
 class dom_weekend_holiday(dom_holiday):
+    """day of month (weekend & holiday)"""
     fg = (0,0,0)
     bg = (0.95,0.95,0.95)
 
 class dom_multi(dom_holiday):
+    """day of month (multi-day holiday)"""
     pass
 
 class dom_weekend_multi(dom_weekend_holiday):
+    """day of month (weekend in multi-day holiday)"""
     pass
 
 class month:    
+    """month style"""
     font = ("Times New Roman", 0, 1)
     frame = (0,0,0)
     frame_thickness = 0.2

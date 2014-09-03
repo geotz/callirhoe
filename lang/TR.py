@@ -3,7 +3,7 @@
 #    callirhoe - high quality calendar rendering
 #    Copyright (C) 2012 George M. Tzoumas
 
-#    Turkish language data
+"""  Turkish language definition file"""
 #    Copyright (C) 2013 Ece Neslihan Aybeke
 
 #    This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ long_day_name = [ u'Pazartesi', u'Salı', u' Çarşamba ',
 
 short_day_name = [ u'Pt', u'Sa', u'Ça', u'Pe', u'Cu', u'Ct', u'Pa' ]
 
-long_month_name = [ '', u'Ocak', 'Şubat', u'Mart', u'Nisan',
+long_month_name = [ '', u'Ocak', u'Şubat', u'Mart', u'Nisan',
                u'Mayıs', u'Haziran', u'Temmuz', u'Ağustos',
                u'Eylül', u'Ekim', u'Kasım', u'Aralık' ]
 

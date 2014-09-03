@@ -16,7 +16,10 @@
 
 # --- geom.default ---
 
+"""module defining the default geometry"""
+
 class dom:
+    """day of month geometry"""
     size = (0.5,0.5,0.8,0.5)   # short 0-1, long 2-3
     mw_split = (0.7,0.2)
     
@@ -27,6 +30,7 @@ class dom:
     hf_vsplit = (0.5,0.4)
     
 class month:
+    """month geometry"""
     symmetric = False
     sloppy_rot = 0
     sloppy_dx = 0

@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- layouts.classic ---
+"""classic layout"""
 
 from lib.xcairo import *
 from lib.geom import *
@@ -28,6 +28,7 @@ import _base
 parser = _base.get_parser(__name__)
 
 def _weekrows_of_month(year, month):
+    """returns the number of Monday-Sunday ranges (or subsets of) that a month contains, which are 4, 5 or 6"""
     day,span = calendar.monthrange(year, month)
     if day == 0 and span == 28: return 4
     if day == 5 and span == 31: return 6
@@ -35,10 +36,11 @@ def _weekrows_of_month(year, month):
     return 5
 
 class CalendarRenderer(_base.CalendarRenderer):
+    """classic tiles layout class"""
     #default thres = 2.5
     def _draw_month(self, cr, rect, month, year, daycell_thres):
         S,G,L = self.Theme
-        apply_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
+        make_sloppy_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
         day, span = calendar.monthrange(year, month)
         weekrows = 6 if G.month.symmetric else _weekrows_of_month(year, month)
@@ -67,7 +69,7 @@ class CalendarRenderer(_base.CalendarRenderer):
                      fill_rgba = S.dom.bg if col < 5 else S.dom_weekend.bg,
                      stroke_width = mm_to_dots(S.dow.frame_thickness))
             R_text = rect_rel_scale(R, 1, 0.5)
-            draw_str(cr, text = L.day_name[col], rect = R_text, stretch = -1, stroke_rgba = S.dow.fg,
+            draw_str(cr, text = L.day_name[col], rect = R_text, scaling = -1, stroke_rgba = S.dow.fg,
                      align = (2,0), font = S.dow.font, measure = wmeasure)
             
         # draw day cells
@@ -100,7 +102,7 @@ class CalendarRenderer(_base.CalendarRenderer):
             mshad = (f,-f) if G.landscape else (f,f)
         title_str = L.month_name[month]
         if self.options.month_with_year: title_str += ' ' + str(year)
-        draw_str(cr, text = title_str, rect = R_text, stretch = -1, stroke_rgba = mcolor_fg,
+        draw_str(cr, text = title_str, rect = R_text, scaling = -1, stroke_rgba = mcolor_fg,
                  align = (2,0), font = S.month.font, measure = mmeasure, shadow = mshad)
         cr.restore()
 

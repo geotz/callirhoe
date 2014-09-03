@@ -25,7 +25,7 @@
 from datetime import date, timedelta
 
 def _get_orthodox_easter(year):
-    """Compute date of orthodox easter."""
+    """compute date of orthodox easter"""
     y1, y2, y3 = year % 4 , year % 7, year % 19
     a = 19*y3 + 15
     y4 = a % 30
@@ -37,7 +37,7 @@ def _get_orthodox_easter(year):
 #    return res
 
 def _get_catholic_easter(year):
-    """Compute date of catholic easter."""
+    """compute date of catholic easter"""
     a, b, c = year % 19, year // 100, year % 100
     d, e = divmod(b,4)
     f = (b + 8) // 25
@@ -49,11 +49,23 @@ def _get_catholic_easter(year):
     emonth,edate = divmod(h + l - 7*m + 114,31)
     return date(year, emonth, edate+1)
 
-class Holiday(object):
-    """class holding a Holiday object (date is I{not} stored!)
+def _strip_empty(sl):
+    """strip empty strings from list I{sl}"""
+    return filter(lambda z: z, sl) if sl else []
 
-    @ivar header: string for header (primary text)
-    @ivar footer: string for footer (secondary text)
+def _flatten(sl):
+    """join list I{sl} into a comma-separated string"""
+    if not sl: return None
+    res = sl[0]
+    for s in sl[1:]:
+        res += ', ' + s
+    return res
+
+class Holiday(object):
+    """class holding a Holiday object (date is I{not} stored, use L{HolidayProvider} for that)
+
+    @ivar header_list: string list for header (primary text)
+    @ivar footer_list: string list for footer (secondary text)
     @ivar flags: bit combination of {OFF=1, MULTI=2, REMINDER=4}
 
             I{OFF}: day off (real holiday)
@@ -73,27 +85,31 @@ class Holiday(object):
     MULTI = 2
     REMINDER = 4
     def __init__(self, header = [], footer = [], flags_str = None):
-        self.header_list = self._strip_empty(header)
-        self.footer_list = self._strip_empty(footer)
+        self.header_list = _strip_empty(header)
+        self.footer_list = _strip_empty(footer)
         self.flags = self._parse_flags(flags_str)
 
     def merge_with(self, hol_list):
-        """Merge a list of holiday objects into this object."""
+        """merge a list of holiday objects into this object"""
         for hol in hol_list:
             self.header_list.extend(hol.header_list)
             self.footer_list.extend(hol.footer_list)
             self.flags |= hol.flags
 
     def header(self):
-        return self._flatten(self.header_list)
+        """return a comma-separated string for L{header_list}"""
+        return _flatten(self.header_list)
 
     def footer(self):
-        return self._flatten(self.footer_list)
+        """return a comma-separated string for L{footer_list}"""
+        return _flatten(self.footer_list)
 
-    def __repr__(self):
+    def __str__(self):
+        """string representation for debugging purposes"""
         return str(self.footer()) + ':' + str(self.header()) + ':' + str(self.flags)
 
     def _parse_flags(self, fstr):
+        """return a bit combination of flags, from a comma-separated string list"""
         if not fstr: return 0
         fs = fstr.split(',')
         val = 0
@@ -104,18 +120,20 @@ class Holiday(object):
             elif 'reminder'.startswith(s): val |= Holiday.REMINDER
         return val
 
-    def _strip_empty(self, sl):
-        return filter(lambda z: z, sl) if sl else []
-
-    def _flatten(self, sl):
-        if not sl: return None
-        res = sl[0]
-        for s in sl[1:]:
-            res += ', ' + s
-        return res
-
-
 def _decode_date_str(ddef):
+    """decode a date definition string into a I{(year,month,day)} tuple
+
+    @param ddef: date definition string of length 2, 4 or 8
+
+        If C{ddef} is of the form "DD" then tuple (0,0,DD) is returned, which
+        stands for any year - any month - day DD.
+
+        If C{ddef} is of the form "MMDD" then tuple (0,MM,DD) is returned, which
+        stands for any year - month MM - day DD.
+
+        If C{ddef} is of the form "YYYYMMDD" then tuple (YYYY,MM,DD) is returned, which
+        stands for year YYYY - month MM - day DD.
+    """
     if len(ddef) == 2:
         return (0,0,int(ddef))
     if len(ddef) == 4:
@@ -125,7 +143,36 @@ def _decode_date_str(ddef):
     raise ValueError("invalid date definition '%s'" % ddef)
 
 class HolidayProvider(object):
-    def __init__(self, s_normal, s_weekend, s_holiday, s_weekend_holiday, s_multi, s_weekend_multi, verbose=True):
+    """class holding the holidays throught the year(s)
+
+    @ivar annual: dict of events occuring annually, indexed by tuple I{(day,month)}. Note
+    each dict entry is actually a list of L{Holiday} objects. This is also true for the other
+    instance variables: L{monthly}, L{fixed}, L{orth_easter}, L{george}, L{cath_easter}.
+    @ivar monthly: event occuring monthly, indexed by int I{day}
+    @ivar fixed: fixed date events, indexed by a C{date()} object
+    @ivar orth_easter: dict of events relative to the orthodox easter Sunday, indexed by
+    an integer days offset
+    @ivar george: events occuring on St George's day (orthodox calendar special computation)
+    @ivar cath_easter: dict of events relative to the catholic easter Sunday, indexed by
+    an integer days offset
+    @ivar cache: for each year requested, all holidays occuring
+    within that year (annual, monthly, easter-based etc.) are precomputed and stored into
+    dict C{cache}, indexed by a C{date()} object
+    @ivar ycache: set holding cached years; each new year requested, triggers a cache-fill
+    operation
+    """
+    def __init__(self, s_normal, s_weekend, s_holiday, s_weekend_holiday, s_multi, s_weekend_multi, multiday_markers=True):
+        """initialize a C{HolidayProvider} object
+
+        @param s_normal: style class object for normal (weekday) day cells
+        @param s_weekend: style for weekend day cells
+        @param s_holiday: style for holiday day cells
+        @param s_weekend_holiday: style for holiday cells on weekends
+        @param s_multi: style for multi-day holiday weekday cells
+        @param s_weekend_multi: style for multi-day holiday weekend cells
+        @param multiday_markers: if C{True}, then use end-of-multiday-holiday markers and range markers (with dots),
+        otherwise only first day and first-day-of-month are marked
+        """
         self.annual = dict() # key = (d,m)
         self.monthly = dict() # key = d
         self.fixed = dict() # key = date()
@@ -140,9 +187,9 @@ class HolidayProvider(object):
         self.s_weekend_holiday = s_weekend_holiday
         self.s_multi = s_multi
         self.s_weekend_multi = s_weekend_multi
-        self.verbose = verbose
+        self.multiday_markers = multiday_markers
 
-    def parse_day_record(self, fields):
+    def _parse_day_record(self, fields):
         """return tuple (etype,ddef,footer,header,flags)
 
            @note: I{ddef} is one of the following:
@@ -189,17 +236,22 @@ class HolidayProvider(object):
             res = int(fields[1])
         return (fields[0],res,fields[2],fields[3],fields[4])
 
-    def multi_holiday_tuple(self, date1, date2, header, footer, flags):
-        """Returns Holiday objects for (beginning, end, first_dom, rest)"""
+    def _multi_holiday_tuple(self, header, footer, flags):
+        """returns a 4-tuple of L{Holiday} objects representing (beginning, end, first-day-of-month, rest)
+
+        @param header: passed as C{[header]} of the generated L{Holiday} object
+        @param footer: passed as C{[footer]} of the generated L{Holiday} object
+        @param flags: C{flags} of the generated L{Holiday} object
+        """
         if header:
-            if self.verbose:
+            if self.multiday_markers:
               header_tuple = (header+'..', '..'+header, '..'+header+'..', None)
             else:
               header_tuple = (header, None, header, None)
         else:
             header_tuple = (None, None, None, None)
         if footer:
-            if self.verbose:
+            if self.multiday_markers:
               footer_tuple = (footer+'..', '..'+footer, '..'+footer+'..', None)
             else:
               footer_tuple = (footer, None, footer, None)
@@ -208,29 +260,47 @@ class HolidayProvider(object):
         return tuple(map(lambda k: Holiday([header_tuple[k]], [footer_tuple[k]], flags),
                          range(4)))
 
-    # File Format:
-    # type|DATE*span|footer|header|flags
-    # type|DATE1-DATE2|footer|header|flags
-    # type|DATE|footer|header|flags
-    #
-    # type:
-    # d: event occurs annually fixed day/month: MMDD
-    # d: event occurs monthly, fixed day: DD
-    # d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
-    # oe: Orthodox Easter-dependent holiday, annually
-    # ge: Georgios' name day, Orthodox Easter dependent holiday, annually
-    # ce: Catholic Easter holiday
-    #
-    # DATE*span and DATE1-DATE2 supported only for YYYYMMDD
-    # flags = {off, multi}
     def load_holiday_file(self, filename):
+        """load a holiday file into the C{HolidayProvider} object
+
+        B{File Format:}
+            - C{type|date*span|footer|header|flags}
+            - C{type|date1-date2|footer|header|flags}
+            - C{type|date|footer|header|flags}
+
+        I{type:}
+            - C{d}: event occurs annually fixed day/month; I{date}=MMDD
+            - C{d}: event occurs monthly, fixed day; I{date}=DD
+            - C{d}: fixed day/month/year combination (e.g. deadline, trip, etc.); I{date}=YYYYMMDD
+            - C{oe}: Orthodox Easter-dependent holiday, annually; I{date}=integer offset in days
+            - C{ge}: Georgios' name day, Orthodox Easter dependent holiday, annually; I{date} field is ignored
+            - C{ce}: Catholic Easter holiday; I{date}=integer offset in days
+
+        I{date*span} and range I{date1-date2} supported only for I{date}=YYYYMMDD (fixed) events
+
+        I{flags:} comma-separated list of the following:
+            1. off
+            2. multi
+            3. reminder (or any prefix of it)
+
+        B{Example}::
+
+            d|0101||New year's|off
+            d|0501||Labour day|off
+            ce|-2||Good Friday|
+            ce|0||Easter|off
+            ce|1||Easter Monday|off
+            d|20130223-20130310|winter vacations (B)||multi
+
+        @param filename: file to be loaded
+        """
         with open(filename, 'r') as f:
             for line in f:
                 line = line.strip()
                 if not line: continue
                 if line[0] == '#': continue
                 fields = line.split('|')
-                etype,ddef,footer,header,flags = self.parse_day_record(fields)
+                etype,ddef,footer,header,flags = self._parse_day_record(fields)
                 hol = Holiday([header], [footer], flags)
                 if etype == 'd':
                     if len(ddef) == 1:
@@ -249,7 +319,7 @@ class HolidayProvider(object):
                             self.fixed[dt1].append(hol)
                         else:
                             # properly annotate multi-day events
-                            hols = self.multi_holiday_tuple(dt1, dt2, header, footer, flags)
+                            hols = self._multi_holiday_tuple(header, footer, flags)
                             dt = dt1
                             while dt <= dt2:
                                 if dt not in self.fixed: self.fixed[dt] = []
@@ -273,6 +343,11 @@ class HolidayProvider(object):
                     self.cath_easter[d].append(hol)
 
     def get_holiday(self, y, m, d):
+        """return a L{Holiday} object for the specified date (y,m,d) or C{None} if no holiday is defined
+
+        @note: If year I{y} has not been requested before, the cache is updated first
+        with all holidays that belong in I{y}, indexed by C{date()} objects.
+        """
         if y not in self.ycache:
             # fill-in events for year y
             # annual
@@ -315,6 +390,11 @@ class HolidayProvider(object):
         return self.cache[dt] if dt in self.cache else None
 
     def get_style(self, flags, dow):
+        """return appropriate style object, depending on I{flags} and I{dow}
+
+        @param flags: bit combination of holiday flags
+        @param dow: day of week
+        """
         if flags & Holiday.OFF:
             return self.s_weekend_holiday if dow >= 5 else self.s_holiday
         if flags & Holiday.MULTI:
@@ -322,7 +402,7 @@ class HolidayProvider(object):
         return self.s_weekend if dow >= 5 else self.s_normal
 
     def __call__(self, year, month, dom, dow):
-        """Returns (header,footer,day_style)
+        """returns (header,footer,day_style)
 
         @param month: month (0-12)
         @param dom: day of month (1-31)
@@ -337,6 +417,8 @@ class HolidayProvider(object):
 if __name__ == '__main__':
     import sys
     hp = HolidayProvider('n', 'w', 'h', 'wh', 'm', 'wm')
+    if len(sys.argv) < 3:
+        raise SystemExit("Usage: %s YEAR holiday_file ..." % sys.argv[0]);
     y = int(sys.argv[1])
     for f in sys.argv[2:]:
         hp.load_holiday_file(f)
