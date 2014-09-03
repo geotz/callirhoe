@@ -56,10 +56,7 @@ def _strip_empty(sl):
 def _flatten(sl):
     """join list I{sl} into a comma-separated string"""
     if not sl: return None
-    res = sl[0]
-    for s in sl[1:]:
-        res += ', ' + s
-    return res
+    return ', '.join(sl)
 
 class Holiday(object):
     """class holding a Holiday object (date is I{not} stored, use L{HolidayProvider} for that)
