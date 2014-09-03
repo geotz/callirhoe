@@ -37,8 +37,7 @@ def _weekrows_of_month(year, month):
 
 class CalendarRenderer(_base.CalendarRenderer):
     """classic tiles layout class"""
-    #default thres = 2.5
-    def _draw_month(self, cr, rect, month, year, daycell_thres):
+    def _draw_month(self, cr, rect, month, year):
         S,G,L = self.Theme
         make_sloppy_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
@@ -81,7 +80,7 @@ class CalendarRenderer(_base.CalendarRenderer):
                     day_style = holiday_tuple[2]
                     dcell = _base.DayCell(day = (dom, col), header = holiday_tuple[0], footer = holiday_tuple[1],
                                           theme = (day_style, G.dom, L), show_day_name = False)
-                    dcell.draw(cr, R, daycell_thres)
+                    dcell.draw(cr, R, self.options.short_daycell_ratio)
                 else:
                     day_style = S.dom_weekend if col >= 5 else S.dom
                     draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,

@@ -24,12 +24,13 @@
 # default values for rows/cols depending on layout (classic/bars)
 # fix auto-measure rendering (cairo)
 # fix plugin loading (without global vars)
+# week markers selectable
+# test layouts
 
 # allow to change background color (fill), other than white
 # page spec parse errors
 # mobile themes (e.g. 800x480)
 # photo support (like ImageMagick's polaroid effect)
-# python source documentation
 # .callirhoe/config : default values for plugins (styles/layouts/lang...) and cmdline
 
 # MAYBE-TODO:
@@ -181,6 +182,8 @@ if __name__ == "__main__":
                       help="user the short version of month names (defined in language file) [%default]")
     parser.add_option("--long-daynames", action="store_true", default=False,
                     help="user the long version of day names (defined in language file) [%default]")
+    parser.add_option("-T", "--terse-holidays", action="store_false", dest="multiday_holidays",
+                    default=True, help="do not print holiday end markers and omit dots")
 
     for x in ["languages", "layouts", "styles", "geometries"]:
         add_list_option(parser, x)
@@ -301,7 +304,7 @@ if __name__ == "__main__":
 
     hprovider = holiday.HolidayProvider(Style.dom, Style.dom_weekend,
                                  Style.dom_holiday, Style.dom_weekend_holiday,
-                                 Style.dom_multi, Style.dom_weekend_multi)
+                                 Style.dom_multi, Style.dom_weekend_multi, options.multiday_holidays)
 
     if options.holidays:
         for f in options.holidays:

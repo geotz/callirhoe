@@ -32,3 +32,4 @@ short_month_name = [ '',
                u'Jan', u'Feb', u'Mar', u'Apr', u'May', u'Jun', 
                u'Jul', u'Aug', u'Sep', u'Oct', u'Nov', u'Dec' ]
 
+week_of_year_prefix = u'W'

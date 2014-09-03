@@ -29,3 +29,5 @@ long_month_name = [ '', u'Ocak', u'Şubat', u'Mart', u'Nisan',
                u'Eylül', u'Ekim', u'Kasım', u'Aralık' ]
 
 short_month_name = long_month_name
+
+week_of_year_prefix = u'H'

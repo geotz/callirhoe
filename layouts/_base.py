@@ -77,7 +77,7 @@ class DayCell(object):
     @ivar day: day of week
     @ivar header: header string
     @ivar footer: footer string
-    @ivar theme: (Style,Geometry,Language) tuple
+    @ivar theme: (Style class,Geometry class,Language module) tuple
     @type show_day_name: bool
     @ivar show_day_name: whether day name is displayed
     """
@@ -166,7 +166,7 @@ class CalendarRenderer(object):
     @ivar Year: year of first month
     @ivar Month: first month
     @ivar MonthSpan: month span
-    @ivar Theme: (Style,Geometry,Language) tuple
+    @ivar Theme: (Style module,Geometry module,Language module) tuple
     @ivar holiday_provider: L{HolidayProvider} object
     @ivar version_string: callirhoe version string
     @ivar options: parser options object
@@ -181,14 +181,13 @@ class CalendarRenderer(object):
         self.version_string = version_string
         self.options = options
         
-    def _draw_month(self, cr, rect, month, year, daycell_thres):
+    def _draw_month(self, cr, rect, month, year):
         """this method renders a calendar month, it B{should be overridden} in any subclass
 
         @param cr: cairo context
         @param rect: rendering rect
         @param month: month
         @param year: year
-        @param daycell_thres: short/long day cell threshold
         """
         raise NotImplementedError("base _draw_month() should be overridden")
         
@@ -288,7 +287,7 @@ class CalendarRenderer(object):
             for (m,y) in p:
                 k = len(p) - num_placed - 1 if z_order == "decreasing" else num_placed 
                 self._draw_month(page.cr, grid.item_seq(k, self.options.grid_order == "column"), 
-                           month=m, year=y, daycell_thres = self.options.short_daycell_ratio)
+                           month=m, year=y)
                 num_placed += 1
                 if (y > yy[-1]): yy.append(y)
             if not self.options.month_with_year and not self.options.no_footer:

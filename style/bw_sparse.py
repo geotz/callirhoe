@@ -1,6 +1,9 @@
 #    callirhoe - high quality calendar rendering
 #    Copyright (C) 2012 George M. Tzoumas
 
+#    Sparse Style Definition
+#    Copyright (C) 2013 Neels Hofmeyr
+
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -16,43 +19,40 @@
 
 # --- style.bw ---
 
-"""module defining the black & white style"""
+"""module defining the black & white sparse style
+
+to be used with sparse layout
+"""
 
 class dow:
     """day of week style"""
-    fg = (.33,.33,.33)
+    fg = (0,0,0)
     frame_thickness = 0.1
-    frame = (0.8,0.8,0.8)
+    frame = (.5, .5, .5)
     font = "Arial"
     
 class dom:
     """day of month style"""
     bg = (1,1,1)
-    frame = (0.8,0.8,0.8)
+    frame = (.9, .9, .9)
     frame_thickness = 0.1
-    fg = (0.2,0.2,0.2)
+    fg = (0.3,0.3,0.3)
     font = "Times New Roman"
-    header = (0.5,0.5,0.5)
+    header = (0.3,0.3,0.3)
     footer = header
     header_font = footer_font = "Arial"
 
-class dom_weekend(dom):
-    """day of month style (weekend)"""
-    bg = (0.95,0.95,0.95)
-    fg = (0,0,0)
-    font = ("Times New Roman", 0, 1)
-
 class dom_holiday(dom):
     """day of month (holiday, indicated by the OFF flag in the holiday file)"""
-    fg = (0,0,0)
     bg = (0.95,0.95,0.95)
-    header = (0,0,0)
+
+class dom_weekend(dom_holiday):
+    """day of month style (weekend)"""
     font = ("Times New Roman", 0, 1)
-    
-class dom_weekend_holiday(dom_holiday):
+
+class dom_weekend_holiday(dom_weekend):
     """day of month (weekend & holiday)"""
-    fg = (0,0,0)
-    bg = (0.95,0.95,0.95)
+    pass
 
 class dom_multi(dom_holiday):
     """day of month (multi-day holiday)"""
