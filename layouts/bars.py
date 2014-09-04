@@ -27,6 +27,7 @@ from datetime import date, timedelta
 import _base
 
 parser = _base.get_parser(__name__)
+parser.set_defaults(rows=2)
 
 class CalendarRenderer(_base.CalendarRenderer):
     """bars layout class"""
