@@ -189,7 +189,7 @@ class PageWriter(Page):
             self.cr.show_page()
         else:
             self.curpage += 1
-            self.setup_surface_and_context()
+            self._setup_surface_and_context()
 
             
 def set_color(cr, rgba):

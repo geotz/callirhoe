@@ -37,7 +37,7 @@ def get_parser(layout_name):
     lname = layout_name.split(".")[1]
     parser = optparse.OptionParser(usage="%prog (...) --layout " + lname + " [options] (...)",add_help_option=False)
     parser.add_option("--rows", type="int", default=1, help="force grid rows [%default]")
-    parser.add_option("--cols", type="int", default=0,
+    parser.add_option("--cols", type="int", default=3,
                       help="force grid columns [%default]; if ROWS and COLS are both non-zero, "
                       "calendar will span multiple pages as needed; if one value is zero, it "
                       "will be computed automatically in order to fill exactly 1 page")

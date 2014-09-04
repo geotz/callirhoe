@@ -21,7 +21,6 @@
 
 # TODO:
 
-# default values for rows/cols depending on layout (classic/bars)
 # fix auto-measure rendering (cairo)
 # fix plugin loading (without global vars)
 # week markers selectable
@@ -45,7 +44,7 @@
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-_version = "0.2.2"
+_version = "0.3.0"
 
 import calendar
 import sys
@@ -101,9 +100,15 @@ Same as above, but in landscape mode (3x4) (for printing):
 Landscape via rotation (for screen):
     $ callirhoe --paper=a4w --rows=3 my_calendar.pdf
 
-Forcing 1 row only, we get month bars instead of boxes:
-    $ callirhoe --landscape --rows=1 my_calendar.pdf
-    
+Let's try with bars instead of boxes:
+    $ callirhoe -t bars my_calendar.pdf
+
+In landscape mode, one row only looks quite good:
+    $ callirhoe -t bars --landscape --rows=1 my_calendar.pdf
+
+How about a more flat look?
+    $ callirhoe -t sparse -s bw_sparse --rows=1 --cols=3 my_calendar.pdf
+
 Calendar of 24 consecutive months, starting from current month:
     $ callirhoe 0:24 0 my_calendar.pdf
     
