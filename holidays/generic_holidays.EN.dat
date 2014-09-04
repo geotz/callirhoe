@@ -1,0 +1,20 @@
+# type|DATE*span|footer|header|flags
+# type|DATE1-DATE2|footer|header|flags
+# type|DATE|footer|header|flags
+#
+# type:
+# d: event occurs annually fixed day/month: MMDD
+# d: event occurs monthly, fixed day: DD
+# d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+#
+# DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+# flags = {off, multi}
+
+d|0101||New year's|off
+d|0501||Labour day|off
+d|1225||Christmas|off
+ce|0||Easter|off
+oe|0||Orthodox Easter|off

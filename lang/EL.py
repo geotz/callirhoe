@@ -16,14 +16,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-day_name = [ u'Δευτέρα', u'Τρίτη', u'Τετάρτη', 
+"""Greek language definition file"""
+
+long_day_name = [ u'Δευτέρα', u'Τρίτη', u'Τετάρτη',
              u'Πέμπτη', u'Παρασκευή', u'Σάββατο', u'Κυριακή' ]
 
-short_day_name = [ u'Δευ', u'Τρι', u'Τετ', u'Πεμ', u'Παρ', u'Σαβ', u'Κυρ' ]
+short_day_name = [ u'Δε', u'Τρ', u'Τε', u'Πε', u'Πα', u'Σα', u'Κυ' ]
 
-month_name = [ '', u'Ιανουάριος', u'Φεβρουάριος', u'Μάρτιος', u'Απρίλιος', 
+long_month_name = [ '', u'Ιανουάριος', u'Φεβρουάριος', u'Μάρτιος', u'Απρίλιος',
                u'Μάιος', u'Ιούνιος', u'Ιούλιος', u'Αύγουστος', 
                u'Σεπτέμβριος', u'Οκτώβριος', u'Νοέμβριος', u'Δεκέμβριος' ]
 
 short_month_name = [ '', u'Ιαν', u'Φεβ', u'Μαρ', u'Απρ', u'Μαϊ', u'Ιον', u'Ιολ', 
                      u'Αυγ', u'Σεπ', u'Οκτ', u'Νοε', u'Δεκ' ]
+
+week_of_year_prefix = u'Ε'

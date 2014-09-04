@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #    callirhoe - high quality calendar rendering
-#    Copyright (C) 2012 George M. Tzoumas
+#    Copyright (C) 2012-2014 George M. Tzoumas
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 # *****************************************
 #                                         #
-#        plugin handling routines         #
+"""        plugin handling routines     """
 #                                         #
 # *****************************************
 
@@ -26,20 +26,33 @@ import sys
 import os.path
 import glob
 
-def available_files(parent, dir, fmatch = ""):
+def available_files(parent, dir, fmatch = None):
+    """find parent/dir/*.py files to be used for plugins
+
+    @note:
+           1. __init__.py should exist
+           2. files starting with underscore are ignored
+           3. if fnmatch is defined (base name), it matches a single file
+    """
     good = False
     res = []
     pattern = parent + "/" + dir + "/*.py"
     for x in glob.glob(pattern):
         basex = os.path.basename(x)
         if basex == "__init__.py": good = True
+        elif basex.startswith('_'):
+            # ignore files aimed for internal use
+            # safer than [a-z]-style matching...
+            continue
         else: 
             base = os.path.splitext(basex)[0]
             if base and ((not fmatch) or (fmatch == base)): res.append((base,parent))
     return res if good else []
 
 def plugin_list(cat):
-    return available_files(plugin_path[0], cat) + available_files(plugin_path[1], cat)
+    """return a sequence of available plugins, using L{available_files()} and L{get_plugin_paths()}"""
+    plugin_paths = get_plugin_paths()
+    return available_files(plugin_paths[0], cat) + available_files(plugin_paths[1], cat)
 
 # cat = lang   (category)
 # longcat = language
@@ -47,4 +60,6 @@ def plugin_list(cat):
 # listopt = --list-lang
 # preset = "EN"
 
-plugin_path = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]
+def get_plugin_paths():
+    """return the plugin search paths"""
+    return [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]

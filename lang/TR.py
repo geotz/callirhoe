@@ -3,6 +3,9 @@
 #    callirhoe - high quality calendar rendering
 #    Copyright (C) 2012 George M. Tzoumas
 
+"""  Turkish language definition file"""
+#    Copyright (C) 2013 Ece Neslihan Aybeke
+
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -16,19 +19,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-"""French language definition file"""
+long_day_name = [ u'Pazartesi', u'Salı', u' Çarşamba ',
+             u'Perşembe', u'Cuma', u'Cumartesi', u'Pazar' ]
 
-long_day_name = [ u'Lundi', u'Mardi', u'Mercredi',
-             u'Jeudi', u'Vendredi', u'Samedi', u'Dimanche' ]
+short_day_name = [ u'Pt', u'Sa', u'Ça', u'Pe', u'Cu', u'Ct', u'Pa' ]
 
-short_day_name = [ u'Lu', u'Ma', u'Me', u'Je', u'Ve', u'Sa', u'Di' ]
+long_month_name = [ '', u'Ocak', u'Şubat', u'Mart', u'Nisan',
+               u'Mayıs', u'Haziran', u'Temmuz', u'Ağustos',
+               u'Eylül', u'Ekim', u'Kasım', u'Aralık' ]
 
-long_month_name = [ '',
-               u'Janvier', u'Février', u'Mars', u'Avril', 
-               u'Mai', u'Juin', u'Juillet', u'Août', 
-               u'Septembre', u'Octobre', u'Novembre', u'Décembre' ]
+short_month_name = long_month_name
 
-short_month_name = [ '', u'Jan', u'Fév', u'Mar', u'Avr', u'Mai', u'Jun', u'Jul', 
-                     u'Aoû', u'Sep', u'Oct', u'Nov', u'Déc' ]
-
-week_of_year_prefix = u'S'
+week_of_year_prefix = u'H'

@@ -1,0 +1,39 @@
+# type|DATE*span|footer|header|flags
+# type|DATE1-DATE2|footer|header|flags
+# type|DATE|footer|header|flags
+#
+# type:
+# d: event occurs annually fixed day/month: MMDD
+# d: event occurs monthly, fixed day: DD
+# d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+#
+# DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+# flags = {off, multi}
+
+d|0101||ΠΡΩΤΟΧΡΟΝΙΑ|off
+d|0106||ΘΕΟΦΑΝΕΙΑ|off
+d|0325||ΕΥΑΓΓΕΛΙΣΜΟΣ|off
+d|0501||ΠΡΩΤΟΜΑΓΙΑ|off
+d|0815||ΚΟΙΜΗΣΗ ΘΕΟΤΟΚΟΥ|off
+d|1028||ΕΠΕΤΕΙΟΣ ΤΟΥ «ΟΧΙ»|off
+d|1117||ΠΟΛΥΤΕΧΝΕΙΟ|
+d|1225||ΧΡΙΣΤΟΥΓΕΝΝΑ|off
+d|1226||2η ΜΕΡΑ ΧΡΙΣΤΟΥΓ.|off
+
+oe|-70||Αρχή Τριωδίου|off
+oe|-59||Τσικνοπέμπτη|
+oe|-56||Της Απόκρεω|
+oe|-49||Της Τυροφάγου|off
+oe|-48||ΚΑΘΑΡΑ ΔΕΥΤΕΡΑ|off
+oe|-8||Σαβ. Λαζάρου|
+oe|-7||Κυρ. Βαϊων|
+oe|-2||ΜΕΓ. ΠΑΡΑΣΚΕΥΗ|off
+oe|0||ΑΓΙΟ ΠΑΣΧΑ|off
+oe|1||2η ΜΕΡΑ ΠΑΣΧΑ|off
+oe|49||ΠΕΝΤΗΚΟΣΤΗ|
+oe|50||ΑΓΙΟΥ ΠΝΕΥΜΑΤΟΣ|off
+
+#ce|0|Καθολικό Πάσχα||

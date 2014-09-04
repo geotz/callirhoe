@@ -16,10 +16,11 @@
 
 # --- style.rainbow ---
 
-# day of week
+"""module defining rainbow color style"""
 
 import default
 
+# day of week
 class dow(default.dow): pass
     
 # day of month
@@ -29,7 +30,11 @@ class dom_weekend(default.dom_weekend): pass
 
 class dom_holiday(default.dom_holiday): pass
     
-class dom_weekend_holiday_style(default.dom_weekend_holiday_style): pass
+class dom_weekend_holiday(default.dom_weekend_holiday): pass
+
+class dom_multi(default.dom_multi): pass
+
+class dom_weekend_multi(default.dom_weekend_multi): pass
 
 from lib.geom import color_mix, color_scale, color_auto_fg
 

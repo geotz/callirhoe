@@ -14,12 +14,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- style.gfs (Greek Font Society fonts) ---
+# --- style.gfs ---
 
-# day of week
+"""module defining Greek Font Society fonts for default style"""
 
 import default
 
+# day of week
 class dow(default.dow):
     font = "GFS Neohellenic"
     
@@ -36,7 +37,15 @@ class dom_holiday(default.dom_holiday):
     font = ("GFS Bodoni",)
     header_font = footer_font = "GFS Elpis"
     
-class dom_weekend_holiday_style(default.dom_weekend_holiday_style):
+class dom_weekend_holiday(default.dom_weekend_holiday):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class dom_multi(default.dom_multi):
+    font = ("GFS Bodoni",)
+    header_font = footer_font = "GFS Elpis"
+
+class dom_weekend_multi(default.dom_weekend_multi):
     font = "GFS Bodoni"
     header_font = footer_font = "GFS Elpis"
 
