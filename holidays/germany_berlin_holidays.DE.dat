@@ -1,0 +1,45 @@
+# type|DATE*span|footer|header|flags
+# type|DATE1-DATE2|footer|header|flags
+# type|DATE|footer|header|flags
+#
+# type:
+# d: event occurs annually fixed day/month: MMDD
+# d: event occurs monthly, fixed day: DD
+# d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+#
+# DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+# flags = {off, multi}
+
+d|0101||Neujahr|off
+d|0501||Tag der Arbeit|off
+d|1003||Tag der Deutschen Einheit|off
+d|1224||Heiligabend|off
+d|1225||1. Weihnachtstag|off
+d|1226||2. Weihnachtstag|off
+
+ce|-2||Karfreitag|off
+ce|0||Ostersonntag|off
+ce|1||Ostermontag|off
+ce|39||Christi Himmelfahrt|off
+ce|49||Pfingsten|off
+ce|50||Pfingstmontag|off
+
+d|20131223-20140103||Weihnachtsferien|multi
+d|20140203-20140208||Winterferien|multi
+d|20140414-20140426||Osterferien|multi
+d|20140502||(Schulfrei)|multi
+d|20140530||(Schulfrei)|multi
+d|20140709-20140822||Sommerferien|multi
+d|20141020-20141101||Herbstferien|multi
+d|20141222-20150102||Weihnachtsferien|multi
+
+d|20150202-20150207||Winterferien|multi
+d|20150330-20150411||Osterferien|multi
+d|20150515||(Schulfrei)|multi
+d|20150715||(Schulfrei)|multi
+d|20150716-20150828||Sommerferien|multi
+d|20151019-20151031||Herbstferien|multi
+d|20151223-20160102||Weihnachtsferien|multi
