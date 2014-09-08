@@ -332,7 +332,6 @@ class HolidayProvider(object):
                     if d not in self.orth_easter: self.orth_easter[d] = []
                     self.orth_easter[d].append(hol)
                 elif etype == 'ge':
-                    d = ddef
                     self.george.append(hol)
                 elif etype == 'ce':
                     d = ddef

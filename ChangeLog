@@ -1,0 +1,26 @@
+*******************************
+* Version 0.3.0 (Sep 2014)    * 
+*******************************
+
++ holiday support (with Orthodox & Catholic Easter based holidays)
++ fully documented code
+* code refactoring, better layout separation
++ sparse layout and minor patches {Neels}
++ more languages: german, turkish
+
+*******************************
+* Version 0.2.1 (Aug 2012)    * 
+*******************************
+
+first "release" (via svn)
+
+
+Legend:
+! bugfix
+* change/modification/update
++ addition
+- removal
+~ known bug
+<X> comments/suggestions by X
+{X} contributed code by X
+[x] configuration variable x

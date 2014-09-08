@@ -1,0 +1,50 @@
+=============================================
+ callirhoe - high quality calendar rendering
+        (c) 2012-2014 George Tzoumas
+=============================================
+
+QUICK INSTALLATION GUIDE
+
+(rough installation guide for novice users...)
+
+1) FROM COMPRESSED ARCHIVE
+
+Download the latest version form
+    http://code.google.com/p/callirhoe/wiki/Releases
+    
+You end up with a file named callirhoe-X.Y.Z.7z where X.Y.Z the version number (for example 0.3.0). 
+
+Extract the contents of the archive
+$ 7z x callirhoe-X.Y.Z.7z
+
+Change into program's directory
+$ cd callirhoe-X.Y.Z
+
+Now you can launch the program, e.g.
+
+$ ./callirhoe.py foo.pdf
+
+You may want to add a link to your path, $HOME/bin or /usr/local/bin:
+
+$ ln -s `pwd`/callirhoe.py $HOME/bin/callirhoe
+
+You may also install system-wide, for example in /opt. In this case,
+keep in mind, that ~/.callirhoe/ is also searched for additional definitions, styles etc.
+
+2) FROM SVN
+
+Checkout the latest version from the svn:
+
+$ svn checkout https://callirhoe.googlecode.com/svn/trunk callirhoe-svn
+
+Change into directory
+
+$ cd callirhoe-svn
+
+After a few days/weeks/months... you may update to the latest version:
+
+$ svn up
+
+You can launch the program as usual:
+
+$ ./callirhoe foo.pdf
