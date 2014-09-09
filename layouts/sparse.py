@@ -120,7 +120,7 @@ def _draw_day_cell(cr, rect, day, header, footer, theme, show_day_name, text_hei
               font = ds.header_font, measure = "W88")
 
     if header:
-      draw_str(cr, text = header, rect = Rright_header, scaling = -1,
+        draw_str(cr, text = header, rect = Rright_header, scaling = -1,
           stroke_rgba = ds.header, align = (1,1), font = ds.header_font,
           measure='MgMgMgMgMgMgMgMgMg')
     if footer:
@@ -159,13 +159,8 @@ class CalendarRenderer(_base.CalendarRenderer):
             day_style = holiday_tuple[2]
             header = holiday_tuple[0]
             footer = holiday_tuple[1]
-            if footer:
-              if header:
-                header = "%s, %s" % (header, footer)
-              else:
-                header = footer
             _draw_day_cell(cr, rect = R, day = (year, month, dom, day),
-                          header = header, footer = None,
+                          header = header, footer = footer,
                           theme = (day_style, G.dom, L), show_day_name = True,
                           text_height = text_height)
 
