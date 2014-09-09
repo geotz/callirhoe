@@ -13,18 +13,11 @@
 # DATE*span and DATE1-DATE2 supported only for YYYYMMDD
 # flags = {off, multi}
 
-d|0101||New year's|off
-d|0501||Labour day|off
-d|0508||Victory in Europe|off
-d|0714||Bastille|off
-d|0815||Assumption of Mary|off
-d|1101||All Saints|off
-d|1111||Armistice|off
-d|1225||Christmas|off
-d|1226||St. Stephen's|off
+d|20130216-20130303|vacances d'hiver||multi
+d|20130413-20140428|vacances de printemps||multi
 
-ce|-2||Good Friday|
-ce|0||Easter|off
-ce|1||Easter Monday|off
-ce|39||Ascension|off
-ce|50||Whit Monday|off
+d|20140222-20140309|vacances d'hiver||multi
+d|20140419-20140504|vacances de printemps||multi
+
+d|20150221-20150308|vacances d'hiver||multi
+d|20150425-20150510|vacances de printemps||multi
