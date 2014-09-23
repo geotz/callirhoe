@@ -18,60 +18,32 @@
 
 """module defining the black & white transparent style"""
 
-_OPACITY = 0.2
+import bw as base
 
-class dow:
-    """day of week style"""
-    fg = (.33,.33,.33)
-    frame_thickness = 0.1
-    frame = (0.8,0.8,0.8)
-    font = "Arial"
+_OPACITY = 0.1
+
+class dow(base.dow):
+    pass
     
-class dom:
-    """day of month style"""
+class dom(base.dom):
     bg = (1,1,1,_OPACITY)
-    frame = (0.8,0.8,0.8)
-    frame_thickness = 0.1
-    fg = (0.2,0.2,0.2)
-    font = "Times New Roman"
-    header = (0.5,0.5,0.5)
-    footer = header
-    header_font = footer_font = "Arial"
 
-class dom_weekend(dom):
-    """day of month style (weekend)"""
+class dom_weekend(base.dom):
     bg = (0.95,0.95,0.95,_OPACITY)
-    fg = (0,0,0)
-    font = ("Times New Roman", 0, 1)
 
-class dom_holiday(dom):
+class dom_holiday(base.dom_holiday):
     """day of month (holiday, indicated by the OFF flag in the holiday file)"""
-    fg = (0,0,0)
     bg = (0.95,0.95,0.95,_OPACITY)
-    header = (0,0,0)
-    font = ("Times New Roman", 0, 1)
     
-class dom_weekend_holiday(dom_holiday):
-    """day of month (weekend & holiday)"""
-    fg = (0,0,0)
+class dom_weekend_holiday(base.dom_weekend_holiday):
     bg = (0.95,0.95,0.95,_OPACITY)
 
-class dom_multi(dom_holiday):
-    """day of month (multi-day holiday)"""
+class dom_multi(base.dom_multi):
     pass
 
-class dom_weekend_multi(dom_weekend_holiday):
-    """day of month (weekend in multi-day holiday)"""
+class dom_weekend_multi(base.dom_weekend_multi):
     pass
 
-class month:    
-    """month style"""
-    font = ("Times New Roman", 0, 1)
-    frame = (0,0,0)
-    frame_thickness = 0.2
+class month(base.month):    
     bg = (1,1,1,_OPACITY)
-    color_map = ((1,1,1),)*13
     color_map_bg = (((1,1,1,_OPACITY),)*13,((.8,.8,.8,_OPACITY),)*13)
-    color_map_fg = (((0,0,0),)*13,((0,0,0),)*13)
-    box_shadow = False
-    text_shadow = False

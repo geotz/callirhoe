@@ -152,13 +152,51 @@ def parse_year(ystr):
     elif y < 0: sys.exit("invalid year value `" + str(ystr) + "'")
     return y
 
-if __name__ == "__main__":
+def extract_parser_args(arglist, parser, pos = -1):
+    """extract options belonging to I{parser} along with I{pos} positional arguments
+
+    @param arglist: argument list to extract
+    @param parser: parser object to be used for extracting
+    @param pos: number of positional options to be extracted
+
+    if I{pos}<0 then all positional arguments are extracted, otherwise,
+    only I{pos} arguments are extracted. arglist[0] (usually sys.argv[0]) is also positional
+    argument!
+    @return: tuple (argv1,argv2) with extracted argument list and remaining argument list
+    """
+    argv = [[],[]]
+    posc = 0
+    push_value = None
+    for x in arglist:
+        if push_value:
+            push_value.append(x)
+            push_value = None
+            continue
+        # get option name (long options stop at '=')
+        y = x[0:x.find('=')] if '=' in x else x
+        if x[0] == '-':
+            if parser.has_option(y):
+                argv[0].append(x)
+                if not x.startswith('--') and parser.get_option(y).takes_value():
+                    push_value = argv[0]
+            else:
+                argv[1].append(x)
+        else:
+            if pos < 0:
+                argv[0].append(x)
+            else:
+                argv[posc >= pos].append(x)
+                posc += 1
+    return tuple(argv)
+
+def get_parser():
+    """get the argument parser object"""
     parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE",
-           description="""High quality calendar rendering with vector graphics.
-    By default, a calendar of the current year in pdf format is written to FILE.
-    Alternatively, you can select a specific YEAR (0=current),
-    and a month range from MONTH (0-12, 0=current) to MONTH2 or for SPAN months.
-    """, version="callirhoe " + _version)
+           description="High quality calendar rendering with vector graphics. "
+           "By default, a calendar of the current year in pdf format is written to FILE. "
+           "Alternatively, you can select a specific YEAR (0=current), "
+           "and a month range from MONTH (0-12, 0=current) to MONTH2 or for SPAN months.",
+           version="callirhoe " + _version)
     parser.add_option("-l", "--lang",  dest="lang", default="EN",
                     help="choose language [%default]")
     parser.add_option("-t", "--layout",  dest="layout", default="classic",
@@ -199,17 +237,12 @@ if __name__ == "__main__":
                     help="modify a style variable, e.g. dom.frame_thickness=0")
     parser.add_option("--geom-var", action="append", dest="geom_assign",
                     help="modify a geometry variable")
+    return parser
 
-    argv1 = []
-    argv2 = []
-    for x in sys.argv:
-         y = x[0:x.find('=')] if '=' in x else x
-         if x[0] == '-' and not parser.has_option(y):
-             argv2.append(x)
-         else:
-             argv1.append(x)
-    sys.argv = argv1
+if __name__ == "__main__":
+    parser = get_parser()
 
+    sys.argv,argv2 = extract_parser_args(sys.argv,parser)
     (options,args) = parser.parse_args()
 
     list_and_exit = False
