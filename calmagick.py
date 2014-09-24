@@ -92,7 +92,7 @@ _version = "0.1.0"
 
 def get_parser():
     """get the argument parser object"""
-    parser = optparse.OptionParser(usage="usage: %prog IMAGE [options] [callirhoe-options]",
+    parser = optparse.OptionParser(usage="usage: %prog IMAGE [options] [callirhoe-options] [--post-magick IMAGEMAGICK-options]",
            description="High quality photo calendar composition with automatic minimal-entropy placement. "
            "If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE is a directory, "
            "then every month is generated starting from January of the current year (unless otherwise specified), "
@@ -111,25 +111,44 @@ def get_parser():
                     help="set minimum entropy threshold (0-255) up to which smaller sizes are always tried [%default]")
     parser.add_option("--improvement",  type="float", default=0.15,
                     help="set minimum relative entropy improvement in order to try a smaller size [%default]")
+    parser.add_option("--negative",  type="float", default=100,
+                    help="average luminosity (0-255) threshold of the overlaid area, below which a negative "
+                    "overlay is chosen [%default]")
     parser.add_option("--test",  action="store_true", default=False,
                     help="generate image showing minimum entropy area only, without calendar")
     parser.add_option("--test-rect",  action="store_true", default=False,
                     help="print minimum entropy area in STDOUT as X Y W H, without generating any files")
-    parser.add_option("--quiet",  action="store_true", default=False,
-                    help="suppress progress messages")
-    parser.add_option("--brightness",  type="int", default=10,
-                    help="[ImageMagick] increase/decrease brightness by this (percent) value; "
+    parser.add_option("-v", "--verbose",  action="store_true", default=False,
+                    help="print progress messages")
+
+    im = optparse.OptionGroup(parser, "ImageMagick Options", "These options determine how ImageMagick is used.")
+    im.add_option("--brightness",  type="int", default=10,
+                    help="increase/decrease brightness by this (percent) value; "
                     "brightness is decreased on negative overlays [%default]")
-    parser.add_option("--saturation",  type="int", default=100,
-                    help="[ImageMagick] set saturation of the overlaid area "
+    im.add_option("--saturation",  type="int", default=100,
+                    help="set saturation of the overlaid area "
                     "to this value (percent) [%default]")
-    parser.add_option("--negative",  type="float", default=100,
-                    help="average luminosity (0-255) threshold of the overlaid area, below which a negative "
-                    "overlay is chosen [%default]")
+    im.add_option("--edge",  type="float", default=2,
+                    help="radius argument for the edge detection algorithm (entropy computation) [%default]")
+    im.add_option("--pre-magick",  action="store_true", default=False,
+                    help="pass all subsequent arguments to ImageMagick, before entropy computation")
+    im.add_option("--in-magick",  action="store_true", default=False,
+                    help="pass all subsequent arguments to ImageMagick, to be applied on the minimal-entropy area")
+    im.add_option("--post-magick",  action="store_true", default=False,
+                    help="pass all subsequent arguments to ImageMagick, to be applied on the final output")
+    parser.add_option_group(im)
     return parser
 
 if __name__ == '__main__':
     parser = get_parser()
+
+    magickargs = []
+    try:
+        m = sys.argv.index('--post-magick')
+        magickargs = sys.argv[m+1:]
+        del sys.argv[m:]
+    except:
+        pass
 
     sys.argv,argv2 = extract_parser_args(sys.argv,parser,2)
     (options,args) = parser.parse_args()
@@ -142,22 +161,20 @@ if __name__ == '__main__':
     img = args[0]
     base,ext = os.path.splitext(img)
 
-    if options.test_rect: options.quiet = True
-
-    if not options.quiet: print "Extracting image info..."
+    if options.verbose: print "Extracting image info..."
     #info = subprocess.check_output(['convert', img, '-colorspace', 'gray', '-format', '%w %h %[fx:mean]', 'info:']).split()
     info = subprocess.check_output(['convert', img, '-format', '%w %h', 'info:']).split()
     w,h = map(int, info)
     resize = '%dx%d!' % (options.quantum, options.quantum)
-    if not options.quiet:
+    if options.verbose:
         print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
         print "Calculating image entropy..."
     pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-resize', '2500>', '-colorspace', 'HSL', '-channel', 'B', '-separate',
-        '-edge', '2', '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
-    if not options.quiet: print "Fitting... ",
+        '-edge', str(options.edge), '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
+    if options.verbose: print "Fitting... ",
     best = pnm_entropy.fit_rect((options.min_size,options.max_size),
                                 (options.low_entropy,options.high_entropy), options.improvement)
-    if not options.quiet: print best
+    if options.verbose: print best
 
     nw, nh = int(w*best[1]), int(h*best[1])
     dx = int(float(w*best[2])/pnm_entropy.size[0])
@@ -181,15 +198,16 @@ if __name__ == '__main__':
     negative = luma < options.negative
 
 
-    if not options.quiet: print "Generating calendar image (transparent)..."
+    if options.verbose: print "Generating calendar image (transparent)..."
     run_callirhoe('mono_transparent', nw, nh, argv2, '_transparent_cal.png');
 
-    if not options.quiet: print "Composing overlay...%s" % (' (negative)' if negative else '')
+    if options.verbose: print "Composing overlay...%s" % (' (negative)' if negative else '')
     overlay = ['(', '-negate', '_transparent_cal.png', ')'] if negative else ['_transparent_cal.png']
     subprocess.call(['convert', img, '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy)] +
         ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if negative else options.brightness)]) +
         ([] if options.saturation == 100 else ['-modulate', '100,%d' % options.saturation]) +
-        ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % (dx,dy), '-composite', base+'-0'+ext])
+        ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % (dx,dy), '-composite'] +
+        magickargs + [base+'-0'+ext])
         
 #    subprocess.call(['composite', '-gravity', 'center', '(', '-negate', '_transparent_cal.png', ')', img, base+'-1'+ext])
 #    print "Composing overlay (blend)..."

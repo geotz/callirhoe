@@ -44,7 +44,7 @@
 
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
-_version = "0.3.0"
+_version = "0.3.1"
 
 import calendar
 import sys
