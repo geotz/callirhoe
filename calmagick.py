@@ -44,7 +44,7 @@ class PNMImage(object):
             # parse header
             if state == 0:
                 if not strlist[i].startswith('P2'):
-                    raise RuntimeError('invalid PNM image format')
+                    raise RuntimeError('invalid PNM image format: %s' % strlist[i])
                 state += 1
             # parse size
             elif state == 1:
@@ -169,8 +169,13 @@ if __name__ == '__main__':
     if options.verbose:
         print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
         print "Calculating image entropy..."
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-resize', '2500>', '-colorspace', 'HSL', '-channel', 'B', '-separate',
-        '-edge', str(options.edge), '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
+#    pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-resize', '2500>', '-colorspace', 'HSL', '-channel', 'B', '-separate',
+#        '-colorspace', 'Gray', '-edge', str(options.edge), '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
+#    pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-scale', '2500>', '-colorspace', 'Gray',
+#        '-edge', str(options.edge), '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
+    pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-scale', '512>', '(', '+clone',
+        '-blur', '0x%d' % options.edge, ')', '-compose', 'minus', '+swap', '-composite',
+        '-colorspace', 'Gray', '-scale', resize, '-normalize', '-compress', 'None', 'pnm:-']).splitlines())
     if options.verbose: print "Fitting... ",
     best = pnm_entropy.fit_rect((options.min_size,options.max_size),
                                 (options.low_entropy,options.high_entropy), options.improvement)
@@ -191,7 +196,9 @@ if __name__ == '__main__':
     if options.test or options.test_rect:
         sys.exit(0)
 
-    pnm_lum = PNMImage(subprocess.check_output(['convert', img, '-colorspace', 'HSL', '-channel', 'B', '-separate',
+#    pnm_lum = PNMImage(subprocess.check_output(['convert', img, '-colorspace', 'HSL', '-channel', 'B', '-separate',
+#        '-colorspace', 'Gray', '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
+    pnm_lum = PNMImage(subprocess.check_output(['convert', img, '-colorspace', 'Gray',
         '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
     luma = pnm_lum.block_avg(best[2], best[3], int(best[1]*pnm_lum.size[0] + 0.5))
     #print 'luma =', luma
@@ -217,3 +224,4 @@ if __name__ == '__main__':
 
 #convert p6.jpg -colorspace HSL -channel B -separate -resize 12x12\! -compress None pnm:-
 #convert p1.jpg -colorspace HSL -channel B -separate -edge 2 -resize 12x12! -compress None pnm:-
+ 
