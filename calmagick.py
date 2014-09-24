@@ -69,24 +69,25 @@ class PNMImage(object):
     def block_avg(self, x, y, sz):
         return float(sum([(self.xsum[y][x+sz] - self.xsum[y][x]) for y in range(y,y+sz)]))/(sz*sz)
 
-    def fit_rect(self, size_range = (0.333, 0.8), entropy_range = (9,16), improvement = 0.15):
+    def lowest_block_avg(self, sz, at_least = 0):
+        best = (self.maxval,1,0,0,sz) # avg, sz_ratio, x, y, sz
         w,h = self.size
-        best = (self.maxval,1,0,0) # avg, sz, x, y
-        for sz in range(int(w*size_range[1]+0.5),int(w*size_range[0]+0.5)-1,-1):
-            for y in range(0,h-sz+1):
-                for x in range(0,w-sz+1):
-                    cur = (self.block_avg(x,y,sz), float(sz)/w, x, y)
-                    if cur[0] < best[0]:
-                        # same size, always minimize
-                        if cur[1] == best[1]:
-                            best = cur
-#                            print best
-                        elif cur[0] > entropy_range[1] or 1-cur[0]/best[0] > improvement:
-                            best = cur
-#                            print best, "+"
-            if best[0] <= entropy_range[0]:
-                break
+        for y in range(0,h-sz+1):
+            for x in range(0,w-sz+1):
+                cur = (self.block_avg(x,y,sz), float(sz)/w, x, y, sz)
+                if cur[0] < best[0]:
+                    best = cur
+                    if best[0] <= at_least: return best
         return best
+
+    def fit_rect(self, size_range = (0.333, 0.8), at_least = 7, relax = 0.2):
+        w,h = self.size
+        sz_range = (int(w*size_range[0]+0.5), int(w*size_range[1]+0.5))
+        best = self.lowest_block_avg(sz_range[0], at_least)
+        for sz in range(sz_range[1],sz_range[0],-1):
+            cur = self.lowest_block_avg(sz, at_least)
+            if cur[0] <= max(at_least, best[0]*(1+relax)): return cur + (best[0],)
+        return best + (best[0],) # avg, sz_ratio, x, y, sz, best_avg
 
 _version = "0.1.0"
 
@@ -105,12 +106,10 @@ def get_parser():
                     help="set minimum calendar/photo size ratio [%default]")
     parser.add_option("--max-size",  type="float", default=0.8,
                     help="set maximum calendar/photo size ratio [%default]")
-    parser.add_option("--low-entropy",  type="float", default=9,
-                    help="set maximum entropy threshold (0-255) for early termination (0=global minimum) [%default]")
-    parser.add_option("--high-entropy",  type="float", default=16,
-                    help="set minimum entropy threshold (0-255) up to which smaller sizes are always tried [%default]")
-    parser.add_option("--improvement",  type="float", default=0.15,
-                    help="set minimum relative entropy improvement in order to try a smaller size [%default]")
+    parser.add_option("--low-entropy",  type="float", default=7,
+                    help="set minimum entropy threshold (0-255) for early termination (0=global minimum) [%default]")
+    parser.add_option("--relax",  type="float", default=0.2,
+                    help="relax minimum entropy multiplying by 1+RELAX, to allow for bigger sizes [%default]")
     parser.add_option("--negative",  type="float", default=100,
                     help="average luminosity (0-255) threshold of the overlaid area, below which a negative "
                     "overlay is chosen [%default]")
@@ -174,11 +173,11 @@ if __name__ == '__main__':
 #    pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-scale', '2500>', '-colorspace', 'Gray',
 #        '-edge', str(options.edge), '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
     pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-scale', '512>', '(', '+clone',
-        '-blur', '0x%d' % options.edge, ')', '-compose', 'minus', '+swap', '-composite',
-        '-colorspace', 'Gray', '-scale', resize, '-normalize', '-compress', 'None', 'pnm:-']).splitlines())
+        '-blur', '0x%d' % options.edge, ')', '-compose', 'minus', '-composite',
+        '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize', '-compress', 'None', 'pnm:-']).splitlines())
+
     if options.verbose: print "Fitting... ",
-    best = pnm_entropy.fit_rect((options.min_size,options.max_size),
-                                (options.low_entropy,options.high_entropy), options.improvement)
+    best = pnm_entropy.fit_rect((options.min_size,options.max_size), options.low_entropy, options.relax)
     if options.verbose: print best
 
     nw, nh = int(w*best[1]), int(h*best[1])
@@ -198,19 +197,21 @@ if __name__ == '__main__':
     if options.test or options.test_rect:
         sys.exit(0)
 
+    if options.verbose: print "Measuring luminance... ",
 #    pnm_lum = PNMImage(subprocess.check_output(['convert', img, '-colorspace', 'HSL', '-channel', 'B', '-separate',
 #        '-colorspace', 'Gray', '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
     pnm_lum = PNMImage(subprocess.check_output(['convert', img, '-colorspace', 'Gray',
         '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
-    luma = pnm_lum.block_avg(best[2], best[3], int(best[1]*pnm_lum.size[0] + 0.5))
+    luma = pnm_lum.block_avg(*best[2:5])
     #print 'luma =', luma
     negative = luma < options.negative
+    if options.verbose: print "DARK" if negative else "LIGHT"
 
 
     if options.verbose: print "Generating calendar image (transparent)..."
     run_callirhoe('mono_transparent', nw, nh, argv2, '_transparent_cal.png');
 
-    if options.verbose: print "Composing overlay...%s" % (' (negative)' if negative else '')
+    if options.verbose: print "Composing overlay..."
     overlay = ['(', '-negate', '_transparent_cal.png', ')'] if negative else ['_transparent_cal.png']
     subprocess.call(['convert', img, '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy)] +
         ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if negative else options.brightness)]) +
