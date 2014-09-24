@@ -188,7 +188,9 @@ if __name__ == '__main__':
 
     if options.test:
         subprocess.call(['convert', img, '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
-            '-border', '2', '-bordercolor', 'black', '-border', '1', base+'-0'+ext])
+            '-negate', base+'-0'+ext])
+#        subprocess.call(['convert', img, '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+#            '-border', '2', '-bordercolor', 'black', '-border', '1', base+'-0'+ext])
 
     if options.test_rect:
         print dx, dy, nw, nh
