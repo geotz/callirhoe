@@ -28,8 +28,9 @@ You may want to add a link to your path, $HOME/bin or /usr/local/bin:
 
 $ ln -s `pwd`/callirhoe.py $HOME/bin/callirhoe
 
-You may also install system-wide, for example in /opt. In this case,
-keep in mind, that ~/.callirhoe/ is also searched for additional definitions, styles etc.
+You can do the same with calmagick.py. You may also install it system-wide,
+for example in /opt. In this case, keep in mind, that ~/.callirhoe/ is also
+searched for additional definitions, styles etc.
 
 2) FROM SVN
 
@@ -47,4 +48,4 @@ $ svn up
 
 You can launch the program as usual:
 
-$ ./callirhoe foo.pdf
+$ ./callirhoe.py foo.pdf

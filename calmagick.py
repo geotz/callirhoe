@@ -26,9 +26,15 @@
 import sys
 import subprocess
 import os.path
+import os
+import tempfile
+import glob
+import random
 
 from callirhoe import extract_parser_args, parse_month_range, parse_year
 import optparse
+
+# TODO: cache stuff when --sample is used
 
 def run_callirhoe(style, w, h, args, outfile):
     if subprocess.call(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile]):
@@ -83,10 +89,13 @@ class PNMImage(object):
     def fit_rect(self, size_range = (0.333, 0.8), at_least = 7, relax = 0.2):
         w,h = self.size
         sz_range = (int(w*size_range[0]+0.5), int(w*size_range[1]+0.5))
-        best = self.lowest_block_avg(sz_range[0], at_least)
+        best = self.lowest_block_avg(sz_range[0])
+        # we do not use at_least because non-global minimum, when relaxed, may jump well above threshold
+        entropy_thres = max(at_least, best[0]*(1+relax))
         for sz in range(sz_range[1],sz_range[0],-1):
-            cur = self.lowest_block_avg(sz, at_least)
-            if cur[0] <= max(at_least, best[0]*(1+relax)): return cur + (best[0],)
+            # we do not use at_least because we want the best possible option, for bigger sizes
+            cur = self.lowest_block_avg(sz)
+            if cur[0] <= entropy_thres: return cur + (best[0],)
         return best + (best[0],) # avg, sz_ratio, x, y, sz, best_avg
 
 _version = "0.1.0"
@@ -100,6 +109,8 @@ def get_parser():
            "advancing one month for every photo in the IMAGE directory. "
            "Photos will be reused in a round-robin fashion if more calendar "
            "months are requested.", version="calmagick " + _version)
+    parser.add_option("--outdir", default=".",
+                    help="set directory for the output image(s); directory will be created if it does not already exist [%default]")
     parser.add_option("--quantum", type="int", default=60,
                     help="choose quantization level for entropy computation [%default]")
     parser.add_option("--min-size",  type="float", default=0.333,
@@ -127,14 +138,23 @@ def get_parser():
                     help="set month range for calendar. Format is MONTH/YEAR or MONTH1-MONTH2/YEAR or "
                     "MONTH:SPAN/YEAR. If set, these arguments will be expanded (as positional arguments for callirhoe) "
                     "and a calendar will be created for "
-                    "each month separately, for each input photo. Photo files will be used in a round-robin "
-                    "fashion if more months are requested. If less months are requested, then the calendar "
+                    "each month separately, for each input photo. Photo files will be globbed by the script "
+                    "and used in a round-robin fashion if more months are requested. Globbing means that you should "
+                    "normally enclose the file name in single quotes like '*.jpg' in order to avoid shell expansion. "
+                    "If less months are requested, then the calendar "
                     "making process will terminate without having used all available photos.")
+    cal.add_option("--sample", type="int", default=None,
+                    help="choose SAMPLE random images from the input and use in round-robin fashion (see --range option); if "
+                    "SAMPLE=0 then the sample size is chosen to be equal to the month span defined with --range")
     cal.add_option("--vanilla", action="store_true", default=False,
                     help="suppress default options --no-footer --border=0")
     parser.add_option_group(cal)
 
     im = optparse.OptionGroup(parser, "ImageMagick Options", "These options determine how ImageMagick is used.")
+    im.add_option("--format", default="",
+                    help="determines the file extension (without dot!) of the output image files; "
+                    "use this option to generate files in a different format than the input, for example "
+                    "to preserve quality by generating PNG from JPEG, thus not recompressing")
     im.add_option("--brightness",  type="int", default=10,
                     help="increase/decrease brightness by this (percent) value; "
                     "brightness is decreased on negative overlays [%default]")
@@ -179,46 +199,36 @@ def parse_magick_args():
             sys.exit(0)
     return magickargs
 
-if __name__ == '__main__':
-    parser = get_parser()
+def mktemp(ext=''):
+    f = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
+    f.close()
+    return f.name
 
-    magickargs = parse_magick_args()
-    sys.argv,argv2 = extract_parser_args(sys.argv,parser,2)
-    (options,args) = parser.parse_args()
+def get_outfile(infile, outdir, base_prefix, format):
+    head,tail = os.path.split(infile)
+    base,ext = os.path.splitext(tail)
+    if format: ext = '.' + format
+    outfile = os.path.join(outdir,base_prefix+base+ext)
+    if os.path.exists(outfile) and os.path.samefile(infile, outfile):
+        outfile = os.path.join(outdir,base_prefix+base+'_calmagick'+ext)
+    return outfile
 
-    if len(args) < 1:
-        parser.print_help()
-        sys.exit(0)
-
-    if options.range:
-        if '/' in options.range:
-            t = options.range.split('/')
-            month,span = parse_month_range(t[0])
-            year = parse_year(t[1])
-            margs = []
-            for m in xrange(span):
-                margs += [(month,year)]
-                month += 1
-                if month > 12: month = 1; year += 1
-            print margs
-            raise NotImplementedError('This feature is still work-in-progress.')
-        else:
-            sys.exit("Invalid range format '%s'." % options.range)
-
-    img = args[0]
-    base,ext = os.path.splitext(img)
-
+def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
+    # get image info (dimensions)
     if options.verbose: print "Extracting image info..."
-    info = subprocess.check_output(['convert', img, '-format', '%w %h', 'info:']).split()
+    info = subprocess.check_output(['convert', img] + magick_args[0] + ['-format', '%w %h', 'info:']).split()
     w,h = map(int, info)
     resize = '%dx%d!' % (options.quantum, options.quantum)
+
+    # measure entropy
     if options.verbose:
         print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
         print "Calculating image entropy..."
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-scale', '512>', '(', '+clone',
+    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] + ['-scale', '512>', '(', '+clone',
         '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
         '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize', '-compress', 'None', 'pnm:-']).splitlines())
 
+    # find optimal fit
     if options.verbose: print "Fitting... ",
     best = pnm_entropy.fit_rect((options.min_size,options.max_size), options.low_entropy, options.relax)
     if options.verbose: print best
@@ -226,40 +236,93 @@ if __name__ == '__main__':
     nw, nh = int(w*best[1]), int(h*best[1])
     dx = int(float(w*best[2])/pnm_entropy.size[0])
     dy = int(float(h*best[3])/pnm_entropy.size[1])
-    #print nw, nh, dx, dy
 
-    if options.test == 1:
-        subprocess.call(['convert', img, '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
-            '-negate', base+'-0'+ext])
-    if options.test == 2:
-        subprocess.call(['convert', img, '-scale', '512>', '(', '+clone',
-        '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
-        '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize',
-        '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
-            '-negate', base+'-0'+ext])
-    elif options.test == 3:
-        print dx, dy, nw, nh
+    if options.test:
+        if options.test == 1:
+            subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+                '-negate', outimg])
+        elif options.test == 2:
+            subprocess.call(['convert', img] + magick_args[0] + ['-scale', '512>', '(', '+clone',
+            '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
+            '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize',
+            '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+                '-negate', outimg])
+        elif options.test == 3:
+            print dx, dy, nw, nh
+        return
 
-    if options.test: sys.exit(0)
-
+    # measure luminance
     if options.verbose: print "Measuring luminance... ",
-    pnm_lum = PNMImage(subprocess.check_output(['convert', img, '-colorspace', 'Gray',
+    pnm_lum = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] + ['-colorspace', 'Gray',
         '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
     luma = pnm_lum.block_avg(*best[2:5])
     #print 'luma =', luma
     negative = luma < options.negative
     if options.verbose: print "DARK" if negative else "LIGHT"
 
+    # generate callirhoe calendar
+    if options.verbose: print "Generating calendar image (%s)..." % options.style
+    if not options.vanilla: callirhoe_args = callirhoe_args + ['--no-footer', '--border=0']
+    calimg = mktemp('.png')
+    try:
+        run_callirhoe(options.style, nw, nh, callirhoe_args, calimg);
 
-    if options.verbose: print "Generating calendar image (transparent)..."
-    if not options.vanilla: argv2.extend(['--no-footer', '--border=0'])
-    run_callirhoe(options.style, nw, nh, argv2, '_transparent_cal.png');
+        # perform final composition
+        if options.verbose: print "Composing overlay (%s)..." % outimg
+        overlay = ['(', '-negate', calimg, ')'] if negative else [calimg]
+        subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy)] +
+            ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if negative else options.brightness)]) +
+            ([] if options.saturation == 100 else ['-modulate', '100,%d' % options.saturation]) + magick_args[1] +
+            ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % (dx,dy), '-composite'] +
+            magick_args[2] + [outimg])
+    finally:
+        os.remove(calimg)
 
-    if options.verbose: print "Composing overlay..."
-    overlay = ['(', '-negate', '_transparent_cal.png', ')'] if negative else ['_transparent_cal.png']
-    subprocess.call(['convert', img] + magickargs[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy)] +
-        ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if negative else options.brightness)]) +
-        ([] if options.saturation == 100 else ['-modulate', '100,%d' % options.saturation]) + magickargs[1] +
-        ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % (dx,dy), '-composite'] +
-        magickargs[2] + [base+'-0'+ext])
-        
+def parse_range(s):
+    if '/' in s:
+        t = s.split('/')
+        month,span = parse_month_range(t[0])
+        year = parse_year(t[1])
+        margs = []
+        for m in xrange(span):
+            margs += [(month,year)]
+            month += 1
+            if month > 12: month = 1; year += 1
+        return margs
+    else:
+        sys.exit("Invalid range format '%s'." % options.range)
+
+if __name__ == '__main__':
+    parser = get_parser()
+
+    magick_args = parse_magick_args()
+    sys.argv,argv2 = extract_parser_args(sys.argv,parser,2)
+    (options,args) = parser.parse_args()
+
+
+    if len(args) < 1:
+        parser.print_help()
+        sys.exit(0)
+
+    if not os.path.isdir(options.outdir):
+        # this way we get an exception if outdir exists and is a normal file
+        os.mkdir(options.outdir)
+
+    if options.range:
+        mrange = parse_range(options.range)
+        flist = glob.glob(args[0])
+        if options.sample is not None:
+            flist = random.sample(flist, options.sample if options.sample else len(mrange))
+        nf = len(flist)
+        if nf > 0:
+            for i in range(len(mrange)):
+                img = flist[i % nf]
+                m,y = mrange[i]
+                outimg = get_outfile(img,options.outdir,'%04d-%02d_' % (y,m),options.format)
+                compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args)
+    else:
+        img = args[0]
+        if not os.path.isfile(img):
+            sys.exit("Input image '%s' does not exist" % img)
+        outimg = get_outfile(img,options.outdir,'',options.format)
+        compose_calendar(img, outimg, options, argv2, magick_args)
