@@ -138,12 +138,31 @@ def itoa(s):
         sys.exit("invalid integer value `" + s +"'")
     return k
 
-def parse_month(mstr):
+def _parse_month(mstr):
     """get a month value (0-12) from I{mstr}, exiting on error (for cmdline parsing)"""
     m = itoa(mstr)
     if m == 0: m = time.localtime()[1]
     elif m > 12 or m < 0: sys.exit("invalid month value `" + str(mstr) + "'")
     return m
+
+def parse_month_range(s):
+    """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}"""
+    if ':' in s:
+        t = s.split(':')
+        if len(t) != 2: sys.exit("invalid month range `" + s + "'")
+        Month = _parse_month(t[0])
+        MonthSpan = itoa(t[1])
+        if MonthSpan < 0: sys.exit("invalid month range `" + s + "'")
+    elif '-' in s:
+        t = s.split('-')
+        if len(t) != 2: sys.exit("invalid month range `" + s + "'")
+        Month = _parse_month(t[0])
+        MonthSpan = itoa(t[1]) - Month + 1
+        if MonthSpan < 0: sys.exit("invalid month range `" + s + "'")
+    else:
+        Month = _parse_month(s)
+        MonthSpan = 1
+    return (Month,MonthSpan)
 
 def parse_year(ystr):
     """get a year value (>=0) from I{ystr}, exiting on error (for cmdline parsing)"""
@@ -317,21 +336,7 @@ if __name__ == "__main__":
         Month, MonthSpan = 1, 12
         Outfile = args[1]
     elif len(args) == 3:
-        if ':' in args[0]:
-            t = args[0].split(':')
-            if len(t) != 2: sys.exit("invalid month range `" + args[0] + "'")
-            Month = parse_month(t[0])
-            MonthSpan = itoa(t[1])
-            if MonthSpan < 0: sys.exit("invalid month range `" + args[0] + "'")
-        elif '-' in args[0]:
-            t = args[0].split('-')
-            if len(t) != 2: sys.exit("invalid month range `" + args[0] + "'")
-            Month = parse_month(t[0])
-            MonthSpan = itoa(t[1]) - Month + 1
-            if MonthSpan < 0: sys.exit("invalid month range `" + args[0] + "'")
-        else:
-            Month = parse_month(args[0])
-            MonthSpan = 1
+        Month, MonthSpan = parse_month_range(args[0])
         Year = parse_year(args[1])
         Outfile = args[2]
 

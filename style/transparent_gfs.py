@@ -14,11 +14,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-# --- style.bw_transparent_gfs ---
+# --- style.transparent_gfs ---
 
-"""module defining Greek Font Society fonts for black & white transparent style"""
+"""module defining Greek Font Society fonts for transparent style"""
 
-import bw_transparent as base
+import transparent as base
 
 # day of week
 class dow(base.dow):

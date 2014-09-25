@@ -27,13 +27,13 @@ import sys
 import subprocess
 import os.path
 
-from callirhoe import extract_parser_args
+from callirhoe import extract_parser_args, parse_month_range, parse_year
 import optparse
 
 def run_callirhoe(style, w, h, args, outfile):
-    subprocess.call(['callirhoe', '-s', style, '--no-footer', '--border', '0', '--paper=-%d:-%d' % (w,h)] + args + [outfile])
+    if subprocess.call(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile]):
+        sys.exit("calmagick: calendar creation failed")
 
-# TODO: parse dimensions
 class PNMImage(object):
     def __init__(self, strlist):
         self.data = [];
@@ -120,6 +120,20 @@ def get_parser():
     parser.add_option("-v", "--verbose",  action="store_true", default=False,
                     help="print progress messages")
 
+    cal = optparse.OptionGroup(parser, "Calendar Options", "These options determine how callirhoe is invoked.")
+    cal.add_option("-s", "--style", default="transparent",
+                    help="calendar default style [%default]")
+    cal.add_option("--range", default=None,
+                    help="set month range for calendar. Format is MONTH/YEAR or MONTH1-MONTH2/YEAR or "
+                    "MONTH:SPAN/YEAR. If set, these arguments will be expanded (as positional arguments for callirhoe) "
+                    "and a calendar will be created for "
+                    "each month separately, for each input photo. Photo files will be used in a round-robin "
+                    "fashion if more months are requested. If less months are requested, then the calendar "
+                    "making process will terminate without having used all available photos.")
+    cal.add_option("--vanilla", action="store_true", default=False,
+                    help="suppress default options --no-footer --border=0")
+    parser.add_option_group(cal)
+
     im = optparse.OptionGroup(parser, "ImageMagick Options", "These options determine how ImageMagick is used.")
     im.add_option("--brightness",  type="int", default=10,
                     help="increase/decrease brightness by this (percent) value; "
@@ -127,8 +141,8 @@ def get_parser():
     im.add_option("--saturation",  type="int", default=100,
                     help="set saturation of the overlaid area "
                     "to this value (percent) [%default]")
-    im.add_option("--edge",  type="float", default=2,
-                    help="radius argument for the edge detection algorithm (entropy computation) [%default]")
+    im.add_option("--radius",  type="float", default=2,
+                    help="radius for the entropy computation algorithm [%default]")
     im.add_option("--pre-magick",  action="store_true", default=False,
                     help="pass all subsequent arguments to ImageMagick, before entropy computation; should precede --in-magick and --post-magick")
     im.add_option("--in-magick",  action="store_true", default=False,
@@ -176,6 +190,21 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(0)
 
+    if options.range:
+        if '/' in options.range:
+            t = options.range.split('/')
+            month,span = parse_month_range(t[0])
+            year = parse_year(t[1])
+            margs = []
+            for m in xrange(span):
+                margs += [(month,year)]
+                month += 1
+                if month > 12: month = 1; year += 1
+            print margs
+            raise NotImplementedError('This feature is still work-in-progress.')
+        else:
+            sys.exit("Invalid range format '%s'." % options.range)
+
     img = args[0]
     base,ext = os.path.splitext(img)
 
@@ -187,7 +216,7 @@ if __name__ == '__main__':
         print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
         print "Calculating image entropy..."
     pnm_entropy = PNMImage(subprocess.check_output(['convert', img, '-scale', '512>', '(', '+clone',
-        '-blur', '0x%d' % options.edge, ')', '-compose', 'minus', '-composite',
+        '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
         '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize', '-compress', 'None', 'pnm:-']).splitlines())
 
     if options.verbose: print "Fitting... ",
@@ -204,7 +233,7 @@ if __name__ == '__main__':
             '-negate', base+'-0'+ext])
     if options.test == 2:
         subprocess.call(['convert', img, '-scale', '512>', '(', '+clone',
-        '-blur', '0x%d' % options.edge, ')', '-compose', 'minus', '-composite',
+        '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
         '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize',
         '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
             '-negate', base+'-0'+ext])
@@ -223,7 +252,8 @@ if __name__ == '__main__':
 
 
     if options.verbose: print "Generating calendar image (transparent)..."
-    run_callirhoe('mono_transparent', nw, nh, argv2, '_transparent_cal.png');
+    if not options.vanilla: argv2.extend(['--no-footer', '--border=0'])
+    run_callirhoe(options.style, nw, nh, argv2, '_transparent_cal.png');
 
     if options.verbose: print "Composing overlay..."
     overlay = ['(', '-negate', '_transparent_cal.png', ')'] if negative else ['_transparent_cal.png']
