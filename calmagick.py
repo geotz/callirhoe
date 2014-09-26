@@ -34,7 +34,11 @@ import random
 from callirhoe import extract_parser_args, parse_month_range, parse_year
 import optparse
 
-# TODO: cache stuff when --sample is used
+# TODO:
+# cache stuff when --sample is used, move --sample to filedef, like '*.jpg:0'
+# --placement NorthEast   (like gravity), minsize=offset, maxsize=size
+# --placement MinEntropy
+
 
 def run_callirhoe(style, w, h, args, outfile):
     if subprocess.call(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile]):
@@ -103,16 +107,19 @@ _version = "0.1.0"
 def get_parser():
     """get the argument parser object"""
     parser = optparse.OptionParser(usage="usage: %prog IMAGE [options] [callirhoe-options] [--pre-magick ...] [--in-magick ...] [--post-magick ...]",
-           description="High quality photo calendar composition with automatic minimal-entropy placement. "
-           "If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE is a directory, "
-           "then every month is generated starting from January of the current year (unless otherwise specified), "
-           "advancing one month for every photo in the IMAGE directory. "
-           "Photos will be reused in a round-robin fashion if more calendar "
-           "months are requested.", version="calmagick " + _version)
+           description="""High quality photo calendar composition with automatic minimal-entropy placement.
+If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE is a directory,
+then every month is generated starting from January of the current year (unless otherwise specified),
+advancing one month for every photo in the IMAGE directory.
+Photos will be reused in a round-robin fashion if more calendar
+months are requested.""", version="calmagick " + _version)
     parser.add_option("--outdir", default=".",
                     help="set directory for the output image(s); directory will be created if it does not already exist [%default]")
     parser.add_option("--quantum", type="int", default=60,
                     help="choose quantization level for entropy computation [%default]")
+    parser.add_option("--placement", type="choice", choices="min max N S W E NW NE SW SE center random".split(),
+                    default="min", help="choose placement algorithm among {min, max, "
+                    "N, S, W, E, NW, NE, SW, SE, center, random} [%default]")
     parser.add_option("--min-size",  type="float", default=0.333,
                     help="set minimum calendar/photo size ratio [%default]")
     parser.add_option("--max-size",  type="float", default=0.8,
@@ -135,14 +142,14 @@ def get_parser():
     cal.add_option("-s", "--style", default="transparent",
                     help="calendar default style [%default]")
     cal.add_option("--range", default=None,
-                    help="set month range for calendar. Format is MONTH/YEAR or MONTH1-MONTH2/YEAR or "
-                    "MONTH:SPAN/YEAR. If set, these arguments will be expanded (as positional arguments for callirhoe) "
-                    "and a calendar will be created for "
-                    "each month separately, for each input photo. Photo files will be globbed by the script "
-                    "and used in a round-robin fashion if more months are requested. Globbing means that you should "
-                    "normally enclose the file name in single quotes like '*.jpg' in order to avoid shell expansion. "
-                    "If less months are requested, then the calendar "
-                    "making process will terminate without having used all available photos.")
+                    help="""set month range for calendar. Format is MONTH/YEAR or MONTH1-MONTH2/YEAR or
+MONTH:SPAN/YEAR. If set, these arguments will be expanded (as positional arguments for callirhoe)
+and a calendar will be created for
+each month separately, for each input photo. Photo files will be globbed by the script
+and used in a round-robin fashion if more months are requested. Globbing means that you should
+normally enclose the file name in single quotes like '*.jpg' in order to avoid shell expansion.
+If less months are requested, then the calendar
+making process will terminate without having used all available photos.""")
     cal.add_option("--sample", type="int", default=None,
                     help="choose SAMPLE random images from the input and use in round-robin fashion (see --range option); if "
                     "SAMPLE=0 then the sample size is chosen to be equal to the month span defined with --range")
@@ -161,8 +168,8 @@ def get_parser():
     im.add_option("--saturation",  type="int", default=100,
                     help="set saturation of the overlaid area "
                     "to this value (percent) [%default]")
-    im.add_option("--radius",  type="float", default=2,
-                    help="radius for the entropy computation algorithm [%default]")
+#    im.add_option("--radius",  type="float", default=2,
+#                    help="radius for the entropy computation algorithm [%default]")
     im.add_option("--pre-magick",  action="store_true", default=False,
                     help="pass all subsequent arguments to ImageMagick, before entropy computation; should precede --in-magick and --post-magick")
     im.add_option("--in-magick",  action="store_true", default=False,
@@ -224,9 +231,13 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     if options.verbose:
         print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
         print "Calculating image entropy..."
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] + ['-scale', '512>', '(', '+clone',
-        '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
-        '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize', '-compress', 'None', 'pnm:-']).splitlines())
+
+    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] +
+    "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
+    [resize] + (['-negate'] if options.placement == 'max' else []) + ['-compress', 'None', 'pnm:-']).splitlines())
+
+#-scale 512> ( -clone -blur 0x2 ) -compose minus -composite -colorspace Gray -normalize -unsharp 0x5 -scale 60x60! -normalize
+#-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale 60x60!
 
     # find optimal fit
     if options.verbose: print "Fitting... ",
@@ -242,10 +253,9 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
             subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
                 '-negate', outimg])
         elif options.test == 2:
-            subprocess.call(['convert', img] + magick_args[0] + ['-scale', '512>', '(', '+clone',
-            '-blur', '0x%d' % options.radius, ')', '-compose', 'minus', '-composite',
-            '-colorspace', 'Gray', '-normalize', '-unsharp', '0x5', '-scale', resize, '-normalize',
-            '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+            subprocess.call(['convert', img] + magick_args[0] +
+            "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
+            [resize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
                 '-negate', outimg])
         elif options.test == 3:
             print dx, dy, nw, nh
@@ -253,12 +263,15 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
 
     # measure luminance
     if options.verbose: print "Measuring luminance... ",
-    pnm_lum = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] + ['-colorspace', 'Gray',
-        '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
-    luma = pnm_lum.block_avg(*best[2:5])
-    #print 'luma =', luma
-    negative = luma < options.negative
-    if options.verbose: print "DARK" if negative else "LIGHT"
+    if options.negative > 0 and options.negative < 255:
+        pnm_lum = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] + ['-colorspace', 'Gray',
+            '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
+        luma = pnm_lum.block_avg(*best[2:5])
+        #print 'luma =', luma
+    else:
+        luma = 255 - options.negative
+    dark = luma < options.negative
+    if options.verbose: print "DARK" if dark else "LIGHT"
 
     # generate callirhoe calendar
     if options.verbose: print "Generating calendar image (%s)..." % options.style
@@ -269,9 +282,9 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
 
         # perform final composition
         if options.verbose: print "Composing overlay (%s)..." % outimg
-        overlay = ['(', '-negate', calimg, ')'] if negative else [calimg]
+        overlay = ['(', '-negate', calimg, ')'] if dark else [calimg]
         subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy)] +
-            ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if negative else options.brightness)]) +
+            ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if dark else options.brightness)]) +
             ([] if options.saturation == 100 else ['-modulate', '100,%d' % options.saturation]) + magick_args[1] +
             ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % (dx,dy), '-composite'] +
             magick_args[2] + [outimg])
