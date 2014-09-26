@@ -131,10 +131,11 @@ months are requested.""", version="calmagick " + _version)
     parser.add_option("--negative",  type="float", default=100,
                     help="average luminosity (0-255) threshold of the overlaid area, below which a negative "
                     "overlay is chosen [%default]")
-    parser.add_option("--test",  type="int", default=0,
-                    help="test entropy minimization algorithm, without creating any calendar: 0=test disabled, "
-                    "1=show area in original image, 2=show area in quantizer, 3=print minimum entropy area in STDOUT as X Y W H, "
-                    "without generating any files at all [%default]")
+    parser.add_option("--test",  type="choice", choices="none area quant print crop".split(), default='none',
+                    help="test entropy minimization algorithm, without creating any calendar, TEST should be among "
+                    "{none, area, quant, print, crop}: none=test disabled; "
+                    "area=show area in original image; quant=show area in quantizer; print=print minimum entropy area in STDOUT as X Y W H, "
+                    "without generating any files at all; crop=crop selected area [%default]")
     parser.add_option("-v", "--verbose",  action="store_true", default=False,
                     help="print progress messages")
 
@@ -248,17 +249,20 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     dx = int(float(w*best[2])/pnm_entropy.size[0])
     dy = int(float(h*best[3])/pnm_entropy.size[1])
 
-    if options.test:
-        if options.test == 1:
+    if options.test != 'none':
+        if options.test == 'area':
             subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
                 '-negate', outimg])
-        elif options.test == 2:
+        elif options.test == 'quant':
             subprocess.call(['convert', img] + magick_args[0] +
             "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
             [resize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
                 '-negate', outimg])
-        elif options.test == 3:
+        elif options.test == 'print':
             print dx, dy, nw, nh
+        elif options.test == 'crop':
+            subprocess.call(['convert', img] + magick_args[0] + ['-crop', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+                outimg])
         return
 
     # measure luminance
