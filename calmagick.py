@@ -30,14 +30,14 @@ import os
 import tempfile
 import glob
 import random
+import optparse
 
 from callirhoe import extract_parser_args, parse_month_range, parse_year
-import optparse
+from lib.geom import rect_rel_scale
 
 # TODO:
 # cache stuff when --sample is used, move --sample to filedef, like '*.jpg:0'
-# --placement NorthEast   (like gravity), minsize=offset, maxsize=size
-# --placement MinEntropy
+# fork processes (independent stuff...)
 
 
 def run_callirhoe(style, w, h, args, outfile):
@@ -108,9 +108,8 @@ def get_parser():
     """get the argument parser object"""
     parser = optparse.OptionParser(usage="usage: %prog IMAGE [options] [callirhoe-options] [--pre-magick ...] [--in-magick ...] [--post-magick ...]",
            description="""High quality photo calendar composition with automatic minimal-entropy placement.
-If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE is a directory,
-then every month is generated starting from January of the current year (unless otherwise specified),
-advancing one month for every photo in the IMAGE directory.
+If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE contains wildcards,
+then every month is generated according to the --range option, advancing one month for every photo file.
 Photos will be reused in a round-robin fashion if more calendar
 months are requested.""", version="calmagick " + _version)
     parser.add_option("--outdir", default=".",
@@ -120,8 +119,10 @@ months are requested.""", version="calmagick " + _version)
     parser.add_option("--placement", type="choice", choices="min max N S W E NW NE SW SE center random".split(),
                     default="min", help="choose placement algorithm among {min, max, "
                     "N, S, W, E, NW, NE, SW, SE, center, random} [%default]")
-    parser.add_option("--min-size",  type="float", default=0.333,
-                    help="set minimum calendar/photo size ratio [%default]")
+    parser.add_option("--min-size",  type="float", default=None,
+                    help="for min/max/random placement: set minimum calendar/photo size ratio [0.333]; for "
+                    "N,S,W,E,NW,NE,SW,SE placement: set margin/opposite-margin size ratio [0.05]; for "
+                    "center placement it has no effect")
     parser.add_option("--max-size",  type="float", default=0.8,
                     help="set maximum calendar/photo size ratio [%default]")
     parser.add_option("--low-entropy",  type="float", default=7,
@@ -134,7 +135,7 @@ months are requested.""", version="calmagick " + _version)
     parser.add_option("--test",  type="choice", choices="none area quant print crop".split(), default='none',
                     help="test entropy minimization algorithm, without creating any calendar, TEST should be among "
                     "{none, area, quant, print, crop}: none=test disabled; "
-                    "area=show area in original image; quant=show area in quantizer; print=print minimum entropy area in STDOUT as X Y W H, "
+                    "area=show area in original image; quant=show area in quantizer; print=print minimum entropy area in STDOUT as W H X Y, "
                     "without generating any files at all; crop=crop selected area [%default]")
     parser.add_option("-v", "--verbose",  action="store_true", default=False,
                     help="print progress messages")
@@ -221,21 +222,22 @@ def get_outfile(infile, outdir, base_prefix, format):
         outfile = os.path.join(outdir,base_prefix+base+'_calmagick'+ext)
     return outfile
 
-def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
-    # get image info (dimensions)
-    if options.verbose: print "Extracting image info..."
-    info = subprocess.check_output(['convert', img] + magick_args[0] + ['-format', '%w %h', 'info:']).split()
-    w,h = map(int, info)
-    resize = '%dx%d!' % (options.quantum, options.quantum)
+def _get_image_size(img, args):
+    info = subprocess.check_output(['convert', img] + args + ['-format', '%w %h', 'info:']).split()
+    return tuple(map(int, info))
 
-    # measure entropy
+def _get_image_luminance(img, args, geometry = None):
+    return 255.0*float(subprocess.check_output(['convert', img] + args +
+            (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
+            ['-colorspace', 'Gray', '-format', '%[fx:mean]', 'info:']))
+
+def _entropy_placement(img, size, args, options):
     if options.verbose:
-        print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
         print "Calculating image entropy..."
-
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] +
+    qresize = '%dx%d!' % ((options.quantum,)*2)
+    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args +
     "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
-    [resize] + (['-negate'] if options.placement == 'max' else []) + ['-compress', 'None', 'pnm:-']).splitlines())
+    [qresize] + (['-negate'] if options.placement == 'max' else []) + ['-compress', 'None', 'pnm:-']).splitlines())
 
 #-scale 512> ( -clone -blur 0x2 ) -compose minus -composite -colorspace Gray -normalize -unsharp 0x5 -scale 60x60! -normalize
 #-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale 60x60!
@@ -245,33 +247,61 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     best = pnm_entropy.fit_rect((options.min_size,options.max_size), options.low_entropy, options.relax)
     if options.verbose: print best
 
-    nw, nh = int(w*best[1]), int(h*best[1])
-    dx = int(float(w*best[2])/pnm_entropy.size[0])
-    dy = int(float(h*best[3])/pnm_entropy.size[1])
+    # (W,H,X,Y)
+    w,h = size
+    geometry = tuple(map(int, (w*best[1], h*best[1],
+                        float(w*best[2])/pnm_entropy.size[0],
+                        float(h*best[3])/pnm_entropy.size[1])))
+    return geometry
+
+def _manual_placement(size, options):
+    r = (0, 0, size[0], size[1])
+    if options.placement == 'random':
+        f = random.uniform(options.min_size, options.max_size)
+        r2 = rect_rel_scale(r, f, f, random.uniform(-1,1), random.uniform(-1,1))
+    else:
+        ax = ay = 0
+        if 'W' in options.placement: ax = -1 + 2.0*options.min_size
+        if 'E' in options.placement: ax = 1 - 2.0*options.min_size
+        if 'N' in options.placement: ay = -1 + 2.0*options.min_size
+        if 'S' in options.placement: ay = 1 - 2.0*options.min_size
+        r2 = rect_rel_scale(r, options.max_size, options.max_size, ax, ay)
+    return tuple(map(int,[r2[2], r2[3], r2[0], r2[1]]))
+
+def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
+    # get image info (dimensions)
+    if options.verbose: print "Extracting image info..."
+    w,h = _get_image_size(img, magick_args[0])
+    qresize = '%dx%d!' % ((options.quantum,)*2)
+    if options.verbose:
+        print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
+
+    if options.placement == 'min' or options.placement == 'max':
+        geometry = _entropy_placement(img, (w,h), magick_args[0], options)
+    else:
+        geometry = _manual_placement((w,h), options)
 
     if options.test != 'none':
         if options.test == 'area':
-            subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+            subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quant':
             subprocess.call(['convert', img] + magick_args[0] +
             "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
-            [resize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+            [qresize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'print':
-            print dx, dy, nw, nh
+            print ' '.join(map(str,geometry))
         elif options.test == 'crop':
-            subprocess.call(['convert', img] + magick_args[0] + ['-crop', '%dx%d+%d+%d' % (nw,nh,dx,dy),
+            subprocess.call(['convert', img] + magick_args[0] + ['-crop', '%dx%d+%d+%d' % geometry,
                 outimg])
         return
 
     # measure luminance
-    if options.verbose: print "Measuring luminance... ",
+    if options.verbose: print "Measuring luminance...",
     if options.negative > 0 and options.negative < 255:
-        pnm_lum = PNMImage(subprocess.check_output(['convert', img] + magick_args[0] + ['-colorspace', 'Gray',
-            '-scale', resize, '-compress', 'None', 'pnm:-']).splitlines())
-        luma = pnm_lum.block_avg(*best[2:5])
-        #print 'luma =', luma
+        luma = _get_image_luminance(img, magick_args[0], geometry)
+        if options.verbose: print "(%s)" % luma,
     else:
         luma = 255 - options.negative
     dark = luma < options.negative
@@ -282,15 +312,15 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     if not options.vanilla: callirhoe_args = callirhoe_args + ['--no-footer', '--border=0']
     calimg = mktemp('.png')
     try:
-        run_callirhoe(options.style, nw, nh, callirhoe_args, calimg);
+        run_callirhoe(options.style, geometry[0], geometry[1], callirhoe_args, calimg);
 
         # perform final composition
         if options.verbose: print "Composing overlay (%s)..." % outimg
         overlay = ['(', '-negate', calimg, ')'] if dark else [calimg]
-        subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % (nw,nh,dx,dy)] +
+        subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry] +
             ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if dark else options.brightness)]) +
             ([] if options.saturation == 100 else ['-modulate', '100,%d' % options.saturation]) + magick_args[1] +
-            ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % (dx,dy), '-composite'] +
+            ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % geometry[2:], '-composite'] +
             magick_args[2] + [outimg])
     finally:
         os.remove(calimg)
@@ -315,6 +345,8 @@ if __name__ == '__main__':
     magick_args = parse_magick_args()
     sys.argv,argv2 = extract_parser_args(sys.argv,parser,2)
     (options,args) = parser.parse_args()
+    if options.min_size is None:
+        options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
 
 
     if len(args) < 1:
