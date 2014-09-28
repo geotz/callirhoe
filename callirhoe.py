@@ -80,12 +80,10 @@ def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
         sys.path[0] = old
         return m
     except IOError:
-        print >> sys.stderr, "%s definition `%s' not found, use %s to see available definitions" % (longcat,
-                               preset,listopt)
-        sys.exit(1)
+        sys.exit("callirhoe: %s definition '%s' not found, use %s to see available definitions" % (longcat,
+                               preset,listopt))
     except ImportError:
-        print >> sys.stderr, "error loading %s definition `%s'" % (longcat, preset)
-        sys.exit(1)
+        sys.exit("callirhoe: error loading %s definition '%s'" % (longcat, preset))
 
 def print_examples():
     """print usage examples"""
@@ -130,35 +128,43 @@ def add_list_option(parser, opt):
     parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
                        help="list available %s" % opt)
 
-def itoa(s):
-    """convert integer to string, exiting on error (for cmdline parsing)"""
+def itoa(s, lower_bound=None, upper_bound=None, prefix=''):
+    """convert integer to string, exiting on error (for cmdline parsing)
+
+    @param lower_bound: perform additional check so that value >= I{lower_bound}
+    @param upper_bound: perform additional check so that value <= I{upper_bound}
+    @param prefix: output prefix for error reporting
+    """
     try:
         k = int(s);
+        if lower_bound is not None:
+            if k < lower_bound:
+                sys.exit(prefix + "value '" + s +"' out of range: should not be less than %d" % lower_bound)
+        if upper_bound is not None:
+            if k > upper_bound:
+                sys.exit(prefix + "value '" + s +"' out of range: should not be greater than %d" % upper_bound)
     except ValueError as e:
-        sys.exit("invalid integer value `" + s +"'")
+        sys.exit(prefix + "invalid integer value '" + s +"'")
     return k
 
 def _parse_month(mstr):
     """get a month value (0-12) from I{mstr}, exiting on error (for cmdline parsing)"""
-    m = itoa(mstr)
+    m = itoa(mstr,lower_bound=0,upper_bound=12,prefix='month: ')
     if m == 0: m = time.localtime()[1]
-    elif m > 12 or m < 0: sys.exit("invalid month value `" + str(mstr) + "'")
     return m
 
 def parse_month_range(s):
     """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}"""
     if ':' in s:
         t = s.split(':')
-        if len(t) != 2: sys.exit("invalid month range `" + s + "'")
+        if len(t) != 2: sys.exit("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
-        MonthSpan = itoa(t[1])
-        if MonthSpan < 0: sys.exit("invalid month range `" + s + "'")
+        MonthSpan = itoa(t[1],lower_bound=0,prefix='month span: ')
     elif '-' in s:
         t = s.split('-')
-        if len(t) != 2: sys.exit("invalid month range `" + s + "'")
+        if len(t) != 2: sys.exit("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
-        MonthSpan = itoa(t[1]) - Month + 1
-        if MonthSpan < 0: sys.exit("invalid month range `" + s + "'")
+        MonthSpan = itoa(t[1],lower_bound=Month+1,prefix='month range: ') - Month + 1
     else:
         Month = _parse_month(s)
         MonthSpan = 1
@@ -166,9 +172,8 @@ def parse_month_range(s):
 
 def parse_year(ystr):
     """get a year value (>=0) from I{ystr}, exiting on error (for cmdline parsing)"""
-    y = itoa(ystr)
+    y = itoa(ystr,lower_bound=0,prefix='year: ')
     if y == 0: y = time.localtime()[0]
-    elif y < 0: sys.exit("invalid year value `" + str(ystr) + "'")
     return y
 
 def extract_parser_args(arglist, parser, pos = -1):
@@ -311,7 +316,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     #if (len(args[-1]) == 4 and args[-1].isdigit()):
-    #    print "WARNING: file name `%s' looks like a year, writing anyway..." % args[-1]
+    #    print "WARNING: file name '%s' looks like a year, writing anyway..." % args[-1]
 
     # the usual "beware of exec()" crap applies here... but come on,
     # this is a SCRIPTING language, you can always hack the source code!!!
@@ -339,6 +344,9 @@ if __name__ == "__main__":
         Month, MonthSpan = parse_month_range(args[0])
         Year = parse_year(args[1])
         Outfile = args[2]
+
+    if MonthSpan == 0:
+        sys.exit("callirhoe: empty calendar requested, aborting")
 
     Geometry.landscape = options.landscape
     xcairo.XDPI = options.dpi

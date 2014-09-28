@@ -39,7 +39,6 @@ from lib.geom import rect_rel_scale
 # cache stuff when --sample is used, move --sample to filedef, like '*.jpg:0'
 # fork processes (independent stuff...)
 
-
 def run_callirhoe(style, w, h, args, outfile):
     if subprocess.call(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile]):
         sys.exit("calmagick: calendar creation failed")
@@ -114,6 +113,13 @@ Photos will be reused in a round-robin fashion if more calendar
 months are requested.""", version="calmagick " + _version)
     parser.add_option("--outdir", default=".",
                     help="set directory for the output image(s); directory will be created if it does not already exist [%default]")
+    parser.add_option("--outfile", default=None,
+                    help="set output filename when no --range is requested; by default will use the same name, unless it is going to "
+                    "overwrite the input image, in which case suffix '_calmagick' will be added; this option will override --outdir and --format options")
+    parser.add_option("--prefix", type="choice", choices=['no','auto','yes'], default='auto',
+                    help="set output filename prefix for multiple image output (with --range); 'no' means no prefix will be added, thus the output "
+                    "filename order may not be the same, if the input photos are randomized (--shuffle or --sample); "
+                    "'auto' adds YEAR_MONTH_ prefix only when input photos are randomized; 'yes' will always add prefix [%default]")
     parser.add_option("--quantum", type="int", default=60,
                     help="choose quantization level for entropy computation [%default]")
     parser.add_option("--placement", type="choice", choices="min max N S W E NW NE SW SE center random".split(),
@@ -151,10 +157,15 @@ each month separately, for each input photo. Photo files will be globbed by the 
 and used in a round-robin fashion if more months are requested. Globbing means that you should
 normally enclose the file name in single quotes like '*.jpg' in order to avoid shell expansion.
 If less months are requested, then the calendar
-making process will terminate without having used all available photos.""")
+making process will terminate without having used all available photos. SPAN=0 will match the number of input
+photos.""")
     cal.add_option("--sample", type="int", default=None,
                     help="choose SAMPLE random images from the input and use in round-robin fashion (see --range option); if "
                     "SAMPLE=0 then the sample size is chosen to be equal to the month span defined with --range")
+    cal.add_option("--shuffle", action="store_true", default=False,
+                    help="shuffle input images and to use in round-robin fashion (see --range option); "
+                    "the sample size is chosen to be equal to the month span defined with --range; this "
+                    "is equivalent to specifying --sample=0")
     cal.add_option("--vanilla", action="store_true", default=False,
                     help="suppress default options --no-footer --border=0")
     parser.add_option_group(cal)
@@ -180,6 +191,22 @@ making process will terminate without having used all available photos.""")
                     help="pass all subsequent arguments to ImageMagick, to be applied on the final output")
     parser.add_option_group(im)
     return parser
+
+def check_parsed_options(options):
+    if options.min_size is None:
+        options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
+    if options.sample is not None and not options.range:
+        sys.exit("calmagick: --sample requested without --range")
+    if options.outfile is not None and options.range:
+        sys.exit("calmagick: you cannot specify both --outfile and --range options")
+    if options.sample is not None and options.shuffle:
+        sys.exit("calmagick: you cannot specify both --shuffle and --sample options")
+    if options.shuffle:
+        options.sample = 0
+    if options.sample is None:
+        if options.prefix == 'auto': options.prefix = 'no'
+    else:
+        if options.prefix == 'auto': options.prefix = 'yes'
 
 def parse_magick_args():
     magickargs = [[],[],[]]
@@ -213,12 +240,16 @@ def mktemp(ext=''):
     f.close()
     return f.name
 
-def get_outfile(infile, outdir, base_prefix, format):
-    head,tail = os.path.split(infile)
-    base,ext = os.path.splitext(tail)
-    if format: ext = '.' + format
-    outfile = os.path.join(outdir,base_prefix+base+ext)
+def get_outfile(infile, outdir, base_prefix, format, hint=None):
+    if hint:
+        outfile = hint
+    else:
+        head,tail = os.path.split(infile)
+        base,ext = os.path.splitext(tail)
+        if format: ext = '.' + format
+        outfile = os.path.join(outdir,base_prefix+base+ext)
     if os.path.exists(outfile) and os.path.samefile(infile, outfile):
+        if hint: sys.exit("calmagick: --outfile same as input, aborting")
         outfile = os.path.join(outdir,base_prefix+base+'_calmagick'+ext)
     return outfile
 
@@ -325,10 +356,11 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     finally:
         os.remove(calimg)
 
-def parse_range(s):
+def parse_range(s,hint=None):
     if '/' in s:
         t = s.split('/')
         month,span = parse_month_range(t[0])
+        if hint and span == 0: span = hint
         year = parse_year(t[1])
         margs = []
         for m in xrange(span):
@@ -337,7 +369,7 @@ def parse_range(s):
             if month > 12: month = 1; year += 1
         return margs
     else:
-        sys.exit("Invalid range format '%s'." % options.range)
+        sys.exit("calmagick: invalid range format '%s'." % options.range)
 
 if __name__ == '__main__':
     parser = get_parser()
@@ -345,9 +377,7 @@ if __name__ == '__main__':
     magick_args = parse_magick_args()
     sys.argv,argv2 = extract_parser_args(sys.argv,parser,2)
     (options,args) = parser.parse_args()
-    if options.min_size is None:
-        options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
-
+    check_parsed_options(options)
 
     if len(args) < 1:
         parser.print_help()
@@ -358,8 +388,9 @@ if __name__ == '__main__':
         os.mkdir(options.outdir)
 
     if options.range:
-        mrange = parse_range(options.range)
         flist = glob.glob(args[0])
+        mrange = parse_range(options.range,hint=len(flist))
+        if options.verbose: print "Composing %d photos..." % len(mrange)
         if options.sample is not None:
             flist = random.sample(flist, options.sample if options.sample else len(mrange))
         nf = len(flist)
@@ -367,11 +398,12 @@ if __name__ == '__main__':
             for i in range(len(mrange)):
                 img = flist[i % nf]
                 m,y = mrange[i]
-                outimg = get_outfile(img,options.outdir,'%04d-%02d_' % (y,m),options.format)
+                prefix = '' if options.prefix == 'no' else '%04d-%02d_' % (y,m)
+                outimg = get_outfile(img,options.outdir,prefix,options.format)
                 compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args)
     else:
         img = args[0]
         if not os.path.isfile(img):
-            sys.exit("Input image '%s' does not exist" % img)
-        outimg = get_outfile(img,options.outdir,'',options.format)
+            sys.exit("calmagick: input image '%s' does not exist" % img)
+        outimg = get_outfile(img,options.outdir,'',options.format,options.outfile)
         compose_calendar(img, outimg, options, argv2, magick_args)
