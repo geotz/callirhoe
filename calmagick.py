@@ -36,12 +36,13 @@ from callirhoe import extract_parser_args, parse_month_range, parse_year
 from lib.geom import rect_rel_scale
 
 # TODO:
-# cache stuff when --sample is used, move --sample to filedef, like '*.jpg:0'
-# fork processes (independent stuff...)
+# cache stuff when --sample is used
+# multithreaded range operation
+# raise exceptions instead of sys.exit
+# convert input to ImageMagick native format for faster access?
 
 def run_callirhoe(style, w, h, args, outfile):
-    if subprocess.call(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile]):
-        sys.exit("calmagick: calendar creation failed")
+    return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile])
 
 class PNMImage(object):
     def __init__(self, strlist):
@@ -101,7 +102,7 @@ class PNMImage(object):
             if cur[0] <= entropy_thres: return cur + (best[0],)
         return best + (best[0],) # avg, sz_ratio, x, y, sz, best_avg
 
-_version = "0.1.0"
+_version = "0.4.0"
 
 def get_parser():
     """get the argument parser object"""
@@ -110,7 +111,7 @@ def get_parser():
 If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE contains wildcards,
 then every month is generated according to the --range option, advancing one month for every photo file.
 Photos will be reused in a round-robin fashion if more calendar
-months are requested.""", version="calmagick " + _version)
+months are requested.""", version="callirhoe.CalMagick " + _version)
     parser.add_option("--outdir", default=".",
                     help="set directory for the output image(s); directory will be created if it does not already exist [%default]")
     parser.add_option("--outfile", default=None,
@@ -328,22 +329,24 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
                 outimg])
         return
 
-    # measure luminance
-    if options.verbose: print "Measuring luminance...",
-    if options.negative > 0 and options.negative < 255:
-        luma = _get_image_luminance(img, magick_args[0], geometry)
-        if options.verbose: print "(%s)" % luma,
-    else:
-        luma = 255 - options.negative
-    dark = luma < options.negative
-    if options.verbose: print "DARK" if dark else "LIGHT"
-
     # generate callirhoe calendar
-    if options.verbose: print "Generating calendar image (%s)..." % options.style
+    if options.verbose: print "Generating calendar image (%s) ... [&]" % options.style
     if not options.vanilla: callirhoe_args = callirhoe_args + ['--no-footer', '--border=0']
     calimg = mktemp('.png')
     try:
-        run_callirhoe(options.style, geometry[0], geometry[1], callirhoe_args, calimg);
+        pcal = run_callirhoe(options.style, geometry[0], geometry[1], callirhoe_args, calimg)
+
+        # measure luminance
+        if options.verbose: print "Measuring luminance...",
+        if options.negative > 0 and options.negative < 255:
+            luma = _get_image_luminance(img, magick_args[0], geometry)
+            if options.verbose: print "(%s)" % luma,
+        else:
+            luma = 255 - options.negative
+        dark = luma < options.negative
+        if options.verbose: print "DARK" if dark else "LIGHT"
+        pcal.wait()
+        if pcal.returncode != 0: raise RuntimeError("calmagick: calendar creation failed")
 
         # perform final composition
         if options.verbose: print "Composing overlay (%s)..." % outimg
