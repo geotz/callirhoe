@@ -32,17 +32,27 @@ import glob
 import random
 import optparse
 
-from callirhoe import extract_parser_args, parse_month_range, parse_year
+from callirhoe import extract_parser_args, parse_month_range, parse_year,itoa,Abort
 from lib.geom import rect_rel_scale
 
 # TODO:
 # cache stuff when --sample is used
+
+# MAYBE-TODO
+# convert input to ImageMagick native format for faster access
 # multithreaded range operation
-# raise exceptions instead of sys.exit
-# convert input to ImageMagick native format for faster access?
+# report error on parse-float (like itoa())
+
+#class Abort(Exception):
+#    pass
 
 def run_callirhoe(style, w, h, args, outfile):
     return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile])
+
+def _bound(x, lower_bound, upper_bound):
+    if x < lower_bound: return lower_bound
+    if x > upper_bound: return upper_bound
+    return x
 
 class PNMImage(object):
     def __init__(self, strlist):
@@ -76,29 +86,37 @@ class PNMImage(object):
 
         self.xsum = [map(lambda x: sum(self.data[y][0:x]), range(w+1)) for y in range(0,h)]
 
-    def block_avg(self, x, y, sz):
-        return float(sum([(self.xsum[y][x+sz] - self.xsum[y][x]) for y in range(y,y+sz)]))/(sz*sz)
+    def block_avg(self, x, y, szx, szy):
+        return float(sum([(self.xsum[y][x+szx] - self.xsum[y][x]) for y in range(y,y+szy)]))/(szx*szy)
 
-    def lowest_block_avg(self, sz, at_least = 0):
-        best = (self.maxval,1,0,0,sz) # avg, sz_ratio, x, y, sz
+    def lowest_block_avg(self, szx, szy, at_least = 0):
         w,h = self.size
-        for y in range(0,h-sz+1):
-            for x in range(0,w-sz+1):
-                cur = (self.block_avg(x,y,sz), float(sz)/w, x, y, sz)
+        best = (self.maxval,(1,1),(0,0),(szx,szy)) # avg, (szx_ratio,szy_ratio), (x,y), (szx,szy)
+        for y in range(0,h-szy+1):
+            for x in range(0,w-szx+1):
+                cur = (self.block_avg(x,y,szx,szy), (float(szx)/w,float(szy)/h), (x,y), (szx,szy))
                 if cur[0] < best[0]:
                     best = cur
                     if best[0] <= at_least: return best
         return best
 
-    def fit_rect(self, size_range = (0.333, 0.8), at_least = 7, relax = 0.2):
+    def fit_rect(self, size_range = (0.333, 0.8), at_least = 7, relax = 0.2, rr = 1.0):
         w,h = self.size
-        sz_range = (int(w*size_range[0]+0.5), int(w*size_range[1]+0.5))
-        best = self.lowest_block_avg(sz_range[0])
+        sz_lo = _bound(int(w*size_range[0]+0.5),1,w)
+        sz_hi = _bound(int(w*size_range[1]+0.5),1,w)
+        szv_range = range(sz_lo, sz_hi+1)
+        if rr == 1:
+            sz_range = zip(szv_range, szv_range)
+        elif rr > 1:
+            sz_range = zip(szv_range, map(lambda x: _bound(int(x/rr+0.5),1,w), szv_range))
+        else:
+            sz_range = zip(map(lambda x: _bound(int(x*rr+0.5),1,w), szv_range), szv_range)
+        best = self.lowest_block_avg(*sz_range[0])
         # we do not use at_least because non-global minimum, when relaxed, may jump well above threshold
         entropy_thres = max(at_least, best[0]*(1+relax))
-        for sz in range(sz_range[1],sz_range[0],-1):
+        for sz in list(reversed(sz_range))[0:-1]:
             # we do not use at_least because we want the best possible option, for bigger sizes
-            cur = self.lowest_block_avg(sz)
+            cur = self.lowest_block_avg(*sz)
             if cur[0] <= entropy_thres: return cur + (best[0],)
         return best + (best[0],) # avg, sz_ratio, x, y, sz, best_avg
 
@@ -132,6 +150,11 @@ months are requested.""", version="callirhoe.CalMagick " + _version)
                     "center placement it has no effect")
     parser.add_option("--max-size",  type="float", default=0.8,
                     help="set maximum calendar/photo size ratio [%default]")
+    parser.add_option("--ratio", default="0",
+                    help="set calendar ratio either as a float or as X/Y where X,Y positive integers; if RATIO=0 then photo ratio R is used; note that "
+                    "for min/max placement, calendar ratio CR will be equal to the closest number (a/b)*R, where "
+                    "a,b integers, and MIN_SIZE <= x/QUANTUM <= MAX_SIZE, where x=b if RATIO/R < 1 otherwise x=a; in "
+                    "any case 1/QUANTUM <= CR/R <= QUANTUM [%default]")
     parser.add_option("--low-entropy",  type="float", default=7,
                     help="set minimum entropy threshold (0-255) for early termination (0=global minimum) [%default]")
     parser.add_option("--relax",  type="float", default=0.2,
@@ -197,11 +220,11 @@ def check_parsed_options(options):
     if options.min_size is None:
         options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
     if options.sample is not None and not options.range:
-        sys.exit("calmagick: --sample requested without --range")
+        raise Abort("calmagick: --sample requested without --range")
     if options.outfile is not None and options.range:
-        sys.exit("calmagick: you cannot specify both --outfile and --range options")
+        raise Abort("calmagick: you cannot specify both --outfile and --range options")
     if options.sample is not None and options.shuffle:
-        sys.exit("calmagick: you cannot specify both --shuffle and --sample options")
+        raise Abort("calmagick: you cannot specify both --shuffle and --sample options")
     if options.shuffle:
         options.sample = 0
     if options.sample is None:
@@ -250,7 +273,7 @@ def get_outfile(infile, outdir, base_prefix, format, hint=None):
         if format: ext = '.' + format
         outfile = os.path.join(outdir,base_prefix+base+ext)
     if os.path.exists(outfile) and os.path.samefile(infile, outfile):
-        if hint: sys.exit("calmagick: --outfile same as input, aborting")
+        if hint: raise Abort("calmagick: --outfile same as input, aborting")
         outfile = os.path.join(outdir,base_prefix+base+'_calmagick'+ext)
     return outfile
 
@@ -263,7 +286,10 @@ def _get_image_luminance(img, args, geometry = None):
             (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
             ['-colorspace', 'Gray', '-format', '%[fx:mean]', 'info:']))
 
-def _entropy_placement(img, size, args, options):
+def _entropy_placement(img, size, args, options, r):
+    w,h = size
+    R = float(w)/h
+    if r == 0: r = R
     if options.verbose:
         print "Calculating image entropy..."
     qresize = '%dx%d!' % ((options.quantum,)*2)
@@ -276,29 +302,40 @@ def _entropy_placement(img, size, args, options):
 
     # find optimal fit
     if options.verbose: print "Fitting... ",
-    best = pnm_entropy.fit_rect((options.min_size,options.max_size), options.low_entropy, options.relax)
-    if options.verbose: print best
+    best = pnm_entropy.fit_rect((options.min_size,options.max_size), options.low_entropy, options.relax, r/R)
+    if options.verbose:
+        print "ent=%0.2f frac=(%0.2f,%0.2f) pos=(%d,%d) bs=(%d,%d) min=%0.2f r=%0.2f" % (
+            best[0], best[1][0], best[1][1], best[2][0], best[2][1], best[3][0], best[3][1], best[4], R*best[3][0]/best[3][1])
 
     # (W,H,X,Y)
     w,h = size
-    geometry = tuple(map(int, (w*best[1], h*best[1],
-                        float(w*best[2])/pnm_entropy.size[0],
-                        float(h*best[3])/pnm_entropy.size[1])))
+    geometry = tuple(map(int, (w*best[1][0], h*best[1][1],
+                        float(w*best[2][0])/pnm_entropy.size[0],
+                        float(h*best[2][1])/pnm_entropy.size[1])))
     return geometry
 
-def _manual_placement(size, options):
-    r = (0, 0, size[0], size[1])
+def _manual_placement(size, options, r):
+    w,h = size
+    rect = (0, 0, w, h)
+    R = float(w)/h
+    if r == 0: r = R
+    if r == R: # float comparison should succeed here
+        fx, fy = 1.0, 1.0
+    elif r > R:
+        fx,fy = 1.0, R/r
+    else:
+        fx,fy = r/R, 1.0
     if options.placement == 'random':
         f = random.uniform(options.min_size, options.max_size)
-        r2 = rect_rel_scale(r, f, f, random.uniform(-1,1), random.uniform(-1,1))
+        rect2 = rect_rel_scale(rect, f*fx, f*fy, random.uniform(-1,1), random.uniform(-1,1))
     else:
         ax = ay = 0
         if 'W' in options.placement: ax = -1 + 2.0*options.min_size
         if 'E' in options.placement: ax = 1 - 2.0*options.min_size
         if 'N' in options.placement: ay = -1 + 2.0*options.min_size
         if 'S' in options.placement: ay = 1 - 2.0*options.min_size
-        r2 = rect_rel_scale(r, options.max_size, options.max_size, ax, ay)
-    return tuple(map(int,[r2[2], r2[3], r2[0], r2[1]]))
+        rect2 = rect_rel_scale(rect, options.max_size*fx, options.max_size*fy, ax, ay)
+    return tuple(map(int,[rect2[2], rect2[3], rect2[0], rect2[1]]))
 
 def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     # get image info (dimensions)
@@ -306,12 +343,17 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
     w,h = _get_image_size(img, magick_args[0])
     qresize = '%dx%d!' % ((options.quantum,)*2)
     if options.verbose:
-        print "%s %dx%d %dmp" % (img, w, h, int(w*h/1000000.0+0.5))
+        print "%s %dx%d %dmp R=%0.2f" % (img, w, h, int(w*h/1000000.0+0.5), float(w)/h)
 
-    if options.placement == 'min' or options.placement == 'max':
-        geometry = _entropy_placement(img, (w,h), magick_args[0], options)
+    if '/' in options.ratio:
+        tmp = options.ratio.split('/')
+        calratio = float(itoa(tmp[0],1))/itoa(tmp[1],1)
     else:
-        geometry = _manual_placement((w,h), options)
+        calratio = float(options.ratio)
+    if options.placement == 'min' or options.placement == 'max':
+        geometry = _entropy_placement(img, (w,h), magick_args[0], options, calratio)
+    else:
+        geometry = _manual_placement((w,h), options, calratio)
 
     if options.test != 'none':
         if options.test == 'area':
@@ -372,9 +414,9 @@ def parse_range(s,hint=None):
             if month > 12: month = 1; year += 1
         return margs
     else:
-        sys.exit("calmagick: invalid range format '%s'." % options.range)
+        raise Abort("calmagick: invalid range format '%s'." % options.range)
 
-if __name__ == '__main__':
+def main_program():
     parser = get_parser()
 
     magick_args = parse_magick_args()
@@ -407,6 +449,12 @@ if __name__ == '__main__':
     else:
         img = args[0]
         if not os.path.isfile(img):
-            sys.exit("calmagick: input image '%s' does not exist" % img)
+            raise Abort("calmagick: input image '%s' does not exist" % img)
         outimg = get_outfile(img,options.outdir,'',options.format,options.outfile)
         compose_calendar(img, outimg, options, argv2, magick_args)
+
+if __name__ == '__main__':
+    try:
+        main_program()
+    except Abort as e:
+        sys.exit(e.args[0])

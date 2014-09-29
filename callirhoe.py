@@ -53,6 +53,9 @@ import optparse
 import lib.xcairo as xcairo
 import lib.holiday as holiday
 
+class Abort(Exception):
+    pass
+
 from lib.plugin import *
 # TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
 def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
@@ -139,12 +142,12 @@ def itoa(s, lower_bound=None, upper_bound=None, prefix=''):
         k = int(s);
         if lower_bound is not None:
             if k < lower_bound:
-                sys.exit(prefix + "value '" + s +"' out of range: should not be less than %d" % lower_bound)
+                raise Abort(prefix + "value '" + s +"' out of range: should not be less than %d" % lower_bound)
         if upper_bound is not None:
             if k > upper_bound:
-                sys.exit(prefix + "value '" + s +"' out of range: should not be greater than %d" % upper_bound)
+                raise Abort(prefix + "value '" + s +"' out of range: should not be greater than %d" % upper_bound)
     except ValueError as e:
-        sys.exit(prefix + "invalid integer value '" + s +"'")
+        raise Abort(prefix + "invalid integer value '" + s +"'")
     return k
 
 def _parse_month(mstr):
@@ -157,12 +160,12 @@ def parse_month_range(s):
     """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}"""
     if ':' in s:
         t = s.split(':')
-        if len(t) != 2: sys.exit("invalid month range '" + s + "'")
+        if len(t) != 2: raise Abort("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
         MonthSpan = itoa(t[1],lower_bound=0,prefix='month span: ')
     elif '-' in s:
         t = s.split('-')
-        if len(t) != 2: sys.exit("invalid month range '" + s + "'")
+        if len(t) != 2: raise Abort("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
         MonthSpan = itoa(t[1],lower_bound=Month+1,prefix='month range: ') - Month + 1
     else:
@@ -263,7 +266,7 @@ def get_parser():
                     help="modify a geometry variable")
     return parser
 
-if __name__ == "__main__":
+def main_program():
     parser = get_parser()
 
     sys.argv,argv2 = extract_parser_args(sys.argv,parser)
@@ -286,7 +289,7 @@ if __name__ == "__main__":
         for x in plugin_list("layouts"): print x[0],
         print
         list_and_exit = True
-    if list_and_exit: sys.exit(0)
+    if list_and_exit: return
 
     plugin_paths = get_plugin_paths()
     Language = import_plugin(plugin_paths, "lang", "language", "languages", "--list-languages", options.lang)
@@ -304,16 +307,16 @@ if __name__ == "__main__":
     if options.layouthelp:
         #print "Help for layout:", options.layout
         Layout.parser.print_help()
-        sys.exit(0)
+        return
 
     if options.examples:
         print_examples()
-        sys.exit(0)
+        return
 
     # we can put it separately together with Layout; but we load Layout *after* lang,style,geom
     if len(args) < 1 or len(args) > 3:
         parser.print_help()
-        sys.exit(0)
+        return
 
     #if (len(args[-1]) == 4 and args[-1].isdigit()):
     #    print "WARNING: file name '%s' looks like a year, writing anyway..." % args[-1]
@@ -346,7 +349,7 @@ if __name__ == "__main__":
         Outfile = args[2]
 
     if MonthSpan == 0:
-        sys.exit("callirhoe: empty calendar requested, aborting")
+        raise Abort("callirhoe: empty calendar requested, aborting")
 
     Geometry.landscape = options.landscape
     xcairo.XDPI = options.dpi
@@ -374,3 +377,9 @@ if __name__ == "__main__":
     renderer = Layout.CalendarRenderer(Outfile, Year, Month, MonthSpan,
                                         (Style,Geometry,Language), hprovider, _version, loptions)
     renderer.render()
+
+if __name__ == "__main__":
+    try:
+        main_program()
+    except Abort as e:
+        sys.exit(e.args[0])
