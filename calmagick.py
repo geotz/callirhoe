@@ -31,17 +31,20 @@ import tempfile
 import glob
 import random
 import optparse
+import Queue
+import threading
 
 from callirhoe import extract_parser_args, parse_month_range, parse_year,itoa,Abort
 from lib.geom import rect_rel_scale
 
 # TODO:
 # cache stuff when --sample is used
+# move to python 3
 
 # MAYBE-TODO
 # convert input to ImageMagick native format for faster access
-# multithreaded range operation
 # report error on parse-float (like itoa())
+# abort --range only on KeyboardInterrupt?
 
 #class Abort(Exception):
 #    pass
@@ -153,7 +156,7 @@ months are requested.""", version="callirhoe.CalMagick " + _version)
     parser.add_option("--ratio", default="0",
                     help="set calendar ratio either as a float or as X/Y where X,Y positive integers; if RATIO=0 then photo ratio R is used; note that "
                     "for min/max placement, calendar ratio CR will be equal to the closest number (a/b)*R, where "
-                    "a,b integers, and MIN_SIZE <= x/QUANTUM <= MAX_SIZE, where x=b if RATIO/R < 1 otherwise x=a; in "
+                    "a,b integers, and MIN_SIZE <= x/QUANTUM <= MAX_SIZE, where x=b if RATIO < R otherwise x=a; in "
                     "any case 1/QUANTUM <= CR/R <= QUANTUM [%default]")
     parser.add_option("--low-entropy",  type="float", default=7,
                     help="set minimum entropy threshold (0-255) for early termination (0=global minimum) [%default]")
@@ -183,6 +186,9 @@ normally enclose the file name in single quotes like '*.jpg' in order to avoid s
 If less months are requested, then the calendar
 making process will terminate without having used all available photos. SPAN=0 will match the number of input
 photos.""")
+    cal.add_option('-j', "--jobs", type="int", default=1,
+                    help="set parallel job count (total number of threads) for the --range iteration; although python "
+                    "threads are not true processes, they help running the external programs efficiently [%default]")
     cal.add_option("--sample", type="int", default=None,
                     help="choose SAMPLE random images from the input and use in round-robin fashion (see --range option); if "
                     "SAMPLE=0 then the sample size is chosen to be equal to the month span defined with --range")
@@ -231,6 +237,7 @@ def check_parsed_options(options):
         if options.prefix == 'auto': options.prefix = 'no'
     else:
         if options.prefix == 'auto': options.prefix = 'yes'
+    if options.jobs < 1: options.jobs = 1
 
 def parse_magick_args():
     magickargs = [[],[],[]]
@@ -416,6 +423,22 @@ def parse_range(s,hint=None):
     else:
         raise Abort("calmagick: invalid range format '%s'." % options.range)
 
+def range_worker(q,ev,i,verbose):
+    while True:
+        if ev.is_set():
+            q.get()
+            q.task_done()
+        else:
+            item = q.get()
+#            if verbose: print "Thead-%d" % i
+            try:
+                compose_calendar(*item)
+            except Exception as e:
+                print >> sys.stderr, "Exception in Thread-%d: %s" % (i,e.args)
+                ev.set()
+            finally:
+                q.task_done()
+
 def main_program():
     parser = get_parser()
 
@@ -440,12 +463,25 @@ def main_program():
             flist = random.sample(flist, options.sample if options.sample else len(mrange))
         nf = len(flist)
         if nf > 0:
+            if options.jobs > 1:
+                q = Queue.Queue()
+                ev = threading.Event()
+                for i in range(options.jobs):
+                     t = threading.Thread(target=range_worker,args=(q,ev,i,options.verbose))
+                     t.daemon = True
+                     t.start()
+
             for i in range(len(mrange)):
                 img = flist[i % nf]
                 m,y = mrange[i]
                 prefix = '' if options.prefix == 'no' else '%04d-%02d_' % (y,m)
                 outimg = get_outfile(img,options.outdir,prefix,options.format)
-                compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args)
+                if options.jobs > 1:
+                    q.put((img, outimg, options, [str(m), str(y)] + argv2, magick_args))
+                else:
+                    compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args)
+
+            if options.jobs > 1: q.join()
     else:
         img = args[0]
         if not os.path.isfile(img):
