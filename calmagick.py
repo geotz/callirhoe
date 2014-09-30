@@ -42,12 +42,10 @@ from lib.geom import rect_rel_scale
 # move to python 3
 
 # MAYBE-TODO
+# imagemagick prog wrapper / entropy launch routine (instead of _entropy args)
 # convert input to ImageMagick native format for faster access
 # report error on parse-float (like itoa())
 # abort --range only on KeyboardInterrupt?
-
-#class Abort(Exception):
-#    pass
 
 def run_callirhoe(style, w, h, args, outfile):
     return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile])
@@ -298,8 +296,8 @@ def _get_image_luminance(img, args, geometry = None):
 
 #_entropy_args = ["-scale 512> -colorspace Gray -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -normalize -unsharp 0x3 -scale",
 #                 "-scale 512> -colorspace Gray ( +clone -blur 0x2 ) +swap -compose minus -composite -unsharp 0x3 -level 0,50% -scale"]
-_entropy_args = ["-scale 512> -colorspace Gray -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -contrast-stretch 0x3% -scale",
-                 "-scale 512> -colorspace Gray ( +clone -blur 0x2 ) +swap -compose minus -composite -contrast-stretch 0x7% -scale"]
+_entropy_args = ["-scale 512> -colorspace LUV -channel R -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -contrast-stretch 0x3% -scale",
+                 "-scale 512> -colorspace LUV -channel R ( +clone -blur 0x2 ) +swap -compose minus -composite -contrast-stretch 0x7% -scale"]
 
 def _entropy_placement(img, size, args, options, r):
     w,h = size
@@ -309,7 +307,7 @@ def _entropy_placement(img, size, args, options, r):
         print "Calculating image entropy..."
     qresize = '%dx%d!' % ((options.quantum,)*2)
     pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args + _entropy_args[options.alt].split() +
-    [qresize] + (['-negate'] if options.placement == 'max' else []) + ['-compress', 'None', 'pnm:-']).splitlines())
+    [qresize] + (['-negate'] if options.placement == 'max' else []) + ['-separate', '-compress', 'None', 'pnm:-']).splitlines())
 
     # find optimal fit
     if options.verbose: print "Fitting... ",
@@ -375,7 +373,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
         elif options.test == 'quant':
             subprocess.call(['convert', img] + magick_args[0] + _entropy_args[options.alt].split() +
             [qresize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
-                '-negate', outimg])
+                '-negate', '-separate', outimg])
         elif options.test == 'print':
             print ' '.join(map(str,geometry))
         elif options.test == 'crop':
