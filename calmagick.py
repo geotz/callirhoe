@@ -170,6 +170,9 @@ months are requested.""", version="callirhoe.CalMagick " + _version)
                     "{none, area, quant, print, crop}: none=test disabled; "
                     "area=show area in original image; quant=show area in quantizer; print=print minimum entropy area in STDOUT as W H X Y, "
                     "without generating any files at all; crop=crop selected area [%default]")
+    parser.add_option("--alt",  action="store_true", default=False,
+                    help="use an alternate entropy computation algorithm; although for most cases it should be no better than the default one, "
+                    "for some cases it might produce better results (yet to be verified)")
     parser.add_option("-v", "--verbose",  action="store_true", default=False,
                     help="print progress messages")
 
@@ -293,6 +296,11 @@ def _get_image_luminance(img, args, geometry = None):
             (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
             ['-colorspace', 'Gray', '-format', '%[fx:mean]', 'info:']))
 
+#_entropy_args = ["-scale 512> -colorspace Gray -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -normalize -unsharp 0x3 -scale",
+#                 "-scale 512> -colorspace Gray ( +clone -blur 0x2 ) +swap -compose minus -composite -unsharp 0x3 -level 0,50% -scale"]
+_entropy_args = ["-scale 512> -colorspace Gray -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -contrast-stretch 0x3% -scale",
+                 "-scale 512> -colorspace Gray ( +clone -blur 0x2 ) +swap -compose minus -composite -contrast-stretch 0x7% -scale"]
+
 def _entropy_placement(img, size, args, options, r):
     w,h = size
     R = float(w)/h
@@ -300,12 +308,8 @@ def _entropy_placement(img, size, args, options, r):
     if options.verbose:
         print "Calculating image entropy..."
     qresize = '%dx%d!' % ((options.quantum,)*2)
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args +
-    "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
+    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args + _entropy_args[options.alt].split() +
     [qresize] + (['-negate'] if options.placement == 'max' else []) + ['-compress', 'None', 'pnm:-']).splitlines())
-
-#-scale 512> ( -clone -blur 0x2 ) -compose minus -composite -colorspace Gray -normalize -unsharp 0x5 -scale 60x60! -normalize
-#-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale 60x60!
 
     # find optimal fit
     if options.verbose: print "Fitting... ",
@@ -344,9 +348,11 @@ def _manual_placement(size, options, r):
         rect2 = rect_rel_scale(rect, options.max_size*fx, options.max_size*fy, ax, ay)
     return tuple(map(int,[rect2[2], rect2[3], rect2[0], rect2[1]]))
 
-def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
+def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=None):
     # get image info (dimensions)
-    if options.verbose: print "Extracting image info..."
+    if options.verbose:
+        if stats: print "[%d/%d]" % stats,
+        print "Extracting image info..."
     w,h = _get_image_size(img, magick_args[0])
     qresize = '%dx%d!' % ((options.quantum,)*2)
     if options.verbose:
@@ -367,8 +373,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args):
             subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quant':
-            subprocess.call(['convert', img] + magick_args[0] +
-            "-scale 512> -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -colorspace Gray -normalize -unsharp 0x5 -scale".split() +
+            subprocess.call(['convert', img] + magick_args[0] + _entropy_args[options.alt].split() +
             [qresize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'print':
@@ -456,7 +461,7 @@ def main_program():
         os.mkdir(options.outdir)
 
     if options.range:
-        flist = glob.glob(args[0])
+        flist = sorted(glob.glob(args[0]))
         mrange = parse_range(options.range,hint=len(flist))
         if options.verbose: print "Composing %d photos..." % len(mrange)
         if options.sample is not None:
@@ -477,9 +482,9 @@ def main_program():
                 prefix = '' if options.prefix == 'no' else '%04d-%02d_' % (y,m)
                 outimg = get_outfile(img,options.outdir,prefix,options.format)
                 if options.jobs > 1:
-                    q.put((img, outimg, options, [str(m), str(y)] + argv2, magick_args))
+                    q.put((img, outimg, options, [str(m), str(y)] + argv2, magick_args, (i+1,len(mrange))))
                 else:
-                    compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args)
+                    compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args, (i+1,len(mrange)))
 
             if options.jobs > 1: q.join()
     else:
