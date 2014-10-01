@@ -34,18 +34,21 @@ import optparse
 import Queue
 import threading
 
-from callirhoe import extract_parser_args, parse_month_range, parse_year,itoa,Abort
+from callirhoe import extract_parser_args, parse_month_range, parse_year, itoa, Abort
 from lib.geom import rect_rel_scale
 
 # TODO:
-# cache stuff when --sample is used
+# epydoc
+# cache stuff when --sample is used and more than 10% reuse
 # move to python 3
 
 # MAYBE-TODO
 # imagemagick prog wrapper / entropy launch routine (instead of _entropy args)
-# convert input to ImageMagick native format for faster access
+# convert input to ImageMagick native format for faster re-access
 # report error on parse-float (like itoa())
 # abort --range only on KeyboardInterrupt?
+
+_version = "0.4.0"
 
 def run_callirhoe(style, w, h, args, outfile):
     return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile])
@@ -121,7 +124,6 @@ class PNMImage(object):
             if cur[0] <= entropy_thres: return cur + (best[0],)
         return best + (best[0],) # avg, sz_ratio, x, y, sz, best_avg
 
-_version = "0.4.0"
 
 def get_parser():
     """get the argument parser object"""
@@ -163,10 +165,11 @@ months are requested.""", version="callirhoe.CalMagick " + _version)
     parser.add_option("--negative",  type="float", default=100,
                     help="average luminosity (0-255) threshold of the overlaid area, below which a negative "
                     "overlay is chosen [%default]")
-    parser.add_option("--test",  type="choice", choices="none area quant print crop".split(), default='none',
+    parser.add_option("--test",  type="choice", choices="none area quant quantimg print crop".split(), default='none',
                     help="test entropy minimization algorithm, without creating any calendar, TEST should be among "
-                    "{none, area, quant, print, crop}: none=test disabled; "
-                    "area=show area in original image; quant=show area in quantizer; print=print minimum entropy area in STDOUT as W H X Y, "
+                    "{none, area, quant, quantimg, print, crop}: none=test disabled; "
+                    "area=show area in original image; quant=show area in quantizer; "
+                    "quantimg=show both quantizer and image; print=print minimum entropy area in STDOUT as W H X Y, "
                     "without generating any files at all; crop=crop selected area [%default]")
     parser.add_option("--alt",  action="store_true", default=False,
                     help="use an alternate entropy computation algorithm; although for most cases it should be no better than the default one, "
@@ -294,10 +297,13 @@ def _get_image_luminance(img, args, geometry = None):
             (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
             ['-colorspace', 'Gray', '-format', '%[fx:mean]', 'info:']))
 
-#_entropy_args = ["-scale 512> -colorspace Gray -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -normalize -unsharp 0x3 -scale",
-#                 "-scale 512> -colorspace Gray ( +clone -blur 0x2 ) +swap -compose minus -composite -unsharp 0x3 -level 0,50% -scale"]
-_entropy_args = ["-scale 512> -colorspace LUV -channel R -define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:> -contrast-stretch 0x3% -scale",
-                 "-scale 512> -colorspace LUV -channel R ( +clone -blur 0x2 ) +swap -compose minus -composite -contrast-stretch 0x7% -scale"]
+_entropy_head = "-scale 262144@".split()
+_entropy_alg = ["-define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:>".split(),
+                 "( +clone -blur 0x2 ) +swap -compose minus -composite".split()]
+_entropy_tail = "-colorspace LUV -channel R -separate +channel -normalize -scale".split()
+
+def entropy_args(alt=False):
+    return _entropy_head + _entropy_alg[alt] + _entropy_tail
 
 def _entropy_placement(img, size, args, options, r):
     w,h = size
@@ -306,8 +312,8 @@ def _entropy_placement(img, size, args, options, r):
     if options.verbose:
         print "Calculating image entropy..."
     qresize = '%dx%d!' % ((options.quantum,)*2)
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args + _entropy_args[options.alt].split() +
-    [qresize] + (['-negate'] if options.placement == 'max' else []) + ['-separate', '-compress', 'None', 'pnm:-']).splitlines())
+    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args + entropy_args(options.alt) +
+    [qresize, '-normalize'] + (['-negate'] if options.placement == 'max' else []) + "-compress None pnm:-".split()).splitlines())
 
     # find optimal fit
     if options.verbose: print "Fitting... ",
@@ -371,9 +377,14 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
             subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quant':
-            subprocess.call(['convert', img] + magick_args[0] + _entropy_args[options.alt].split() +
-            [qresize, '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
-                '-negate', '-separate', outimg])
+            subprocess.call(['convert', img] + magick_args[0] + entropy_args(options.alt) +
+            [qresize, '-normalize', '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
+                '-negate', outimg])
+        elif options.test == 'quantimg':
+            subprocess.call(['convert', img] + magick_args[0] + entropy_args(options.alt) +
+            [qresize, '-normalize', '-scale', '%dx%d!' % (w,h),
+                '-compose', 'multiply', img, '-composite', '-region', '%dx%d+%d+%d' % geometry,
+                '-negate', outimg])
         elif options.test == 'print':
             print ' '.join(map(str,geometry))
         elif options.test == 'crop':
@@ -424,7 +435,7 @@ def parse_range(s,hint=None):
             if month > 12: month = 1; year += 1
         return margs
     else:
-        raise Abort("calmagick: invalid range format '%s'." % options.range)
+        raise Abort("calmagick: invalid range format '%s'" % options.range)
 
 def range_worker(q,ev,i,verbose):
     while True:
