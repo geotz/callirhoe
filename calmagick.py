@@ -43,12 +43,13 @@ from lib.geom import rect_rel_scale
 # move to python 3
 
 # MAYBE-TODO
-# imagemagick prog wrapper / entropy launch routine (instead of _entropy args)
+# check ImageMagick availability/version
 # convert input to ImageMagick native format for faster re-access
 # report error on parse-float (like itoa())
 # abort --range only on KeyboardInterrupt?
 
 _version = "0.4.0"
+_prog_im = os.getenv('CALLIRHOE_IM', 'convert')
 
 def run_callirhoe(style, w, h, args, outfile):
     return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile])
@@ -65,6 +66,8 @@ class PNMImage(object):
         for i in range(len(strlist)):
             # skip comments
             if strlist[i].startswith('#'): continue
+            # skip empty lines
+            if len(strlist[i]) == 0: continue
             # parse header
             if state == 0:
                 if not strlist[i].startswith('P2'):
@@ -289,18 +292,20 @@ def get_outfile(infile, outdir, base_prefix, format, hint=None):
     return outfile
 
 def _get_image_size(img, args):
-    info = subprocess.check_output(['convert', img] + args + ['-format', '%w %h', 'info:']).split()
+    info = subprocess.check_output([_prog_im, img] + args + ['-format', '%w %h', 'info:']).split()
     return tuple(map(int, info))
 
+_lum_args = "-colorspace Lab -channel R -separate +channel -set colorspace Gray".split()
 def _get_image_luminance(img, args, geometry = None):
-    return 255.0*float(subprocess.check_output(['convert', img] + args +
+    return 255.0*float(subprocess.check_output([_prog_im, img] + args +
             (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
-            ['-colorspace', 'Gray', '-format', '%[fx:mean]', 'info:']))
+            _lum_args + ['-format', '%[fx:mean]', 'info:']))
 
-_entropy_head = "-scale 262144@".split()
+_entropy_head = "-scale 262144@>".split()
 _entropy_alg = ["-define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:>".split(),
                  "( +clone -blur 0x2 ) +swap -compose minus -composite".split()]
-_entropy_tail = "-colorspace LUV -channel R -separate +channel -normalize -scale".split()
+_entropy_tail = "-colorspace Lab -channel R -separate +channel -set colorspace Gray -normalize -scale".split()
+#_entropy_tail = "-colorspace Lab -channel R -separate +channel -normalize -scale".split()
 
 def entropy_args(alt=False):
     return _entropy_head + _entropy_alg[alt] + _entropy_tail
@@ -312,7 +317,7 @@ def _entropy_placement(img, size, args, options, r):
     if options.verbose:
         print "Calculating image entropy..."
     qresize = '%dx%d!' % ((options.quantum,)*2)
-    pnm_entropy = PNMImage(subprocess.check_output(['convert', img] + args + entropy_args(options.alt) +
+    pnm_entropy = PNMImage(subprocess.check_output([_prog_im, img] + args + entropy_args(options.alt) +
     [qresize, '-normalize'] + (['-negate'] if options.placement == 'max' else []) + "-compress None pnm:-".split()).splitlines())
 
     # find optimal fit
@@ -374,21 +379,21 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
 
     if options.test != 'none':
         if options.test == 'area':
-            subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry,
+            subprocess.call([_prog_im, img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quant':
-            subprocess.call(['convert', img] + magick_args[0] + entropy_args(options.alt) +
+            subprocess.call([_prog_im, img] + magick_args[0] + entropy_args(options.alt) +
             [qresize, '-normalize', '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quantimg':
-            subprocess.call(['convert', img] + magick_args[0] + entropy_args(options.alt) +
+            subprocess.call([_prog_im, img] + magick_args[0] + entropy_args(options.alt) +
             [qresize, '-normalize', '-scale', '%dx%d!' % (w,h),
                 '-compose', 'multiply', img, '-composite', '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'print':
             print ' '.join(map(str,geometry))
         elif options.test == 'crop':
-            subprocess.call(['convert', img] + magick_args[0] + ['-crop', '%dx%d+%d+%d' % geometry,
+            subprocess.call([_prog_im, img] + magick_args[0] + ['-crop', '%dx%d+%d+%d' % geometry,
                 outimg])
         return
 
@@ -414,7 +419,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
         # perform final composition
         if options.verbose: print "Composing overlay (%s)..." % outimg
         overlay = ['(', '-negate', calimg, ')'] if dark else [calimg]
-        subprocess.call(['convert', img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry] +
+        subprocess.call([_prog_im, img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry] +
             ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if dark else options.brightness)]) +
             ([] if options.saturation == 100 else ['-modulate', '100,%d' % options.saturation]) + magick_args[1] +
             ['-compose', 'over'] +  overlay + ['-geometry', '+%d+%d' % geometry[2:], '-composite'] +
