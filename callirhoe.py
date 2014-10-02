@@ -45,6 +45,10 @@
 # CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?
 
 _version = "0.4.0"
+_copyright = """Copyright (C) 2012-2014 George M. Tzoumas
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law."""
 
 import calendar
 import sys
@@ -223,7 +227,7 @@ def get_parser():
            "By default, a calendar of the current year in pdf format is written to FILE. "
            "Alternatively, you can select a specific YEAR (0=current), "
            "and a month range from MONTH (0-12, 0=current) to MONTH2 or for SPAN months.",
-           version="callirhoe " + _version)
+           version="callirhoe " + _version + '\n' + _copyright)
     parser.add_option("-l", "--lang",  dest="lang", default="EN",
                     help="choose language [%default]")
     parser.add_option("-t", "--layout",  dest="layout", default="classic",

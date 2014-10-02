@@ -1,6 +1,7 @@
 =============================================
  callirhoe - high quality calendar rendering
         (c) 2012-2014 George Tzoumas
+    https://code.google.com/p/callirhoe/
 =============================================
 
 First steps:
@@ -11,7 +12,8 @@ Create a calendar of the current year:
 
 Options:
     $ callirhoe --help
-    
+(or just callirhoe)
+
 More options:
     $ callirhoe --list-layouts
     bars classic sparse
@@ -24,3 +26,41 @@ Examples:
     
 For more info, have a look at the Wiki: 
     https://code.google.com/p/callirhoe/wiki
+
+PHOTO CALENDARS
+---------------
+
+Use calmagick.
+
+Options:
+    $ calmagick --help
+(or just calmagick)
+
+Example usage:
+
+$ cd photos
+$ ls
+photo001.jpg photo002.jpg ...
+
+Create a calendar starting from current month/year, spanning as many months
+as the photo files:
+
+$ calmagick '*.jpg' --range 0:0/0 --outdir=mycalendar
+
+- use the -v option for progress output (if you are bored :) )
+- use the -j option for multiple threads, e.g. -j 2
+- by default the 'transparent' style is used; use the -s option to override
+
+Create a calendar for 2015 using the first 12 photo files (in alphabetic order):
+
+$ calmagick '*.jpg' --range 1-12/2015 --outdir=mycalendar_2015
+
+Note that we specified where output files (composed images) go: mycaledar_2015/
+(folder will be created automatically)
+
+Create a calendar for 2015 choosing 12 random photos from all the available ones
+(if not enough photos available, they will be reused in a round-robin fashion):
+
+$ calmagick '*.jpg' --range 1-12/2015 --shuffle --outdir=mycalendar_2015s
+
+-- Have fun !!

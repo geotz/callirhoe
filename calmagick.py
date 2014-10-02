@@ -34,26 +34,23 @@ import optparse
 import Queue
 import threading
 
-from callirhoe import extract_parser_args, parse_month_range, parse_year, itoa, Abort
+from callirhoe import extract_parser_args, parse_month_range, parse_year, itoa, Abort, _version, _copyright
 from lib.geom import rect_rel_scale
 
-# TODO:
-# epydoc
-# move to python 3
-
 # MAYBE-TODO
+# move to python 3?
 # check ImageMagick availability/version
 # convert input to ImageMagick native format for faster re-access
 # report error on parse-float (like itoa())
 # abort --range only on KeyboardInterrupt?
 
-_version = "0.4.0"
 _prog_im = os.getenv('CALLIRHOE_IM', 'convert')
+"""ImageMagick binary, either 'convert' or env var C{CALLIRHOE_IM}"""
 
 def run_callirhoe(style, size, args, outfile):
     """launch callirhoe to generate a calendar
 
-    @param style: calendar style to use (pass -s option to callirhoe)
+    @param style: calendar style to use (passes -s option to callirhoe)
     @param size: tuple (I{width},I{height}) for output calendar size (in pixels)
     @param args: (extra) argument list to pass to callirhoe
     @param outfile: output calendar file
@@ -62,7 +59,7 @@ def run_callirhoe(style, size, args, outfile):
     return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % size] + args + [outfile])
 
 def _bound(x, lower, upper):
-    """return the closest number to M{x} that lies in M{[lower,upper]}"""
+    """return the closest number to M{x} that lies in [M{lower,upper}]"""
     if x < lower: return lower
     if x > upper: return upper
     return x
@@ -117,7 +114,7 @@ class PNMImage(object):
     def lowest_block_avg(self, szx, szy, at_least = 0):
         """returns the M{(szx,szy)}-sized block with intensity as close to M{at_least} as possible
         @return: R=tuple M({avg, (szx_ratio,szy_ratio), (x,y), (szx,szy))}: R[0] is the
-        average intensity of the block found, R[1] is the block size ratio with respect the whole image,
+        average intensity of the block found, R[1] is the block size ratio with respect to the whole image,
         R[2] is the block position (top-left) and R[3] is the block size
         """
         w,h = self.size
@@ -131,7 +128,21 @@ class PNMImage(object):
         return best
 
     def fit_rect(self, size_range = (0.333, 0.8), at_least = 7, relax = 0.2, rr = 1.0):
-        """find the lowest entropy rectangle within the image"""
+        """find the maximal-area minimal-entropy rectangle within the image
+
+        @param size_range: tuple of smallest and largest rect/photo size ratio
+
+        size measured on the 'best-fit' dimension' if rectangle and photo ratios differ
+        @param at_least: early stop of minimization algorithm, when rect of this amount of entropy is found
+        @param relax: relax minimum entropy by a factor of (1+M{relax}), so that bigger sizes can be tried
+
+        This is because usuallly minimal entropy is achieved at a minimal-area box.
+        @param rr: ratio of ratios
+
+        Calendar rectangle ratio over Photo ratio. If M{r>1} then calendar rectangle, when scaled, fits
+        M{x} dimension first. Conversely, if M{r<1}, scaling touches the M{y} dimension first. When M{r=1},
+        calendar rectangle can fit perfectly within the photo at 100% size.
+        """
         w,h = self.size
         sz_lo = _bound(int(w*size_range[0]+0.5),1,w)
         sz_hi = _bound(int(w*size_range[1]+0.5),1,w)
@@ -159,7 +170,7 @@ def get_parser():
 If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE contains wildcards,
 then every month is generated according to the --range option, advancing one month for every photo file.
 Photos will be reused in a round-robin fashion if more calendar
-months are requested.""", version="callirhoe.CalMagick " + _version)
+months are requested.""", version="callirhoe.CalMagick " + _version + '\n' + _copyright)
     parser.add_option("--outdir", default=".",
                     help="set directory for the output image(s); directory will be created if it does not already exist [%default]")
     parser.add_option("--outfile", default=None,
@@ -223,10 +234,12 @@ photos.""")
                     "threads are not true processes, they help running the external programs efficiently [%default]")
     cal.add_option("--sample", type="int", default=None,
                     help="choose SAMPLE random images from the input and use in round-robin fashion (see --range option); if "
-                    "SAMPLE=0 then the sample size is chosen to be equal to the month span defined with --range")
+                    "SAMPLE=0 then the sample size is chosen to as big as possible, either equal to the month span defined with --range, or "
+                    "equal to the total number of available photos")
     cal.add_option("--shuffle", action="store_true", default=False,
                     help="shuffle input images and to use in round-robin fashion (see --range option); "
-                    "the sample size is chosen to be equal to the month span defined with --range; this "
+                    "the sample size is chosen to be equal to the month span defined with --range or equal to "
+                    "the total number of available photos (whichever is smaller); this "
                     "is equivalent to specifying --sample=0")
     cal.add_option("--vanilla", action="store_true", default=False,
                     help="suppress default options --no-footer --border=0")
@@ -313,6 +326,7 @@ def mktemp(ext=''):
     return f.name
 
 def get_outfile(infile, outdir, base_prefix, format, hint=None):
+    """get output file name taking into account output directory, format and prefix, avoiding overwriting the input file"""
     if hint:
         outfile = hint
     else:
@@ -325,33 +339,50 @@ def get_outfile(infile, outdir, base_prefix, format, hint=None):
         outfile = os.path.join(outdir,base_prefix+base+'_calmagick'+ext)
     return outfile
 
-def _get_image_size(img, args):
+def _IM_get_image_size(img, args):
+    """extract tuple(width,height) from image file using ImageMagick"""
     info = subprocess.check_output([_prog_im, img] + args + ['-format', '%w %h', 'info:']).split()
     return tuple(map(int, info))
 
-_lum_args = "-colorspace Lab -channel R -separate +channel -set colorspace Gray".split()
-def _get_image_luminance(img, args, geometry = None):
+_IM_lum_args = "-colorspace Lab -channel R -separate +channel -set colorspace Gray".split()
+"""IM colorspace conversion arguments to extract image luminance"""
+
+def _IM_get_image_luminance(img, args, geometry = None):
+    """get average image luminance as a float in [0,255], using ImageMagick"""
     return 255.0*float(subprocess.check_output([_prog_im, img] + args +
             (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
-            _lum_args + ['-format', '%[fx:mean]', 'info:']))
+            _IM_lum_args + ['-format', '%[fx:mean]', 'info:']))
 
-_entropy_head = "-scale 262144@>".split()
-_entropy_alg = ["-define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:>".split(),
+_IM_entropy_head = "-scale 262144@>".split()
+"""IM args for entropy computation: pre-scaling"""
+_IM_entropy_alg = ["-define convolve:scale=! -define morphology:compose=Lighten -morphology Convolve Sobel:>".split(),
                  "( +clone -blur 0x2 ) +swap -compose minus -composite".split()]
-_entropy_tail = "-colorspace Lab -channel R -separate +channel -set colorspace Gray -normalize -scale".split()
-#_entropy_tail = "-colorspace Lab -channel R -separate +channel -normalize -scale".split()
+"""IM main/alternate entropy computation operator"""
+_IM_entropy_tail = "-colorspace Lab -channel R -separate +channel -set colorspace Gray -normalize -scale".split()
+"""IM entropy computation final colorspace"""
+#_IM_entropy_tail = "-colorspace Lab -channel R -separate +channel -normalize -scale".split()
 
-def entropy_args(alt=False):
-    return _entropy_head + _entropy_alg[alt] + _entropy_tail
+def _IM_entropy_args(alt=False):
+    """IM entropy computation arguments, depending on default or alternate algorithm"""
+    return _IM_entropy_head + _IM_entropy_alg[alt] + _IM_entropy_tail
 
 def _entropy_placement(img, size, args, options, r):
+    """get rectangle of minimal/maximal entropy
+
+    @param img: image file
+    @param size: image size tuple(I{width,height})
+    @param args: ImageMagick pre-processing argument list (see C{--pre-magick})
+    @param options: (command-line) options object
+    @param r: rectangle ratio, 0=match input ratio
+    @return: IM geometry tuple(I{width,height,x,y})
+    """
     w,h = size
     R = float(w)/h
     if r == 0: r = R
     if options.verbose:
         print "Calculating image entropy..."
     qresize = '%dx%d!' % ((options.quantum,)*2)
-    pnm_entropy = PNMImage(subprocess.check_output([_prog_im, img] + args + entropy_args(options.alt) +
+    pnm_entropy = PNMImage(subprocess.check_output([_prog_im, img] + args + _IM_entropy_args(options.alt) +
     [qresize, '-normalize'] + (['-negate'] if options.placement == 'max' else []) + "-compress None pnm:-".split()).splitlines())
 
     # find optimal fit
@@ -369,6 +400,13 @@ def _entropy_placement(img, size, args, options, r):
     return geometry
 
 def _manual_placement(size, options, r):
+    """get rectangle of ratio I{r} with user-defined placement (N,S,W,E,NW,NE,SW,SE,center,random)
+
+    @param size: image size tuple(I{width,height})
+    @param options: (command-line) options object
+    @param r: rectangle ratio, 0=match input ratio
+    @return: IM geometry tuple(I{width,height,x,y})
+    """
     w,h = size
     rect = (0, 0, w, h)
     R = float(w)/h
@@ -392,14 +430,31 @@ def _manual_placement(size, options, r):
     return tuple(map(int,[rect2[2], rect2[3], rect2[0], rect2[1]]))
 
 _cache = dict() # {'filename': (geometry, is_dark)}
+"""cache input photo computed rectangle and luminance, key=filename, value=(geometry,is_dark)"""
 _mutex = threading.Lock()
+"""mutex for cache access"""
+
 def get_cache(num_photos, num_months):
+    """returns a reference to the cache object, or None if caching is disabled
+
+    @note: caching is enabled only when more than 1/6 of photos is going to be re-used
+    """
     q,r = divmod(num_months, num_photos)
     if q > 1: return _cache
     if q < 1 or r == 0: return None
     return _cache if (num_photos / r <= 6) else None;
 
-def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=None, cache = None):
+def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=None, cache=None):
+    """performs calendar composition on a photo image
+
+    @param img: photo file
+    @param outimg: output file
+    @param options: (command-line) options object
+    @param callirhoe_args: extra argument list to pass to callirhoe
+    @param magick_args: [pre,in,post]-magick argument list
+    @param stats: if not C{None}: tuple(I{current,total}) counting input photos
+    @param cache: if cache enabled, points to the cache dictionary
+    """
     # get image info (dimensions)
     geometry, dark = None, None
     if cache is not None:
@@ -414,7 +469,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
         if options.verbose:
             if stats: print "[%d/%d]" % stats,
             print "Extracting image info..."
-        w,h = _get_image_size(img, magick_args[0])
+        w,h = _IM_get_image_size(img, magick_args[0])
         qresize = '%dx%d!' % ((options.quantum,)*2)
         if options.verbose:
             print "%s %dx%d %dmp R=%0.2f" % (img, w, h, int(w*h/1000000.0+0.5), float(w)/h)
@@ -434,11 +489,11 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
             subprocess.call([_prog_im, img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quant':
-            subprocess.call([_prog_im, img] + magick_args[0] + entropy_args(options.alt) +
+            subprocess.call([_prog_im, img] + magick_args[0] + _IM_entropy_args(options.alt) +
             [qresize, '-normalize', '-scale', '%dx%d!' % (w,h), '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'quantimg':
-            subprocess.call([_prog_im, img] + magick_args[0] + entropy_args(options.alt) +
+            subprocess.call([_prog_im, img] + magick_args[0] + _IM_entropy_args(options.alt) +
             [qresize, '-normalize', '-scale', '%dx%d!' % (w,h),
                 '-compose', 'multiply', img, '-composite', '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
@@ -460,7 +515,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
             # measure luminance
             if options.verbose: print "Measuring luminance...",
             if options.negative > 0 and options.negative < 255:
-                luma = _get_image_luminance(img, magick_args[0], geometry)
+                luma = _IM_get_image_luminance(img, magick_args[0], geometry)
                 if options.verbose: print "(%s)" % luma,
             else:
                 luma = 255 - options.negative
@@ -485,6 +540,12 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
         os.remove(calimg)
 
 def parse_range(s,hint=None):
+    """returns list of (I{Month,Year}) tuples for a given range
+
+    @param s: range string in format I{Month1-Month2/Year} or I{Month:Span/Year}
+    @param hint: span value to be used, when M{Span=0}
+    @return: list of (I{Month,Year}) tuples for every month specified
+    """
     if '/' in s:
         t = s.split('/')
         month,span = parse_month_range(t[0])
@@ -499,14 +560,19 @@ def parse_range(s,hint=None):
     else:
         raise Abort("calmagick: invalid range format '%s'" % options.range)
 
-def range_worker(q,ev,i,verbose):
+def range_worker(q,ev,i):
+    """worker thread for a (I{Month,Year}) tuple
+
+    @param ev: Event used to consume remaining items in case of error
+    @param q: Queue object to consume items from
+    @param i: Thread number
+    """
     while True:
         if ev.is_set():
             q.get()
             q.task_done()
         else:
             item = q.get()
-#            if verbose: print "Thead-%d" % i
             try:
                 compose_calendar(*item)
             except Exception as e:
@@ -516,6 +582,11 @@ def range_worker(q,ev,i,verbose):
                 q.task_done()
 
 def main_program():
+    """this is the main program routine
+
+    Parses options, and calls C{compose_calendar()} the appropriate number of times,
+    possibly by multiple threads (if requested by user)
+    """
     parser = get_parser()
 
     magick_args = parse_magick_args()
@@ -536,7 +607,7 @@ def main_program():
         mrange = parse_range(options.range,hint=len(flist))
         if options.verbose: print "Composing %d photos..." % len(mrange)
         if options.sample is not None:
-            flist = random.sample(flist, options.sample if options.sample else len(mrange))
+            flist = random.sample(flist, options.sample if options.sample else min(len(mrange),len(flist)))
         nf = len(flist)
         if nf > 0:
             if len(mrange) > nf and options.prefix == 'no?': options.prefix = 'yes'
@@ -544,7 +615,7 @@ def main_program():
                 q = Queue.Queue()
                 ev = threading.Event()
                 for i in range(options.jobs):
-                     t = threading.Thread(target=range_worker,args=(q,ev,i,options.verbose))
+                     t = threading.Thread(target=range_worker,args=(q,ev,i))
                      t.daemon = True
                      t.start()
 

@@ -1,10 +1,12 @@
 *******************************
-* Version 0.3.1 (Oct 2014)    *
+* Version 0.4.0 (Oct 2014)    *
 *******************************
 + calmagick: combining callirhoe with ImageMagick for impressive
   photo calendars featuring:
-    - traslucent overlays
-    - automatic minimal-entropy overlay placement!
+    - translucent overlays
+    - automatic minimal-entropy overlay placement
+    - automatic maximal-entropy cropping (smart-crop)
+    - multi-threaded operation, photo globbing, randomizing...
 
 *******************************
 * Version 0.3.0 (Sep 2014)    * 
