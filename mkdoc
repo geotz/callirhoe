@@ -1,2 +1,3 @@
-#!/bin/sh
-epydoc-2.7 -v --html -o callirhoe_doc callirhoe.py lib layouts lang geom style
+#!/bin/bash
+[[ "$#" -gt 0 ]] && ITEMS="$@" || ITEMS="callirhoe.py calmagick.py lib layouts lang geom style"
+epydoc-2.7 -v --html -o callirhoe_doc $ITEMS

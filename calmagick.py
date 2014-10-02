@@ -19,7 +19,7 @@
 
 # *****************************************************************
 #                                                                 #
-"""  high quality photo calendar composition using Imagemagick  """
+"""  high quality photo calendar composition using ImageMagick  """
 #                                                                 #
 # *****************************************************************
 
@@ -39,7 +39,6 @@ from lib.geom import rect_rel_scale
 
 # TODO:
 # epydoc
-# cache stuff when --sample is used and more than 10% reuse
 # move to python 3
 
 # MAYBE-TODO
@@ -51,15 +50,33 @@ from lib.geom import rect_rel_scale
 _version = "0.4.0"
 _prog_im = os.getenv('CALLIRHOE_IM', 'convert')
 
-def run_callirhoe(style, w, h, args, outfile):
-    return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % (w,h)] + args + [outfile])
+def run_callirhoe(style, size, args, outfile):
+    """launch callirhoe to generate a calendar
 
-def _bound(x, lower_bound, upper_bound):
-    if x < lower_bound: return lower_bound
-    if x > upper_bound: return upper_bound
+    @param style: calendar style to use (pass -s option to callirhoe)
+    @param size: tuple (I{width},I{height}) for output calendar size (in pixels)
+    @param args: (extra) argument list to pass to callirhoe
+    @param outfile: output calendar file
+    @return: subprocess exit code
+    """
+    return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % size] + args + [outfile])
+
+def _bound(x, lower, upper):
+    """return the closest number to M{x} that lies in M{[lower,upper]}"""
+    if x < lower: return lower
+    if x > upper: return upper
     return x
 
 class PNMImage(object):
+    """class to represent an PNM grayscale image given in P2 format
+
+    @ivar data: image data as 2-dimensional array (list of lists)
+    @ivar size: tuple M{(width,height)} of image dimensions
+    @ivar maxval: maximum grayscale value
+    @ivar xsum: 2-dimensional array of running x-sums for each line, used for efficient
+    computation of block averages, resulting in M{O(sqrt(A))} complexity, instead of M{O(A)},
+    where M{A} the image area
+    """
     def __init__(self, strlist):
         self.data = [];
         state = 0;
@@ -94,9 +111,15 @@ class PNMImage(object):
         self.xsum = [map(lambda x: sum(self.data[y][0:x]), range(w+1)) for y in range(0,h)]
 
     def block_avg(self, x, y, szx, szy):
+        """returns the average intensity of a block of size M{(szx,szy)} at pos (top-left) M{(x,y)}"""
         return float(sum([(self.xsum[y][x+szx] - self.xsum[y][x]) for y in range(y,y+szy)]))/(szx*szy)
 
     def lowest_block_avg(self, szx, szy, at_least = 0):
+        """returns the M{(szx,szy)}-sized block with intensity as close to M{at_least} as possible
+        @return: R=tuple M({avg, (szx_ratio,szy_ratio), (x,y), (szx,szy))}: R[0] is the
+        average intensity of the block found, R[1] is the block size ratio with respect the whole image,
+        R[2] is the block position (top-left) and R[3] is the block size
+        """
         w,h = self.size
         best = (self.maxval,(1,1),(0,0),(szx,szy)) # avg, (szx_ratio,szy_ratio), (x,y), (szx,szy)
         for y in range(0,h-szy+1):
@@ -108,6 +131,7 @@ class PNMImage(object):
         return best
 
     def fit_rect(self, size_range = (0.333, 0.8), at_least = 7, relax = 0.2, rr = 1.0):
+        """find the lowest entropy rectangle within the image"""
         w,h = self.size
         sz_lo = _bound(int(w*size_range[0]+0.5),1,w)
         sz_hi = _bound(int(w*size_range[1]+0.5),1,w)
@@ -143,8 +167,9 @@ months are requested.""", version="callirhoe.CalMagick " + _version)
                     "overwrite the input image, in which case suffix '_calmagick' will be added; this option will override --outdir and --format options")
     parser.add_option("--prefix", type="choice", choices=['no','auto','yes'], default='auto',
                     help="set output filename prefix for multiple image output (with --range); 'no' means no prefix will be added, thus the output "
-                    "filename order may not be the same, if the input photos are randomized (--shuffle or --sample); "
-                    "'auto' adds YEAR_MONTH_ prefix only when input photos are randomized; 'yes' will always add prefix [%default]")
+                    "filename order may not be the same, if the input photos are randomized (--shuffle or --sample), also some output files may be overwritten, "
+                    "if input photos are reused in round-robin; "
+                    "'auto' adds YEAR_MONTH_ prefix only when input photos are randomized or more months than photos are requested; 'yes' will always add prefix [%default]")
     parser.add_option("--quantum", type="int", default=60,
                     help="choose quantization level for entropy computation [%default]")
     parser.add_option("--placement", type="choice", choices="min max N S W E NW NE SW SE center random".split(),
@@ -230,6 +255,7 @@ photos.""")
     return parser
 
 def check_parsed_options(options):
+    """set (remaining) default values and check validity of various option combinations"""
     if options.min_size is None:
         options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
     if options.sample is not None and not options.range:
@@ -241,12 +267,19 @@ def check_parsed_options(options):
     if options.shuffle:
         options.sample = 0
     if options.sample is None:
-        if options.prefix == 'auto': options.prefix = 'no'
+        if options.prefix == 'auto': options.prefix = 'no?' # dirty, isn't it? :)
     else:
         if options.prefix == 'auto': options.prefix = 'yes'
     if options.jobs < 1: options.jobs = 1
 
 def parse_magick_args():
+    """extract arguments from command-line that will be passed to ImageMagick
+
+    ImageMagick-specific arguments should be defined between arguments C{--pre-magick},
+    C{--in-magick}, C{--post-magick} is this order
+
+    @return: 3-element list of lists containing the [pre,in,post]-options
+    """
     magickargs = [[],[],[]]
     try:
         m = sys.argv.index('--post-magick')
@@ -274,6 +307,7 @@ def parse_magick_args():
     return magickargs
 
 def mktemp(ext=''):
+    """get temporary file name with optional extension"""
     f = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
     f.close()
     return f.name
@@ -357,25 +391,43 @@ def _manual_placement(size, options, r):
         rect2 = rect_rel_scale(rect, options.max_size*fx, options.max_size*fy, ax, ay)
     return tuple(map(int,[rect2[2], rect2[3], rect2[0], rect2[1]]))
 
-def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=None):
-    # get image info (dimensions)
-    if options.verbose:
-        if stats: print "[%d/%d]" % stats,
-        print "Extracting image info..."
-    w,h = _get_image_size(img, magick_args[0])
-    qresize = '%dx%d!' % ((options.quantum,)*2)
-    if options.verbose:
-        print "%s %dx%d %dmp R=%0.2f" % (img, w, h, int(w*h/1000000.0+0.5), float(w)/h)
+_cache = dict() # {'filename': (geometry, is_dark)}
+_mutex = threading.Lock()
+def get_cache(num_photos, num_months):
+    q,r = divmod(num_months, num_photos)
+    if q > 1: return _cache
+    if q < 1 or r == 0: return None
+    return _cache if (num_photos / r <= 6) else None;
 
-    if '/' in options.ratio:
-        tmp = options.ratio.split('/')
-        calratio = float(itoa(tmp[0],1))/itoa(tmp[1],1)
-    else:
-        calratio = float(options.ratio)
-    if options.placement == 'min' or options.placement == 'max':
-        geometry = _entropy_placement(img, (w,h), magick_args[0], options, calratio)
-    else:
-        geometry = _manual_placement((w,h), options, calratio)
+def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=None, cache = None):
+    # get image info (dimensions)
+    geometry, dark = None, None
+    if cache is not None:
+        with _mutex:
+            if img in cache:
+                geometry, dark = cache[img]
+        if options.verbose and geometry:
+            if stats: print "[%d/%d]" % stats,
+            print "Reusing image info from cache...", geometry, "DARK" if dark else "LIGHT"
+
+    if geometry is None:
+        if options.verbose:
+            if stats: print "[%d/%d]" % stats,
+            print "Extracting image info..."
+        w,h = _get_image_size(img, magick_args[0])
+        qresize = '%dx%d!' % ((options.quantum,)*2)
+        if options.verbose:
+            print "%s %dx%d %dmp R=%0.2f" % (img, w, h, int(w*h/1000000.0+0.5), float(w)/h)
+
+        if '/' in options.ratio:
+            tmp = options.ratio.split('/')
+            calratio = float(itoa(tmp[0],1))/itoa(tmp[1],1)
+        else:
+            calratio = float(options.ratio)
+        if options.placement == 'min' or options.placement == 'max':
+            geometry = _entropy_placement(img, (w,h), magick_args[0], options, calratio)
+        else:
+            geometry = _manual_placement((w,h), options, calratio)
 
     if options.test != 'none':
         if options.test == 'area':
@@ -402,17 +454,22 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
     if not options.vanilla: callirhoe_args = callirhoe_args + ['--no-footer', '--border=0']
     calimg = mktemp('.png')
     try:
-        pcal = run_callirhoe(options.style, geometry[0], geometry[1], callirhoe_args, calimg)
+        pcal = run_callirhoe(options.style, geometry[0:2], callirhoe_args, calimg)
 
-        # measure luminance
-        if options.verbose: print "Measuring luminance...",
-        if options.negative > 0 and options.negative < 255:
-            luma = _get_image_luminance(img, magick_args[0], geometry)
-            if options.verbose: print "(%s)" % luma,
-        else:
-            luma = 255 - options.negative
-        dark = luma < options.negative
-        if options.verbose: print "DARK" if dark else "LIGHT"
+        if dark is None:
+            # measure luminance
+            if options.verbose: print "Measuring luminance...",
+            if options.negative > 0 and options.negative < 255:
+                luma = _get_image_luminance(img, magick_args[0], geometry)
+                if options.verbose: print "(%s)" % luma,
+            else:
+                luma = 255 - options.negative
+            dark = luma < options.negative
+            if options.verbose: print "DARK" if dark else "LIGHT"
+            if cache is not None:
+                with _mutex:
+                    cache[img] = (geometry, dark)
+
         pcal.wait()
         if pcal.returncode != 0: raise RuntimeError("calmagick: calendar creation failed")
 
@@ -482,6 +539,7 @@ def main_program():
             flist = random.sample(flist, options.sample if options.sample else len(mrange))
         nf = len(flist)
         if nf > 0:
+            if len(mrange) > nf and options.prefix == 'no?': options.prefix = 'yes'
             if options.jobs > 1:
                 q = Queue.Queue()
                 ev = threading.Event()
@@ -490,15 +548,16 @@ def main_program():
                      t.daemon = True
                      t.start()
 
+            cache = get_cache(nf, len(mrange));
             for i in range(len(mrange)):
                 img = flist[i % nf]
                 m,y = mrange[i]
-                prefix = '' if options.prefix == 'no' else '%04d-%02d_' % (y,m)
+                prefix = '' if options.prefix.startswith('no') else '%04d-%02d_' % (y,m)
                 outimg = get_outfile(img,options.outdir,prefix,options.format)
-                if options.jobs > 1:
-                    q.put((img, outimg, options, [str(m), str(y)] + argv2, magick_args, (i+1,len(mrange))))
-                else:
-                    compose_calendar(img, outimg, options, [str(m), str(y)] + argv2, magick_args, (i+1,len(mrange)))
+                args = (img, outimg, options, [str(m), str(y)] + argv2, magick_args,
+                        (i+1,len(mrange)), cache)
+                if options.jobs > 1: q.put(args)
+                else: compose_calendar(*args)
 
             if options.jobs > 1: q.join()
     else:
