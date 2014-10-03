@@ -70,9 +70,10 @@ class PNMImage(object):
     @ivar data: image data as 2-dimensional array (list of lists)
     @ivar size: tuple M{(width,height)} of image dimensions
     @ivar maxval: maximum grayscale value
+    @ivar _rsum_cache: used by L{_rsum()} to remember results
     @ivar xsum: 2-dimensional array of running x-sums for each line, used for efficient
-    computation of block averages, resulting in M{O(sqrt(A))} complexity, instead of M{O(A)},
-    where M{A} the image area
+    computation of block averages, resulting in M{O(H)} complexity, instead of M{O(W*H)},
+    where M{W,H} the image dimensions
     """
     def __init__(self, strlist):
         self.data = [];
@@ -105,7 +106,18 @@ class PNMImage(object):
                 self.data = [intlist[x:x+w] for x in range(0, len(intlist), w)]
                 break
 
-        self.xsum = [map(lambda x: sum(self.data[y][0:x]), range(w+1)) for y in range(0,h)]
+        self._rsum_cache=(-1,-1,0) # y,x,s
+#        self.xsum = [map(lambda x: sum(self.data[y][0:x]), range(w+1)) for y in range(0,h)]
+        self.xsum = [map(lambda x: self._rsum(y,x), range(w+1)) for y in range(0,h)]
+
+    def _rsum(self,y,x):
+        """running sum with cache"""
+        if self._rsum_cache[0] == y and self._rsum_cache[1] == x:
+            s = self._rsum_cache[2] + self.data[y][x-1]
+        else:
+            s = sum(self.data[y][0:x])
+        self._rsum_cache = (y,x+1,s)
+        return s
 
     def block_avg(self, x, y, szx, szy):
         """returns the average intensity of a block of size M{(szx,szy)} at pos (top-left) M{(x,y)}"""
