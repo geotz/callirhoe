@@ -43,6 +43,8 @@ def page_spec(spec = None):
         Paper type can be an ISO paper type (a0..a9 or a0w..a9w) or of the
         form W:H; positive values correspond to W or H mm, negative values correspond to
         -W or -H pixels; 'w' suffix swaps width & height; None defaults to A4 paper
+
+    @rtype: (int,int)
     """
     if not spec:
         return (ISOPAGE[5], ISOPAGE[4])
@@ -62,11 +64,17 @@ def page_spec(spec = None):
         return (w,h)
 
 def mm_to_dots(mm):
-    """convert millimeters to dots"""
+    """convert millimeters to dots
+
+    @rtype: float
+    """
     return mm/25.4 * XDPI
 
 def dots_to_mm(dots):
-    """convert dots to millimeters"""
+    """convert dots to millimeters
+
+    @rtype: float
+    """
     return dots*25.4/XDPI
 
 class Page(object):
@@ -205,7 +213,10 @@ def set_color(cr, rgba):
         cr.set_source_rgba(*rgba)
 
 def extract_font_name(f):
-    "extract the font name from a string or from a tuple (fontname, slant, weight)"""
+    """extract the font name from a string or from a tuple (fontname, slant, weight)
+
+    @rtype: str
+    """
     return f if type(f) is str else f[0]
 
 def make_sloppy_rect(cr, rect, sdx = 0.0, sdy = 0.0, srot = 0.0):
@@ -233,8 +244,6 @@ def draw_shadow(cr, rect, thickness = None, shadow_color = (0,0,0,0.3)):
     @param thickness: if C{None} nothing is drawn
     @param shadow_color: shadow color
     """
-
-
     if thickness is None: return
     fx = mm_to_dots(thickness[0])
     fy = mm_to_dots(thickness[1])

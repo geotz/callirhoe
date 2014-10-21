@@ -28,7 +28,10 @@ import _base
 parser = _base.get_parser(__name__)
 
 def _weekrows_of_month(year, month):
-    """returns the number of Monday-Sunday ranges (or subsets of) that a month contains, which are 4, 5 or 6"""
+    """returns the number of Monday-Sunday ranges (or subsets of) that a month contains, which are 4, 5 or 6
+
+    @rtype: int
+    """
     day,span = calendar.monthrange(year, month)
     if day == 0 and span == 28: return 4
     if day == 5 and span == 31: return 6

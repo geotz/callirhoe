@@ -75,6 +75,7 @@ def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
     @param longcat2: long category name in plural form
     @param listopt: option name
     @param preset: default value
+    @rtype: module
 
     @note: Aimed for internal use with I{lang}, I{style}, I{geom}, I{layouts}.
     """
@@ -135,12 +136,13 @@ def add_list_option(parser, opt):
     parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
                        help="list available %s" % opt)
 
-def itoa(s, lower_bound=None, upper_bound=None, prefix=''):
-    """convert integer to string, exiting on error (for cmdline parsing)
+def atoi(s, lower_bound=None, upper_bound=None, prefix=''):
+    """convert string to integer, exiting on error (for cmdline parsing)
 
     @param lower_bound: perform additional check so that value >= I{lower_bound}
     @param upper_bound: perform additional check so that value <= I{upper_bound}
     @param prefix: output prefix for error reporting
+    @rtype: int
     """
     try:
         k = int(s);
@@ -155,31 +157,40 @@ def itoa(s, lower_bound=None, upper_bound=None, prefix=''):
     return k
 
 def _parse_month(mstr):
-    """get a month value (0-12) from I{mstr}, exiting on error (for cmdline parsing)"""
-    m = itoa(mstr,lower_bound=0,upper_bound=12,prefix='month: ')
+    """get a month value (0-12) from I{mstr}, exiting on error (for cmdline parsing)
+
+    @rtype: int
+    """
+    m = atoi(mstr,lower_bound=0,upper_bound=12,prefix='month: ')
     if m == 0: m = time.localtime()[1]
     return m
 
 def parse_month_range(s):
-    """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}"""
+    """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}
+
+    @rtype: (int,int)
+    """
     if ':' in s:
         t = s.split(':')
         if len(t) != 2: raise Abort("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
-        MonthSpan = itoa(t[1],lower_bound=0,prefix='month span: ')
+        MonthSpan = atoi(t[1],lower_bound=0,prefix='month span: ')
     elif '-' in s:
         t = s.split('-')
         if len(t) != 2: raise Abort("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
-        MonthSpan = itoa(t[1],lower_bound=Month+1,prefix='month range: ') - Month + 1
+        MonthSpan = atoi(t[1],lower_bound=Month+1,prefix='month range: ') - Month + 1
     else:
         Month = _parse_month(s)
         MonthSpan = 1
     return (Month,MonthSpan)
 
 def parse_year(ystr):
-    """get a year value (>=0) from I{ystr}, exiting on error (for cmdline parsing)"""
-    y = itoa(ystr,lower_bound=0,prefix='year: ')
+    """get a year value (>=0) from I{ystr}, exiting on error (for cmdline parsing)
+
+    @rtype: int
+    """
+    y = atoi(ystr,lower_bound=0,prefix='year: ')
     if y == 0: y = time.localtime()[0]
     return y
 
@@ -193,6 +204,8 @@ def extract_parser_args(arglist, parser, pos = -1):
     if I{pos}<0 then all positional arguments are extracted, otherwise,
     only I{pos} arguments are extracted. arglist[0] (usually sys.argv[0]) is also positional
     argument!
+
+    @rtype: ([str,...],[str,...])
     @return: tuple (argv1,argv2) with extracted argument list and remaining argument list
     """
     argv = [[],[]]
@@ -221,7 +234,10 @@ def extract_parser_args(arglist, parser, pos = -1):
     return tuple(argv)
 
 def get_parser():
-    """get the argument parser object"""
+    """get the argument parser object
+
+    @rtype: optparse.OptionParser
+    """
     parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE",
            description="High quality calendar rendering with vector graphics. "
            "By default, a calendar of the current year in pdf format is written to FILE. "
