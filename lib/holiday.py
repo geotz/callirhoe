@@ -23,6 +23,7 @@
 # *****************************************
 
 from datetime import date, timedelta
+import pkg_resources
 
 def _get_orthodox_easter(year):
     """compute date of orthodox easter
@@ -318,7 +319,7 @@ class HolidayProvider(object):
 
         @param filename: file to be loaded
         """
-        with open(filename, 'r') as f:
+        with open(pkg_resources.resource_stream(filename), 'r') as f:
             for line in f:
                 line = line.strip()
                 if not line: continue
