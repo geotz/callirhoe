@@ -21,7 +21,6 @@
 
 # TODO:
 
-
 # fix auto-measure rendering (cairo)
 # fix plugin loading (without global vars)
 # week markers selectable
@@ -63,7 +62,7 @@ class Abort(Exception):
 
 from lib.plugin import *
 # TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
-def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
+def import_plugin(plugin_path, cat, longcat, longcat2, listopt, preset):
     """import a plugin making it visible
 
     I{Example:}
@@ -81,12 +80,9 @@ def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
     @note: Aimed for internal use with I{lang}, I{style}, I{geom}, I{layouts}.
     """
     try:
-        found = available_files(plugin_paths[0], cat, preset) + available_files(plugin_paths[1], cat, preset)
+        found = available_files(plugin_path, cat, preset)
         if len(found) == 0: raise IOError
-        old = sys.path[0];
-        sys.path[0] = found[0][1]
         m = __import__("%s.%s" % (cat,preset), globals(), locals(), [ "*" ])
-        sys.path[0] = old
         return m
     except IOError:
         sys.exit("callirhoe: %s definition '%s' not found, use %s to see available definitions" % (longcat,
@@ -312,11 +308,11 @@ def main_program():
         list_and_exit = True
     if list_and_exit: return
 
-    plugin_paths = get_plugin_paths()
-    Language = import_plugin(plugin_paths, "lang", "language", "languages", "--list-languages", options.lang)
-    Style = import_plugin(plugin_paths, "style", "style", "styles", "--list-styles", options.style)
-    Geometry = import_plugin(plugin_paths, "geom", "geometry", "geometries", "--list-geometries", options.geom)
-    Layout = import_plugin(plugin_paths, "layouts", "layout", "layouts", "--list-layouts", options.layout)
+    plugin_path = "/"
+    Language = import_plugin(plugin_path, "lang", "language", "languages", "--list-languages", options.lang)
+    Style = import_plugin(plugin_path, "style", "style", "styles", "--list-styles", options.style)
+    Geometry = import_plugin(plugin_path, "geom", "geometry", "geometries", "--list-geometries", options.geom)
+    Layout = import_plugin(plugin_path, "layouts", "layout", "layouts", "--list-layouts", options.layout)
 
     for x in argv2:
         if '=' in x: x = x[0:x.find('=')]
@@ -401,6 +397,8 @@ def main_program():
 
 if __name__ == "__main__":
     try:
+#        import pkg_resources
+#        print pkg_resources.resource_listdir(__name__,"/")
         main_program()
     except Abort as e:
         sys.exit(e.args[0])
