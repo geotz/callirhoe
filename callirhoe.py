@@ -21,6 +21,7 @@
 
 # TODO:
 
+# test
 # fix auto-measure rendering (cairo)
 # fix plugin loading (without global vars)
 # week markers selectable
