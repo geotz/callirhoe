@@ -62,7 +62,7 @@ class Abort(Exception):
 
 from lib.plugin import *
 # TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
-def import_plugin(plugin_path, cat, longcat, longcat2, listopt, preset):
+def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
     """import a plugin making it visible
 
     I{Example:}
@@ -75,14 +75,18 @@ def import_plugin(plugin_path, cat, longcat, longcat2, listopt, preset):
     @param longcat2: long category name in plural form
     @param listopt: option name
     @param preset: default value
-    @rtype: module
 
     @note: Aimed for internal use with I{lang}, I{style}, I{geom}, I{layouts}.
     """
     try:
-        found = available_files(plugin_path, cat, preset)
+        found = []
+        for path in plugin_paths:
+            found += available_files(plugin_paths[0], cat, preset)
         if len(found) == 0: raise IOError
+        old = sys.path[0];
+        sys.path[0] = found[0][1]
         m = __import__("%s.%s" % (cat,preset), globals(), locals(), [ "*" ])
+        sys.path[0] = old
         return m
     except IOError:
         sys.exit("callirhoe: %s definition '%s' not found, use %s to see available definitions" % (longcat,
@@ -133,13 +137,12 @@ def add_list_option(parser, opt):
     parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
                        help="list available %s" % opt)
 
-def atoi(s, lower_bound=None, upper_bound=None, prefix=''):
-    """convert string to integer, exiting on error (for cmdline parsing)
+def itoa(s, lower_bound=None, upper_bound=None, prefix=''):
+    """convert integer to string, exiting on error (for cmdline parsing)
 
     @param lower_bound: perform additional check so that value >= I{lower_bound}
     @param upper_bound: perform additional check so that value <= I{upper_bound}
     @param prefix: output prefix for error reporting
-    @rtype: int
     """
     try:
         k = int(s);
@@ -154,40 +157,31 @@ def atoi(s, lower_bound=None, upper_bound=None, prefix=''):
     return k
 
 def _parse_month(mstr):
-    """get a month value (0-12) from I{mstr}, exiting on error (for cmdline parsing)
-
-    @rtype: int
-    """
-    m = atoi(mstr,lower_bound=0,upper_bound=12,prefix='month: ')
+    """get a month value (0-12) from I{mstr}, exiting on error (for cmdline parsing)"""
+    m = itoa(mstr,lower_bound=0,upper_bound=12,prefix='month: ')
     if m == 0: m = time.localtime()[1]
     return m
 
 def parse_month_range(s):
-    """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}
-
-    @rtype: (int,int)
-    """
+    """return (Month,Span) by parsing range I{Month}, I{Month1}-I{Month2} or I{Month}:I{Span}"""
     if ':' in s:
         t = s.split(':')
         if len(t) != 2: raise Abort("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
-        MonthSpan = atoi(t[1],lower_bound=0,prefix='month span: ')
+        MonthSpan = itoa(t[1],lower_bound=0,prefix='month span: ')
     elif '-' in s:
         t = s.split('-')
         if len(t) != 2: raise Abort("invalid month range '" + s + "'")
         Month = _parse_month(t[0])
-        MonthSpan = atoi(t[1],lower_bound=Month+1,prefix='month range: ') - Month + 1
+        MonthSpan = itoa(t[1],lower_bound=Month+1,prefix='month range: ') - Month + 1
     else:
         Month = _parse_month(s)
         MonthSpan = 1
     return (Month,MonthSpan)
 
 def parse_year(ystr):
-    """get a year value (>=0) from I{ystr}, exiting on error (for cmdline parsing)
-
-    @rtype: int
-    """
-    y = atoi(ystr,lower_bound=0,prefix='year: ')
+    """get a year value (>=0) from I{ystr}, exiting on error (for cmdline parsing)"""
+    y = itoa(ystr,lower_bound=0,prefix='year: ')
     if y == 0: y = time.localtime()[0]
     return y
 
@@ -201,8 +195,6 @@ def extract_parser_args(arglist, parser, pos = -1):
     if I{pos}<0 then all positional arguments are extracted, otherwise,
     only I{pos} arguments are extracted. arglist[0] (usually sys.argv[0]) is also positional
     argument!
-
-    @rtype: ([str,...],[str,...])
     @return: tuple (argv1,argv2) with extracted argument list and remaining argument list
     """
     argv = [[],[]]
@@ -231,10 +223,7 @@ def extract_parser_args(arglist, parser, pos = -1):
     return tuple(argv)
 
 def get_parser():
-    """get the argument parser object
-
-    @rtype: optparse.OptionParser
-    """
+    """get the argument parser object"""
     parser = optparse.OptionParser(usage="usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE",
            description="High quality calendar rendering with vector graphics. "
            "By default, a calendar of the current year in pdf format is written to FILE. "
@@ -308,11 +297,11 @@ def main_program():
         list_and_exit = True
     if list_and_exit: return
 
-    plugin_path = "/"
-    Language = import_plugin(plugin_path, "lang", "language", "languages", "--list-languages", options.lang)
-    Style = import_plugin(plugin_path, "style", "style", "styles", "--list-styles", options.style)
-    Geometry = import_plugin(plugin_path, "geom", "geometry", "geometries", "--list-geometries", options.geom)
-    Layout = import_plugin(plugin_path, "layouts", "layout", "layouts", "--list-layouts", options.layout)
+    plugin_paths = get_plugin_paths()
+    Language = import_plugin(plugin_paths, "lang", "language", "languages", "--list-languages", options.lang)
+    Style = import_plugin(plugin_paths, "style", "style", "styles", "--list-styles", options.style)
+    Geometry = import_plugin(plugin_paths, "geom", "geometry", "geometries", "--list-geometries", options.geom)
+    Layout = import_plugin(plugin_paths, "layouts", "layout", "layouts", "--list-layouts", options.layout)
 
     for x in argv2:
         if '=' in x: x = x[0:x.find('=')]
@@ -397,8 +386,6 @@ def main_program():
 
 if __name__ == "__main__":
     try:
-#        import pkg_resources
-#        print pkg_resources.resource_listdir(__name__,"/")
         main_program()
     except Abort as e:
         sys.exit(e.args[0])

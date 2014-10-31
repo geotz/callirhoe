@@ -24,29 +24,16 @@
 
 import sys
 import os.path
-import pkg_resources
+import glob
 
-def glob(path, pattern):
-"""
- Internal function that scans the given path and subpaths for .py files
-"""
-    tmplist = pkg_resources.resource_listdir("__main__", "/"+path)
-    filelist = []
-    for i in tmplist:
-        if i == "":
-            continue
-        if pkg_resources.resource_isdir("__main__", "/"+path+"/"+i):
-            filelist.extend(glob(path+"/"+i, pattern))
-        else:
-            if i.lower()[-3:] == pattern.lower():
-                name = path+"/"+i
-                filelist.append(name)
-    return filelist
+try:
+    import resources
+except:
+    pass
 
 def available_files(parent, dir, fmatch = None):
     """find parent/dir/*.py files to be used for plugins
 
-    @rtype: [str,...]
     @note:
            1. __init__.py should exist
            2. files starting with underscore are ignored
@@ -54,27 +41,36 @@ def available_files(parent, dir, fmatch = None):
     """
     good = False
     res = []
-    for x in glob(dir,".py"):
+    pattern = parent + "/" + dir + "/*.py"
+    for x in glob.glob(pattern) if parent != "resource" else resources.resource_list[dir]:
         basex = os.path.basename(x)
         if basex == "__init__.py": good = True
         elif basex.startswith('_'):
             # ignore files aimed for internal use
             # safer than [a-z]-style matching...
             continue
-        else:
+        else: 
             base = os.path.splitext(basex)[0]
-            if base and ((not fmatch) or (fmatch == base)): res.append((base,"/"+dir+parent))
+            if base and ((not fmatch) or (fmatch == base)): res.append((base,parent))
     return res if good else []
 
 def plugin_list(cat):
-    """return a sequence of available plugins, using L{available_files()} and L{get_plugin_paths()}
-
-    @rtype: [str,...]
-    """
-    return available_files("../", cat)
+    """return a sequence of available plugins, using L{available_files()} and L{get_plugin_paths()}"""
+    plugin_paths = get_plugin_paths()
+    return available_files(plugin_paths[0], cat) + available_files(plugin_paths[1], cat)
 
 # cat = lang   (category)
 # longcat = language
 # longcat2 = languages
 # listopt = --list-lang
 # preset = "EN"
+
+def get_plugin_paths():
+    """return the plugin search paths"""
+    result = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "."]
+    try:
+        tmp = resources.resource_list
+        result.append["resource"]
+    except:
+        pass
+    return result

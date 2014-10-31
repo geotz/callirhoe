@@ -34,14 +34,14 @@ import optparse
 import Queue
 import threading
 
-from callirhoe import extract_parser_args, parse_month_range, parse_year, atoi, Abort, _version, _copyright
+from callirhoe import extract_parser_args, parse_month_range, parse_year, itoa, Abort, _version, _copyright
 from lib.geom import rect_rel_scale
 
 # MAYBE-TODO
 # move to python 3?
 # check ImageMagick availability/version
 # convert input to ImageMagick native format for faster re-access
-# report error on parse-float (like atoi())
+# report error on parse-float (like itoa())
 # abort --range only on KeyboardInterrupt?
 
 _prog_im = os.getenv('CALLIRHOE_IM', 'convert')
@@ -54,16 +54,12 @@ def run_callirhoe(style, size, args, outfile):
     @param size: tuple (I{width},I{height}) for output calendar size (in pixels)
     @param args: (extra) argument list to pass to callirhoe
     @param outfile: output calendar file
-    @rtype: subprocess.Popen
-    @return: Popen object
+    @return: subprocess exit code
     """
     return subprocess.Popen(['callirhoe', '-s', style, '--paper=-%d:-%d' % size] + args + [outfile])
 
 def _bound(x, lower, upper):
-    """return the closest number to M{x} that lies in [M{lower,upper}]
-
-    @rtype: type(x)
-    """
+    """return the closest number to M{x} that lies in [M{lower,upper}]"""
     if x < lower: return lower
     if x > upper: return upper
     return x
@@ -115,10 +111,7 @@ class PNMImage(object):
         self.xsum = [map(lambda x: self._rsum(y,x), range(w+1)) for y in range(0,h)]
 
     def _rsum(self,y,x):
-        """running sum with cache
-
-        @rtype: int
-        """
+        """running sum with cache"""
         if self._rsum_cache[0] == y and self._rsum_cache[1] == x:
             s = self._rsum_cache[2] + self.data[y][x-1]
         else:
@@ -127,15 +120,11 @@ class PNMImage(object):
         return s
 
     def block_avg(self, x, y, szx, szy):
-        """returns the average intensity of a block of size M{(szx,szy)} at pos (top-left) M{(x,y)}
-
-        @rtype: float
-        """
+        """returns the average intensity of a block of size M{(szx,szy)} at pos (top-left) M{(x,y)}"""
         return float(sum([(self.xsum[y][x+szx] - self.xsum[y][x]) for y in range(y,y+szy)]))/(szx*szy)
 
     def lowest_block_avg(self, szx, szy, at_least = 0):
         """returns the M{(szx,szy)}-sized block with intensity as close to M{at_least} as possible
-        @rtype: (float,(float,float),(int,int),(int,int))
         @return: R=tuple M({avg, (szx_ratio,szy_ratio), (x,y), (szx,szy))}: R[0] is the
         average intensity of the block found, R[1] is the block size ratio with respect to the whole image,
         R[2] is the block position (top-left) and R[3] is the block size
@@ -165,8 +154,6 @@ class PNMImage(object):
         Calendar rectangle ratio over Photo ratio. If M{r>1} then calendar rectangle, when scaled, fits
         M{x} dimension first. Conversely, if M{r<1}, scaling touches the M{y} dimension first. When M{r=1},
         calendar rectangle can fit perfectly within the photo at 100% size.
-
-        @rtype: (float,(float,float),(int,int),(int,int),float)
         """
         w,h = self.size
         sz_lo = _bound(int(w*size_range[0]+0.5),1,w)
@@ -185,14 +172,11 @@ class PNMImage(object):
             # we do not use at_least because we want the best possible option, for bigger sizes
             cur = self.lowest_block_avg(*sz)
             if cur[0] <= entropy_thres: return cur + (best[0],)
-        return best + (best[0],) # avg, (szx_ratio,szy_ratio), (x,y), (szx,szy), best_avg
+        return best + (best[0],) # avg, sz_ratio, x, y, sz, best_avg
 
 
 def get_parser():
-    """get the argument parser object
-
-    @rtype: optparse.OptionParser
-    """
+    """get the argument parser object"""
     parser = optparse.OptionParser(usage="usage: %prog IMAGE [options] [callirhoe-options] [--pre-magick ...] [--in-magick ...] [--post-magick ...]",
            description="""High quality photo calendar composition with automatic minimal-entropy placement.
 If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE contains wildcards,
@@ -319,7 +303,6 @@ def parse_magick_args():
     ImageMagick-specific arguments should be defined between arguments C{--pre-magick},
     C{--in-magick}, C{--post-magick} is this order
 
-    @rtype: [[str,...],[str,...],[str,...]]
     @return: 3-element list of lists containing the [pre,in,post]-options
     """
     magickargs = [[],[],[]]
@@ -349,19 +332,13 @@ def parse_magick_args():
     return magickargs
 
 def mktemp(ext=''):
-    """get temporary file name with optional extension
-
-    @rtype: str
-    """
+    """get temporary file name with optional extension"""
     f = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
     f.close()
     return f.name
 
 def get_outfile(infile, outdir, base_prefix, format, hint=None):
-    """get output file name taking into account output directory, format and prefix, avoiding overwriting the input file
-
-    @rtype: str
-    """
+    """get output file name taking into account output directory, format and prefix, avoiding overwriting the input file"""
     if hint:
         outfile = hint
     else:
@@ -375,10 +352,7 @@ def get_outfile(infile, outdir, base_prefix, format, hint=None):
     return outfile
 
 def _IM_get_image_size(img, args):
-    """extract tuple(width,height) from image file using ImageMagick
-
-    @rtype: (int,int)
-    """
+    """extract tuple(width,height) from image file using ImageMagick"""
     info = subprocess.check_output([_prog_im, img] + args + ['-format', '%w %h', 'info:']).split()
     return tuple(map(int, info))
 
@@ -386,10 +360,7 @@ _IM_lum_args = "-colorspace Lab -channel R -separate +channel -set colorspace Gr
 """IM colorspace conversion arguments to extract image luminance"""
 
 def _IM_get_image_luminance(img, args, geometry = None):
-    """get average image luminance as a float in [0,255], using ImageMagick
-
-    @rtype: float
-    """
+    """get average image luminance as a float in [0,255], using ImageMagick"""
     return 255.0*float(subprocess.check_output([_prog_im, img] + args +
             (['-crop', '%dx%d+%d+%d' % geometry] if geometry else []) +
             _IM_lum_args + ['-format', '%[fx:mean]', 'info:']))
@@ -404,10 +375,7 @@ _IM_entropy_tail = "-colorspace Lab -channel R -separate +channel -set colorspac
 #_IM_entropy_tail = "-colorspace Lab -channel R -separate +channel -normalize -scale".split()
 
 def _IM_entropy_args(alt=False):
-    """IM entropy computation arguments, depending on default or alternate algorithm
-
-    @rtype: [str,...]
-    """
+    """IM entropy computation arguments, depending on default or alternate algorithm"""
     return _IM_entropy_head + _IM_entropy_alg[alt] + _IM_entropy_tail
 
 def _entropy_placement(img, size, args, options, r):
@@ -418,7 +386,6 @@ def _entropy_placement(img, size, args, options, r):
     @param args: ImageMagick pre-processing argument list (see C{--pre-magick})
     @param options: (command-line) options object
     @param r: rectangle ratio, 0=match input ratio
-    @rtype: (int,int,int,int)
     @return: IM geometry tuple(I{width,height,x,y})
     """
     w,h = size
@@ -450,7 +417,6 @@ def _manual_placement(size, options, r):
     @param size: image size tuple(I{width,height})
     @param options: (command-line) options object
     @param r: rectangle ratio, 0=match input ratio
-    @rtype: (int,int,int,int)
     @return: IM geometry tuple(I{width,height,x,y})
     """
     w,h = size
@@ -483,7 +449,6 @@ _mutex = threading.Lock()
 def get_cache(num_photos, num_months):
     """returns a reference to the cache object, or None if caching is disabled
 
-    @rtype: dict
     @note: caching is enabled only when more than 1/6 of photos is going to be re-used
     """
     q,r = divmod(num_months, num_photos)
@@ -523,7 +488,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
 
         if '/' in options.ratio:
             tmp = options.ratio.split('/')
-            calratio = float(atoi(tmp[0],1))/atoi(tmp[1],1)
+            calratio = float(itoa(tmp[0],1))/itoa(tmp[1],1)
         else:
             calratio = float(options.ratio)
         if options.placement == 'min' or options.placement == 'max':
@@ -591,7 +556,6 @@ def parse_range(s,hint=None):
 
     @param s: range string in format I{Month1-Month2/Year} or I{Month:Span/Year}
     @param hint: span value to be used, when M{Span=0}
-    @rtype: [(int,int),...]
     @return: list of (I{Month,Year}) tuples for every month specified
     """
     if '/' in s:

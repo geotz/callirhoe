@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mkdir _callirhoe
+./make_resources_list > resources.py
 cp -R geom _callirhoe
 cp -R holidays _callirhoe
 cp -R lang _callirhoe
@@ -8,12 +9,13 @@ cp -R layouts _callirhoe
 cp -R lib _callirhoe
 cp -R style _callirhoe
 cp callirhoe.py _callirhoe/__main__.py
+mv resources.py lib
 
 cd _callirhoe
 zip -q -r callirhoe.zip *
 mv callirhoe.zip ../
 cd ..
-rm -rf _callirhoe
+#rm -rf _callirhoe
 echo \#!/usr/bin/env python2 | cat - callirhoe.zip > callirhoe
 chmod 755 callirhoe
 rm callirhoe.zip
