@@ -1,15 +1,13 @@
 #!/usr/bin/env python2
 import glob
 
-lang = glob.glob('lang/*.py')
-style = glob.glob('style/*.py')
-layouts = glob.glob('layouts/*.py')
-geom = glob.glob('geom/*.py')
+res = dict()
+
+for x in ['lang', 'style', 'layouts', 'geom']:
+    res[x] = glob.glob('%s/*.py' % x)
 
 out = open('resources.py', 'w')
-out.write('resource_list = { ')
-out.write('"lang" : ' + str(lang) + ', ')
-out.write('"style" : ' + str(style)+ ', ')
-out.write('"layouts" : ' + str(layouts) + ', ')
-out.write('"geom" :' + str(geom) + ' }')
+
+for x in res.keys():
+    out.write('resources_list["%s"] = %s\n' % (x, str(res[x])))
 out.close()
