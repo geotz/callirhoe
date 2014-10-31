@@ -61,7 +61,10 @@ def plugin_list(cat):
     @rtype: [str,...]
     """
     plugin_paths = get_plugin_paths()
-    return available_files(plugin_paths[0], cat) + available_files(plugin_paths[1], cat)
+    result = []
+    for path in plugin_paths:
+        result += available_files(path, cat)
+    return result
 
 # cat = lang   (category)
 # longcat = language
