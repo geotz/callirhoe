@@ -84,13 +84,12 @@ def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
         for path in plugin_paths:
             found += available_files(path, cat, preset)
         if len(found) == 0: raise IOError
-        if found[0][1] == "/":
+        if found[0][1] == "resource:":
             m = __import__("%s.%s" % (cat,preset), globals(), locals(), [ "*" ])
         else:
-            old = sys.path[0]
-            sys.path[0] = found[0][1]
+            sys.path.insert(0, found[0][1])
             m = __import__("%s.%s" % (cat,preset), globals(), locals(), [ "*" ])
-            sys.path[0] = old
+            sys.path.pop(0)
         return m
     except IOError:
         sys.exit("callirhoe: %s definition '%s' not found, use %s to see available definitions" % (longcat,

@@ -2,7 +2,7 @@
 
 # Create Callirhoe package
 mkdir _callirhoe
-./make_resources_list > resources.py
+./make_resources_list
 cp -R geom holidays lang layouts lib style _callirhoe
 cp callirhoe.py _callirhoe/__main__.py
 mv resources.py _callirhoe/lib
