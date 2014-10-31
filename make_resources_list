@@ -10,4 +10,5 @@ out = open('resources.py', 'w')
 
 for x in res.keys():
     out.write('resources_list["%s"] = %s\n' % (x, str(res[x])))
+
 out.close()

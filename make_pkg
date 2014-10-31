@@ -7,11 +7,7 @@ cp -R geom lang layouts lib style _callirhoe
 cp callirhoe.py _callirhoe/__main__.py
 mv resources.py _callirhoe/lib
 
-cd _callirhoe
-zip -q -r callirhoe.zip *
-mv callirhoe.zip ../
-cd ..
-rm -rf _callirhoe
+cd _callirhoe && zip -q -r callirhoe.zip * && mv callirhoe.zip ../ && cd .. && rm -rf _callirhoe
 echo \#!/usr/bin/env python2 | cat - callirhoe.zip > callirhoe
 chmod 755 callirhoe
 rm callirhoe.zip
@@ -22,11 +18,7 @@ cp -R geom lib _calmagick
 cp callirhoe.py _calmagick
 cp calmagick.py _calmagick/__main__.py
 
-cd _calmagick
-zip -q -r calmagick.zip *
-mv calmagick.zip ../
-cd ..
-rm -rf _calmagick
+cd _calmagick && zip -q -r calmagick.zip * && mv calmagick.zip ../ && cd .. && rm -rf _calmagick
 echo \#!/usr/bin/env python2 | cat - calmagick.zip > calmagick
 chmod 755 calmagick
 rm calmagick.zip
