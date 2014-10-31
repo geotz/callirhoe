@@ -33,6 +33,6 @@ rm calmagick.zip
 
 # Create Makefile
 echo install: > Makefile
-echo    install -m 0755 callirhoe "$""(prefix)"/bin >> Makefile
-echo    install -m 0755 calmagick "$""(prefix)"/bin >> Makefile
-find holidays/ | sed 's/^/    install -m 644 /' | sed 's/$/ \$(prefix)\/share\/callirhoe/' >> Makefile
+echo "    install -m 0755 callirhoe" "$""(prefix)/bin" >> Makefile
+echo "    install -m 0755 calmagick" "$""(prefix)/bin" >> Makefile
+find holidays/* -printf "    install -m 644 %p \$(prefix)/share/callirhoe\n" >> Makefile
