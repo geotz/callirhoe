@@ -1,13 +1,9 @@
 #!/bin/bash
 
+# Create Callirhoe package
 mkdir _callirhoe
 ./make_resources_list > resources.py
-cp -R geom _callirhoe
-cp -R holidays _callirhoe
-cp -R lang _callirhoe
-cp -R layouts _callirhoe
-cp -R lib _callirhoe
-cp -R style _callirhoe
+cp -R geom holidays lang layouts lib style _callirhoe
 cp callirhoe.py _callirhoe/__main__.py
 mv resources.py _callirhoe/lib
 
@@ -15,19 +11,14 @@ cd _callirhoe
 zip -q -r callirhoe.zip *
 mv callirhoe.zip ../
 cd ..
-#rm -rf _callirhoe
+rm -rf _callirhoe
 echo \#!/usr/bin/env python2 | cat - callirhoe.zip > callirhoe
 chmod 755 callirhoe
 rm callirhoe.zip
 
+# Create Calmagick package
 mkdir _calmagick
-
-cp -R geom _calmagick
-cp -R holidays _calmagick
-cp -R lang _calmagick
-cp -R layouts _calmagick
-cp -R lib _calmagick
-cp -R style _calmagick
+cp -R geom holidays lang layouts lib style _calmagick
 cp callirhoe.py _calmagick
 cp calmagick.py _calmagick/__main__.py
 
