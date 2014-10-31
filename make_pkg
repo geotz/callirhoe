@@ -32,4 +32,4 @@ install:
 	install -m 0755 calmagick \$(DESTDIR)/bin
 END
 
-find holidays/* -printf "\tinstall -m 644 %p \$(prefix)/share/callirhoe\n" >> Makefile
+find holidays/* -printf "\tinstall -m 644 %p \$(DESTDIR)/share/callirhoe\n" >> Makefile
