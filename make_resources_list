@@ -1,10 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env python2
+import glob
 
-echo -n  resource_list = { \"lang\" : [
-find ./lang | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
-echo -n \"layouts\" : [
-find ./layouts | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
-echo -n \"style\" : [
-find ./style | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
-echo -n \"geom\" : [
-find ./geom | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/]}/'
+lang = glob.glob('lang/*.py')
+style = glob.glob('style/*.py')
+layouts = glob.glob('layouts/*.py')
+geom = glob.glob('geom/*.py')
+
+out = open('resources.py', 'w')
+out.write('resource_list = { ')
+out.write('"lang" : ' + str(lang) + ', ')
+out.write('"style" : ' + str(style)+ ', ')
+out.write('"layouts" : ' + str(layouts) + ', ')
+out.write('"geom" :' + str(geom) + ' }')
+out.close()
