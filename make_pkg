@@ -28,8 +28,8 @@ cat << END > Makefile
 prefix=/usr
 
 install:
-	install -m 0755 callirhoe \$(DESTDIR)/bin/callirhoe
-	install -m 0755 calmagick \$(DESTDIR)/bin/calmagick
+	install -Dm755 callirhoe \$(DESTDIR)/bin/callirhoe
+	install -Dm755 calmagick \$(DESTDIR)/bin/calmagick
 END
 
-find holidays/* -printf "\tinstall -m 644 %p \$(DESTDIR)/share/callirhoe/%p\n" >> Makefile
+find holidays/* -printf "\tinstall -Dm644 %p \$(DESTDIR)/share/callirhoe/%p\n" >> Makefile
