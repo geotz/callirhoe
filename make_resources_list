@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo -n  resource_list = { \"lang\" : [
-find ./lang | grep '.py' | sed 's/\.\//"/' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
+find ./lang | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
 echo -n \"layouts\" : [
-find ./layouts | grep '.py' | sed 's/\.\//"/' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
+find ./layouts | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
 echo -n \"style\" : [
-find ./style | grep '.py' | sed 's/\.\//"/' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
+find ./style | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/], /'
 echo -n \"geom\" : [
-find ./geom | grep '.py' | sed 's/\.\//"/' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/]}/'
+find ./geom | grep '.py' | sed 's/\.\//"\//' | sed 's/$/"/' | tr '\n' ',' | sed 's/.$/]}/'

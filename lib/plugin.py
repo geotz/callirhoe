@@ -43,7 +43,7 @@ def available_files(parent, dir, fmatch = None):
     good = False
     res = []
     pattern = parent + "/" + dir + "/*.py"
-    for x in glob.glob(pattern) if parent != "resource" else resources.resource_list[dir]:
+    for x in glob.glob(pattern) if parent != "/" else resources.resource_list[dir]:
         basex = os.path.basename(x)
         if basex == "__init__.py": good = True
         elif basex.startswith('_'):
@@ -77,7 +77,7 @@ def get_plugin_paths():
     result = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]
     try:
         temp = resources.resource_list
-        result.append("resource")
+        result.append("/")
     except:
         pass
     return result
