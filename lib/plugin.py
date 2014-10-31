@@ -27,6 +27,9 @@ import os.path
 import pkg_resources
 
 def glob(path, pattern):
+"""
+ Internal function that scans the given path and subpaths for .py files
+"""
     tmplist = pkg_resources.resource_listdir("__main__", "/"+path)
     filelist = []
     for i in tmplist:
