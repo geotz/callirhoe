@@ -34,7 +34,7 @@ import optparse
 import Queue
 import threading
 
-from callirhoe import extract_parser_args, parse_month_range, parse_year, atoi, Abort, _version, _copyright
+import lib
 from lib.geom import rect_rel_scale
 
 # MAYBE-TODO
@@ -198,7 +198,7 @@ def get_parser():
 If IMAGE is a single file, then a calendar of the current month is overlayed. If IMAGE contains wildcards,
 then every month is generated according to the --range option, advancing one month for every photo file.
 Photos will be reused in a round-robin fashion if more calendar
-months are requested.""", version="callirhoe.CalMagick " + _version + '\n' + _copyright)
+months are requested.""", version="callirhoe.CalMagick " + lib._version + '\n' + lib._copyright)
     parser.add_option("--outdir", default=".",
                     help="set directory for the output image(s); directory will be created if it does not already exist [%default]")
     parser.add_option("--outfile", default=None,
@@ -300,11 +300,11 @@ def check_parsed_options(options):
     if options.min_size is None:
         options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
     if options.sample is not None and not options.range:
-        raise Abort("calmagick: --sample requested without --range")
+        raise lib.Abort("calmagick: --sample requested without --range")
     if options.outfile is not None and options.range:
-        raise Abort("calmagick: you cannot specify both --outfile and --range options")
+        raise lib.Abort("calmagick: you cannot specify both --outfile and --range options")
     if options.sample is not None and options.shuffle:
-        raise Abort("calmagick: you cannot specify both --shuffle and --sample options")
+        raise lib.Abort("calmagick: you cannot specify both --shuffle and --sample options")
     if options.shuffle:
         options.sample = 0
     if options.sample is None:
@@ -370,7 +370,7 @@ def get_outfile(infile, outdir, base_prefix, format, hint=None):
         if format: ext = '.' + format
         outfile = os.path.join(outdir,base_prefix+base+ext)
     if os.path.exists(outfile) and os.path.samefile(infile, outfile):
-        if hint: raise Abort("calmagick: --outfile same as input, aborting")
+        if hint: raise lib.Abort("calmagick: --outfile same as input, aborting")
         outfile = os.path.join(outdir,base_prefix+base+'_calmagick'+ext)
     return outfile
 
@@ -523,7 +523,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
 
         if '/' in options.ratio:
             tmp = options.ratio.split('/')
-            calratio = float(atoi(tmp[0],1))/atoi(tmp[1],1)
+            calratio = float(lib.atoi(tmp[0],1))/lib.atoi(tmp[1],1)
         else:
             calratio = float(options.ratio)
         if options.placement == 'min' or options.placement == 'max':
@@ -596,9 +596,9 @@ def parse_range(s,hint=None):
     """
     if '/' in s:
         t = s.split('/')
-        month,span = parse_month_range(t[0])
+        month,span = lib.parse_month_range(t[0])
         if hint and span == 0: span = hint
-        year = parse_year(t[1])
+        year = lib.parse_year(t[1])
         margs = []
         for m in xrange(span):
             margs += [(month,year)]
@@ -606,7 +606,7 @@ def parse_range(s,hint=None):
             if month > 12: month = 1; year += 1
         return margs
     else:
-        raise Abort("calmagick: invalid range format '%s'" % options.range)
+        raise lib.Abort("calmagick: invalid range format '%s'" % options.range)
 
 def range_worker(q,ev,i):
     """worker thread for a (I{Month,Year}) tuple
@@ -638,7 +638,7 @@ def main_program():
     parser = get_parser()
 
     magick_args = parse_magick_args()
-    sys.argv,argv2 = extract_parser_args(sys.argv,parser,2)
+    sys.argv,argv2 = lib.extract_parser_args(sys.argv,parser,2)
     (options,args) = parser.parse_args()
     check_parsed_options(options)
 
@@ -682,12 +682,12 @@ def main_program():
     else:
         img = args[0]
         if not os.path.isfile(img):
-            raise Abort("calmagick: input image '%s' does not exist" % img)
+            raise lib.Abort("calmagick: input image '%s' does not exist" % img)
         outimg = get_outfile(img,options.outdir,'',options.format,options.outfile)
         compose_calendar(img, outimg, options, argv2, magick_args)
 
 if __name__ == '__main__':
     try:
         main_program()
-    except Abort as e:
+    except lib.Abort as e:
         sys.exit(e.args[0])
