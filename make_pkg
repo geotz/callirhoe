@@ -24,7 +24,12 @@ chmod 755 calmagick
 rm calmagick.zip
 
 # Create Makefile
-echo install: > Makefile
-echo "    install -m 0755 callirhoe" "$""(prefix)/bin" >> Makefile
-echo "    install -m 0755 calmagick" "$""(prefix)/bin" >> Makefile
+cat << END > Makefile
+prefix=/usr
+
+install: callrhoe
+    install -m 0755 callirhoe \$(prefix)/bin
+    install -m 0755 calmagick \$(prefix)/bin
+END
+
 find holidays/* -printf "    install -m 644 %p \$(prefix)/share/callirhoe\n" >> Makefile
