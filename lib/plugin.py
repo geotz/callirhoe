@@ -34,6 +34,7 @@ except:
 def available_files(parent, dir, fmatch = None):
     """find parent/dir/*.py files to be used for plugins
 
+    @rtype: [str,...]
     @note:
            1. __init__.py should exist
            2. files starting with underscore are ignored
@@ -55,7 +56,10 @@ def available_files(parent, dir, fmatch = None):
     return res if good else []
 
 def plugin_list(cat):
-    """return a sequence of available plugins, using L{available_files()} and L{get_plugin_paths()}"""
+    """return a sequence of available plugins, using L{available_files()} and L{get_plugin_paths()}
+
+    @rtype: [str,...]
+    """
     plugin_paths = get_plugin_paths()
     return available_files(plugin_paths[0], cat) + available_files(plugin_paths[1], cat)
 
@@ -66,11 +70,14 @@ def plugin_list(cat):
 # preset = "EN"
 
 def get_plugin_paths():
-    """return the plugin search paths"""
-    result = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "."]
+    """return the plugin search paths
+
+    @rtype: [str,str,..]
+    """
+    result = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]
     try:
-        tmp = resources.resource_list
-        result.append["resource"]
+        temp = resources.resource_list
+        result.append("resource")
     except:
         pass
     return result

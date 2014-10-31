@@ -26,6 +26,7 @@ def get_parser(layout_name):
     """get the parser object for the layout command-line arguments
 
     @param layout_name: corresponding python module (.py file)
+    @rtype: optparse.OptionParser
     """
     lname = layout_name.split(".")[1]
     parser = optparse.OptionParser(usage="%prog (...) --layout " + lname + " [options] (...)",add_help_option=False)

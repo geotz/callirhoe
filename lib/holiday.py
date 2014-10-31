@@ -25,7 +25,9 @@
 from datetime import date, timedelta
 
 def _get_orthodox_easter(year):
-    """compute date of orthodox easter"""
+    """compute date of orthodox easter
+    @rtype: datetime.date
+    """
     y1, y2, y3 = year % 4 , year % 7, year % 19
     a = 19*y3 + 15
     y4 = a % 30
@@ -37,7 +39,10 @@ def _get_orthodox_easter(year):
 #    return res
 
 def _get_catholic_easter(year):
-    """compute date of catholic easter"""
+    """compute date of catholic easter
+
+    @rtype: datetime.date
+    """
     a, b, c = year % 19, year // 100, year % 100
     d, e = divmod(b,4)
     f = (b + 8) // 25
@@ -50,11 +55,17 @@ def _get_catholic_easter(year):
     return date(year, emonth, edate+1)
 
 def _strip_empty(sl):
-    """strip empty strings from list I{sl}"""
+    """strip empty strings from list I{sl}
+
+    @rtype: [str,...]
+    """
     return filter(lambda z: z, sl) if sl else []
 
 def _flatten(sl):
-    """join list I{sl} into a comma-separated string"""
+    """join list I{sl} into a comma-separated string
+
+    @rtype: str
+    """
     if not sl: return None
     return ', '.join(sl)
 
@@ -94,19 +105,31 @@ class Holiday(object):
             self.flags |= hol.flags
 
     def header(self):
-        """return a comma-separated string for L{header_list}"""
+        """return a comma-separated string for L{header_list}
+
+        @rtype: str
+        """
         return _flatten(self.header_list)
 
     def footer(self):
-        """return a comma-separated string for L{footer_list}"""
+        """return a comma-separated string for L{footer_list}
+
+        @rtype: str
+        """
         return _flatten(self.footer_list)
 
     def __str__(self):
-        """string representation for debugging purposes"""
+        """string representation for debugging purposes
+
+        @rtype: str
+        """
         return str(self.footer()) + ':' + str(self.header()) + ':' + str(self.flags)
 
     def _parse_flags(self, fstr):
-        """return a bit combination of flags, from a comma-separated string list"""
+        """return a bit combination of flags, from a comma-separated string list
+
+        @rtype: int
+        """
         if not fstr: return 0
         fs = fstr.split(',')
         val = 0
@@ -130,6 +153,8 @@ def _decode_date_str(ddef):
 
         If C{ddef} is of the form "YYYYMMDD" then tuple (YYYY,MM,DD) is returned, which
         stands for year YYYY - month MM - day DD.
+
+    @rtype: (int,int,int)
     """
     if len(ddef) == 2:
         return (0,0,int(ddef))
@@ -189,11 +214,12 @@ class HolidayProvider(object):
     def _parse_day_record(self, fields):
         """return tuple (etype,ddef,footer,header,flags)
 
+           @rtype: (char,type(ddef),str,str,int)
            @note: I{ddef} is one of the following:
-               None
-               int
-               ((y,m,d),)
-               ((y,m,d),(y,m,d))
+                - None
+                - int
+                - ((y,m,d),)
+                - ((y,m,d),(y,m,d))
         """
         if len(fields) != 5:
             raise ValueError("Too many fields: " + str(fields))
@@ -239,6 +265,7 @@ class HolidayProvider(object):
         @param header: passed as C{[header]} of the generated L{Holiday} object
         @param footer: passed as C{[footer]} of the generated L{Holiday} object
         @param flags: C{flags} of the generated L{Holiday} object
+        @rtype: (Holiday,Holiday,Holiday,Holiday)
         """
         if header:
             if self.multiday_markers:
@@ -341,6 +368,7 @@ class HolidayProvider(object):
     def get_holiday(self, y, m, d):
         """return a L{Holiday} object for the specified date (y,m,d) or C{None} if no holiday is defined
 
+        @rtype: Holiday
         @note: If year I{y} has not been requested before, the cache is updated first
         with all holidays that belong in I{y}, indexed by C{date()} objects.
         """
@@ -388,6 +416,7 @@ class HolidayProvider(object):
     def get_style(self, flags, dow):
         """return appropriate style object, depending on I{flags} and I{dow}
 
+        @rtype: Style
         @param flags: bit combination of holiday flags
         @param dow: day of week
         """
@@ -400,6 +429,7 @@ class HolidayProvider(object):
     def __call__(self, year, month, dom, dow):
         """returns (header,footer,day_style)
 
+        @rtype: (str,str,Style)
         @param month: month (0-12)
         @param dom: day of month (1-31)
         @param dow: day of week (0-6)
