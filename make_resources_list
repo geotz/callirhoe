@@ -8,6 +8,7 @@ for x in ['lang', 'style', 'layouts', 'geom']:
 
 out = open('resources.py', 'w')
 
+out.write('resource_list = {}')
 for x in res.keys():
     out.write('resource_list["%s"] = %s\n' % (x, str(res[x])))
 
