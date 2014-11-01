@@ -5,6 +5,10 @@ make_archive() {
     base="$1"
     tempdir="$2"
     curdir=`pwd`
+    for i in `find $tempdir -type f -name "*.py" | grep -v "__"`
+    do
+     python2.7 -m py_compile $i
+    done
     cd $tempdir
     zip -q -r $curdir/$base.zip *
     cd $curdir
@@ -17,15 +21,9 @@ make_archive() {
 
 # Create Callirhoe package
 DIR=`mktemp -d -t callirhoe.XXX`
-# TODO: do we need .pyc files? (my guess is yes, how do we force creation?)
 cp -R geom lang layouts lib style "$DIR"
 cp callirhoe.py "$DIR/__main__.py"
 ./make_resources_list > "$DIR/lib/resources.py"
-
-for i in `find $DIR -type f -name "*.py" | grep -v "__"`
-do
- python2.7 -m py_compile $i
-done
 
 make_archive callirhoe "$DIR"
 
@@ -34,11 +32,6 @@ DIR=`mktemp -d -t callirhoe.XXX`
 mkdir  "$DIR/lib"
 cp lib/__init__.py lib/geom.py "$DIR/lib"
 cp calmagick.py "$DIR/__main__.py"
-
-for i in `find $DIR -type f -name "*.py" | grep -v "__"`
-do
- python2.7 -m py_compile $i
-done
 
 make_archive calmagick "$DIR"
 
