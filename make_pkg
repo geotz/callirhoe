@@ -1,27 +1,36 @@
 #!/bin/bash
+set -e
+
+make_archive() {
+    base="$1"
+    tempdir="$2"
+    curdir=`pwd`
+    cd $tempdir
+    zip -q -r $curdir/$base.zip *
+    cd $curdir
+    rm -rf $tempdir
+    echo '#!/usr/bin/env python2.7' | cat - $base.zip > $base
+    chmod 755 $base
+    rm -f $base.zip
+}
+
 
 # Create Callirhoe package
-mkdir _callirhoe
-./make_resources_list
-cp -R geom lang layouts lib style _callirhoe
-cp callirhoe.py _callirhoe/__main__.py
-mv resources.py _callirhoe/lib
+DIR=`mktemp -d -t callirhoe`
+# TODO: do we need .pyc files? (my guess is yes, how do we force creation?)
+cp -R geom lang layouts lib style "$DIR"
+cp callirhoe.py "$DIR/__main__.py"
+./make_resources_list > "$DIR/lib/resources.py"
 
-cd _callirhoe && zip -q -r callirhoe.zip * && mv callirhoe.zip ../ && cd .. && rm -rf _callirhoe
-echo \#!/usr/bin/env python2 | cat - callirhoe.zip > callirhoe
-chmod 755 callirhoe
-rm callirhoe.zip
+make_archive callirhoe "$DIR"
 
 # Create Calmagick package
-mkdir _calmagick
-cp -R geom lib _calmagick
-cp callirhoe.py _calmagick
-cp calmagick.py _calmagick/__main__.py
+DIR=`mktemp -d -t callirhoe`
+mkdir  "$DIR/lib"
+cp lib/__init__.py lib/geom.py "$DIR/lib"
+cp calmagick.py "$DIR/__main__.py"
 
-cd _calmagick && zip -q -r calmagick.zip * && mv calmagick.zip ../ && cd .. && rm -rf _calmagick
-echo \#!/usr/bin/env python2 | cat - calmagick.zip > calmagick
-chmod 755 calmagick
-rm calmagick.zip
+make_archive calmagick "$DIR"
 
 # Create Makefile
 cat << END > Makefile
