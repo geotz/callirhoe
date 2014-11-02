@@ -8,6 +8,7 @@ make_archive() {
     for i in `find $tempdir -type f -name "*.py" | grep -v "__init__"`
     do
      python2.7 -m py_compile $i
+     rm $i
     done
     cd $tempdir
     zip -q -r $curdir/$base.zip *
