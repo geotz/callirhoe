@@ -10,6 +10,10 @@ make_archive() {
      python2.7 -m py_compile $i
      rm $i
     done
+    for i in `find $tempdir -type d -name ".svn"`
+    do
+     rm -rf $i
+    done
     cd $tempdir
     zip -q -r $curdir/$base.zip *
     cd $curdir
