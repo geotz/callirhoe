@@ -5,14 +5,16 @@ make_archive() {
     base="$1"
     tempdir="$2"
     curdir=`pwd`
-    for i in `find $tempdir -type f -name "*.py" | grep -v "__init__"`
-    do
-     python2.7 -m py_compile $i
-     rm $i
+    for i in `find $tempdir -type f -name "*.py" | grep -v "__init__"`; do
+       python2.7 -m py_compile $i
+       rm $i
     done
-    for i in `find $tempdir -type d -name ".svn"`
-    do
-     rm -rf $i
+    # if copied with tar, this is not needed anyway:
+    # find $tempdir -type d -name ".svn" -exec rm -rf '{}' ';'
+    #   or 
+    # rm -rf `find $tempdir -type d -name ".svn"`
+    for i in `find $tempdir -type d -name ".svn"`; do
+       rm -rf $i
     done
     cd $tempdir
     zip -q -r $curdir/$base.zip *
@@ -26,7 +28,11 @@ make_archive() {
 
 # Create Callirhoe package
 DIR=`mktemp -d -t callirhoe.XXX`
+# consider this command to actually copy only *.py, without any .svn/ or other crap
+# tar also preserves timestamps by default, dunno if we really need them
+#tar c {geom,lang,layouts,lib,style}/*.py | tar x -C "$DIR"
 cp -R geom lang layouts lib style "$DIR"
+
 cp callirhoe.py "$DIR/__main__.py"
 ./make_resources_list > "$DIR/lib/resources.py"
 
@@ -34,8 +40,11 @@ make_archive callirhoe "$DIR"
 
 # Create Calmagick package
 DIR=`mktemp -d -t callirhoe.XXX`
+#tar c lib/{__init__,geom}.py | tar x -C "$DIR"
+# we also avoid using mkdir this way! ;)
 mkdir  "$DIR/lib"
 cp lib/__init__.py lib/geom.py "$DIR/lib"
+
 cp calmagick.py "$DIR/__main__.py"
 
 make_archive calmagick "$DIR"
