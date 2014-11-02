@@ -5,7 +5,7 @@ make_archive() {
     base="$1"
     tempdir="$2"
     curdir=`pwd`
-    for i in `find $tempdir -type f -name "*.py" | grep -v "__"`
+    for i in `find $tempdir -type f -name "*.py" | grep -v "__init__"`
     do
      python2.7 -m py_compile $i
     done
