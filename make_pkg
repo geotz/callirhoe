@@ -37,8 +37,6 @@ make_archive calmagick "$DIR"
 
 # Create Makefile
 cat << END > Makefile
-prefix=/usr
-
 install:
 	install -Dm755 callirhoe \$(DESTDIR)/bin/callirhoe
 	install -Dm755 calmagick \$(DESTDIR)/bin/calmagick
