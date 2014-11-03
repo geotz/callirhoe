@@ -298,7 +298,9 @@ photos.""")
 def check_parsed_options(options):
     """set (remaining) default values and check validity of various option combinations"""
     if options.min_size is None:
-        options.min_size = 0.333 if options.placement in ['min','max','random'] else 0.05
+        options.min_size = min(0.333,options.max_size) if options.placement in ['min','max','random'] else min(0.05,options.max_size)
+    if options.min_size > options.max_size:
+        raise lib.Abort("calmagick: --min-size should not be greater than --max-size")
     if options.sample is not None and not options.range:
         raise lib.Abort("calmagick: --sample requested without --range")
     if options.outfile is not None and options.range:
