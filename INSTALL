@@ -9,7 +9,8 @@ QUICK INSTALLATION GUIDE
 CONTENTS
  1) FROM COMPRESSED ARCHIVE
  2) FROM SVN
- 3) INSTALLATION FOR ARCH LINUX
+ 3) INVOKING callirhoe FROM PATH
+ 4) INSTALLATION FOR ARCH LINUX
 
 (rough installation guide for novice users...)
 
@@ -31,13 +32,7 @@ Now you can launch the program, e.g.
 
 $ ./callirhoe.py foo.pdf
 
-You may want to add a link to your path, $HOME/bin or /usr/local/bin:
-
-$ ln -s `pwd`/callirhoe.py $HOME/bin/callirhoe
-
-You can do the same with calmagick.py. You may also install it system-wide,
-for example in /opt. In this case, keep in mind, that ~/.callirhoe/ is also
-searched for additional definitions, styles etc.
+See section 3 for how to install callirhoe so that it lies in your executable path.
 
 2) FROM SVN
 
@@ -57,11 +52,40 @@ You can launch the program as usual:
 
 $ ./callirhoe.py foo.pdf
 
-3) INSTALLATION FOR ARCH LINUX
+3) INVOKING callirhoe FROM PATH
+
+You can add a link to your path, $HOME/bin or /usr/local/bin:
+
+$ ln -s `pwd`/callirhoe.py $HOME/bin/callirhoe
+
+You can do the same with calmagick.py. You may also install it system-wide,
+for example in /opt. In this case, keep in mind, that ~/.callirhoe/ is also
+searched for additional definitions, styles etc.
+
+If you do not plan to mess with the source, you make create a binary python package.
+This is not exactly a binary, it is a zip archive containing compiled python bytecode,
+which is quite compact. To do so, go to the scripts directory:
+
+$ cd scripts
+
+and run
+
+$ ./make_pkg
+
+This will create in the parent directory two executables, 'callirhoe' and 'calmagick'.
+Now copy them to your binary path. And you can remove the source dir, as it is no longer
+needed. You might want to copy the holiday data files first, if you want to use them
+(callirhoe takes a full path to them, so you can store them wherever you want).
+
+On a linux system, you will additionally see a Makefile created, which you can alternatively
+run with 'make install' to install the files in the standard places, 
+instead of manually copying them.
+
+4) INSTALLATION FOR ARCH LINUX
 
 There is a PKGBUILD file you can use to install.
 You can get the PKGBUILD either from SVN or compressed archive or from AUR.
-For the first two options the method to get the source tree is described above,
+For the first two options, the method to get the source tree is described in sections 1 and 2,
 while for the third option you can get it from here: <INSERT LINK HERE>
 
 

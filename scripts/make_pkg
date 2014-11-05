@@ -1,8 +1,6 @@
 #!/bin/bash
-set -e
-cd ..
 
-make_archive() {
+make_python_zip() {
     base="$1"
     tempdir="$2"
     curdir=`pwd`
@@ -19,28 +17,38 @@ make_archive() {
     rm -f $base.zip
 }
 
+create_callirhoe_package() {
+    DIR=`mktemp -d -t callirhoe.XXX`
+    tar c {geom,lang,layouts,lib,style}/*.py | tar x -C "$DIR"
+    cp callirhoe.py "$DIR/__main__.py"
+    python2.7 scripts/make_resources_list.py > "$DIR/lib/resources.py"
 
-# Create Callirhoe package
-DIR=`mktemp -d -t callirhoe.XXX`
-tar c {geom,lang,layouts,lib,style}/*.py | tar x -C "$DIR"
+    make_python_zip callirhoe "$DIR"
+}
 
-cp callirhoe.py "$DIR/__main__.py"
-scripts/make_resources_list > "$DIR/lib/resources.py"
+create_calmagick_package() {
+    # Create Calmagick package
+    DIR=`mktemp -d -t callirhoe.XXX`
+    tar c lib/{__init__,geom}.py | tar x -C "$DIR"
+    cp calmagick.py "$DIR/__main__.py"
+    
+    make_python_zip calmagick "$DIR"
+}
 
-make_archive callirhoe "$DIR"
-
-# Create Calmagick package
-DIR=`mktemp -d -t callirhoe.XXX`
-tar c lib/{__init__,geom}.py | tar x -C "$DIR"
-cp calmagick.py "$DIR/__main__.py"
-
-make_archive calmagick "$DIR"
-
-# Create Makefile
-cat << END > Makefile
+create_makefile() {
+    cat << END > Makefile
 install:
 	install -Dm755 callirhoe \$(DESTDIR)/bin/callirhoe
 	install -Dm755 calmagick \$(DESTDIR)/bin/calmagick
 END
 
-find holidays/* -printf "\tinstall -Dm644 %p \$(DESTDIR)/share/callirhoe/%p\n" >> Makefile
+    find holidays/* -printf "\tinstall -Dm644 %p \$(DESTDIR)/share/callirhoe/%p\n" >> Makefile
+}
+
+set -e
+cd ..
+
+create_callirhoe_package
+create_calmagick_package
+
+[[ "`uname`" != "Darwin" ]] && create_makefile
