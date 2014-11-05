@@ -67,7 +67,7 @@ while for the third option you can get it from here: <INSERT LINK HERE>
 
 Place the PKGBUILD into a directory and run:
 
-$ makepkg -s -i
+$ makepkg -si
 
 ( -s will automatically install missing depedencies )
 
