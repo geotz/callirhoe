@@ -6,6 +6,11 @@
 
 QUICK INSTALLATION GUIDE
 
+CONTENTS
+ 1) FROM COMPRESSED ARCHIVE
+ 2) FROM SVN
+ 3) INSTALLATION FOR ARCH LINUX
+
 (rough installation guide for novice users...)
 
 1) FROM COMPRESSED ARCHIVE
@@ -13,7 +18,7 @@ QUICK INSTALLATION GUIDE
 Download the latest version from the project's page,
 or directly from:
     https://callirhoe.googlecode.com/svn/wiki/releases/
-    
+
 You end up with a file named callirhoe-X.Y.Z.7z where X.Y.Z the version number (for example 0.4.0).
 
 Extract the contents of the archive
@@ -51,3 +56,22 @@ $ svn up
 You can launch the program as usual:
 
 $ ./callirhoe.py foo.pdf
+
+3) INSTALLATION FOR ARCH LINUX
+
+There is a PKGBUILD file you can use to install.
+You can get the PKGBUILD either from SVN or compressed archive or from AUR.
+For the first two options the method to get the source tree is described above,
+while for the third option you can get it from here: <INSERT LINK HERE>
+
+
+Place the PKGBUILD into a directory and run:
+$ makepkg -i
+
+Arch will do the rest for you.
+
+In the unlikely event that you don't have "makepkg" already installed
+you can find information about it's installation here: 
+
+https://wiki.archlinux.org/index.php/Arch_User_Repository
+
