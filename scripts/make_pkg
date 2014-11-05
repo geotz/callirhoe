@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-cd..
+cd ..
 
 make_archive() {
     base="$1"
