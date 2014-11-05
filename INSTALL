@@ -62,7 +62,7 @@ You can do the same with calmagick.py. You may also install it system-wide,
 for example in /opt. In this case, keep in mind, that ~/.callirhoe/ is also
 searched for additional definitions, styles etc.
 
-If you do not plan to mess with the source, you make create a binary python package.
+If you do not plan to mess with the source, you may create a binary python package.
 This is not exactly a binary, it is a zip archive containing compiled python bytecode,
 which is quite compact. To do so, go to the scripts directory:
 
