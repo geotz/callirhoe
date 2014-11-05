@@ -1,0 +1,46 @@
+#!/bin/bash
+set -e
+cd..
+
+make_archive() {
+    base="$1"
+    tempdir="$2"
+    curdir=`pwd`
+    for i in `find $tempdir -type f -name "*.py" | grep -v "__init__"`; do
+       python2.7 -m py_compile $i
+       rm $i
+    done
+    cd $tempdir
+    zip -q -r $curdir/$base.zip *
+    cd $curdir
+    rm -rf $tempdir
+    echo '#!/usr/bin/env python2.7' | cat - $base.zip > $base
+    chmod 755 $base
+    rm -f $base.zip
+}
+
+
+# Create Callirhoe package
+DIR=`mktemp -d -t callirhoe.XXX`
+tar c {geom,lang,layouts,lib,style}/*.py | tar x -C "$DIR"
+
+cp callirhoe.py "$DIR/__main__.py"
+scripts/make_resources_list > "$DIR/lib/resources.py"
+
+make_archive callirhoe "$DIR"
+
+# Create Calmagick package
+DIR=`mktemp -d -t callirhoe.XXX`
+tar c lib/{__init__,geom}.py | tar x -C "$DIR"
+cp calmagick.py "$DIR/__main__.py"
+
+make_archive calmagick "$DIR"
+
+# Create Makefile
+cat << END > Makefile
+install:
+	install -Dm755 callirhoe \$(DESTDIR)/bin/callirhoe
+	install -Dm755 calmagick \$(DESTDIR)/bin/calmagick
+END
+
+find holidays/* -printf "\tinstall -Dm644 %p \$(DESTDIR)/share/callirhoe/%p\n" >> Makefile
