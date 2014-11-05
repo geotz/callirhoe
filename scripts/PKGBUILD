@@ -19,7 +19,7 @@ pkgver() {
 }
 
 build() {
-    cd "${srcdir}/${pkgname}"
+    cd "${srcdir}/${pkgname}/scripts"
     ./make_pkg
 }
 
