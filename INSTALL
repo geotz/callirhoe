@@ -86,9 +86,9 @@ Now you can remove the source dir, as it is no longer needed.
 4) INSTALLATION FOR ARCH LINUX
 
 There is a PKGBUILD file you can use to install. Normally you get just
-the PKGBUILD from the webpage from AUR (<INSERT LINK HERE>). It is also
-included in the source distribution, but this is a bit redundant (see
-below).
+the PKGBUILD from the webpage from AUR
+(https://aur.archlinux.org/packages/callirhoe/). It is also included in
+the source distribution, but this is a bit redundant (see below).
 
 Place the PKGBUILD into a directory and run:
 

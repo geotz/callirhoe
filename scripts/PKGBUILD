@@ -3,12 +3,12 @@
 # For contributors check the AUTHORS file
 
 # This file is also included in the source tree for purposes of completeness
-# The normal way of aqusition is from AUR: <INSERT LINK HERE>
+# The normal way of aqusition is from AUR: https://aur.archlinux.org/packages/callirhoe/
 
 pkgname=callirhoe
 pkgver=228
 pkgrel=1
-pkgdesc="PDF Calendar creator with high quality vector graphics"
+pkgdesc="PDF & Photo calendar creator with high quality vector graphics"
 url="https://code.google.com/p/callirhoe/"
 arch=('any')
 license=('GPLv3')
