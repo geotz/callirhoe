@@ -1,6 +1,10 @@
-# Author : George Tzoumas <geotz[at]gmail[dot]com>
 # Maintainer: Nick Kavalieris <ph4ntome[at]gmail[dot]com>
+# Upstream Author : George Tzoumas <geotz[at]gmail[dot]com>
 # For contributors check the AUTHORS file
+
+# This file is also included in the source tree for purposes of completeness
+# The normal way of aqusition is from AUR: <INSERT LINK HERE>
+
 pkgname=callirhoe
 pkgver=228
 pkgrel=1
