@@ -1,7 +1,7 @@
 DESTDIR=/usr
 
 all: callirhoe calmagick
-    cd scripts && ./make_pkg
+	cd scripts && ./make_pkg
 
 install: install-package
 
