@@ -13,7 +13,7 @@ url="https://code.google.com/p/callirhoe/"
 arch=('any')
 license=('GPLv3')
 depends=('python2' 'imagemagick' 'python2-cairo' 'subversion')
-source=("$pkgname::svn+https://callirhoe.googlecode.com/svn/branches/phantome")
+source=("$pkgname::svn+https://callirhoe.googlecode.com/svn/trunk")
 md5sums=('SKIP')
 
 
