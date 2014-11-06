@@ -1,4 +1,4 @@
-DESTDIR=/usr
+DESTDIR=/usr/local
 
 all:
 	cd scripts && ./make_pkg
@@ -11,3 +11,6 @@ install-package:
 	install -m755 callirhoe $(DESTDIR)/bin/callirhoe
 	install -m755 calmagick $(DESTDIR)/bin/calmagick
 	install -m644 holidays/* $(DESTDIR)/share/callirhoe/holidays/
+
+clean:
+	rm -f callirhoe calmagick

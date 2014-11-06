@@ -38,5 +38,5 @@ create_calmagick_package() {
 set -e
 
 cd ..
-create_callirhoe_package
-create_calmagick_package
+[[ -x callirhoe ]] && echo "callirhoe package seems to exist, skipping; rm 'calliroe' to recreate" || create_callirhoe_package
+[[ -x calmagick ]] && echo "calmagick package seems to exist, skipping; rm 'calmagick' to recreate" || create_calmagick_package
