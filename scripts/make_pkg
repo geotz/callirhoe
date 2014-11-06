@@ -37,6 +37,6 @@ create_calmagick_package() {
 
 set -e
 
-cd..
+cd ..
 create_callirhoe_package
 create_calmagick_package
