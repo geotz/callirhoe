@@ -31,24 +31,14 @@ create_calmagick_package() {
     DIR=`mktemp -d -t callirhoe.XXX`
     tar c lib/{__init__,geom}.py | tar x -C "$DIR"
     cp calmagick.py "$DIR/__main__.py"
-    
+
     make_python_zip calmagick "$DIR"
 }
 
-create_makefile() {
-    cat << END > Makefile
-install:
-	install -Dm755 callirhoe \$(DESTDIR)/bin/callirhoe
-	install -Dm755 calmagick \$(DESTDIR)/bin/calmagick
-END
-
-    find holidays/* -printf "\tinstall -Dm644 %p \$(DESTDIR)/share/callirhoe/%p\n" >> Makefile
-}
-
 set -e
+
+cp Makefile ../
 cd ..
 
 create_callirhoe_package
 create_calmagick_package
-
-[[ "`uname`" != "Darwin" ]] && create_makefile
