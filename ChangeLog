@@ -1,4 +1,11 @@
 *******************************
+* Version 0.4.1 (Nov 2014)    *
+*******************************
++ packaging support for Python/Arch Linux {Nick}
+! calmagick: fixed bug regarding --min-size being greater than --max-size
+* refactored some common code between callirhoe and calmagick
+
+*******************************
 * Version 0.4.0 (Oct 2014)    *
 *******************************
 + calmagick: combining callirhoe with ImageMagick for impressive

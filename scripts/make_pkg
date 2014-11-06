@@ -1,0 +1,42 @@
+#!/bin/bash
+
+make_python_zip() {
+    base="$1"
+    tempdir="$2"
+    curdir=`pwd`
+    for i in `find $tempdir -type f -name "*.py" | grep -v "__init__"`; do
+       python2.7 -m py_compile $i
+       rm $i
+    done
+    cd $tempdir
+    zip -q -r $curdir/$base.zip *
+    cd $curdir
+    rm -rf $tempdir
+    echo '#!/usr/bin/env python2.7' | cat - $base.zip > $base
+    chmod 755 $base
+    rm -f $base.zip
+}
+
+create_callirhoe_package() {
+    DIR=`mktemp -d -t callirhoe.XXX`
+    tar c {geom,lang,layouts,lib,style}/*.py | tar x -C "$DIR"
+    cp callirhoe.py "$DIR/__main__.py"
+    python2.7 scripts/make_resources_list.py > "$DIR/lib/resources.py"
+
+    make_python_zip callirhoe "$DIR"
+}
+
+create_calmagick_package() {
+    # Create Calmagick package
+    DIR=`mktemp -d -t callirhoe.XXX`
+    tar c lib/{__init__,geom}.py | tar x -C "$DIR"
+    cp calmagick.py "$DIR/__main__.py"
+
+    make_python_zip calmagick "$DIR"
+}
+
+set -e
+
+cd ..
+[[ -x callirhoe ]] && echo "callirhoe package seems to exist, skipping; rm 'calliroe' to recreate" || create_callirhoe_package
+[[ -x calmagick ]] && echo "calmagick package seems to exist, skipping; rm 'calmagick' to recreate" || create_calmagick_package

@@ -26,6 +26,11 @@ import sys
 import os.path
 import glob
 
+try:
+    import resources
+except:
+    resources = None
+
 def available_files(parent, dir, fmatch = None):
     """find parent/dir/*.py files to be used for plugins
 
@@ -38,7 +43,7 @@ def available_files(parent, dir, fmatch = None):
     good = False
     res = []
     pattern = parent + "/" + dir + "/*.py"
-    for x in glob.glob(pattern):
+    for x in glob.glob(pattern) if not parent.startswith('resource:') else resources.resource_list[dir]:
         basex = os.path.basename(x)
         if basex == "__init__.py": good = True
         elif basex.startswith('_'):
@@ -56,7 +61,10 @@ def plugin_list(cat):
     @rtype: [str,...]
     """
     plugin_paths = get_plugin_paths()
-    return available_files(plugin_paths[0], cat) + available_files(plugin_paths[1], cat)
+    result = []
+    for path in plugin_paths:
+        result += available_files(path, cat)
+    return result
 
 # cat = lang   (category)
 # longcat = language
@@ -67,6 +75,9 @@ def plugin_list(cat):
 def get_plugin_paths():
     """return the plugin search paths
 
-    @rtype: [str,str]
+    @rtype: [str,str,..]
     """
-    return [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]
+    result = [ os.path.expanduser("~/.callirhoe"), sys.path[0] if sys.path[0] else "." ]
+    if resources:
+        result.append("resource:")
+    return result
