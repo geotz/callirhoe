@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>callirhoe</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;callirhoe
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="callirhoe-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="callirhoe-module.html">Module callirhoe</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/env python2.7</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#    callirhoe - high quality calendar rendering</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment">#    Copyright (C) 2012-2014 George M. Tzoumas</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">#    This program is free software: you can redistribute it and/or modify</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#    it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#    the Free Software Foundation, either version 3 of the License, or</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#    (at your option) any later version.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment">#    This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment">#    GNU General Public License for more details.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment">#    You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment">#    along with this program.  If not, see http://www.gnu.org/licenses/</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">"""high quality calendar rendering"""</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-comment"># TODO:</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-comment"># fix auto-measure rendering (cairo)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-comment"># fix plugin loading (without global vars)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-comment"># week markers selectable</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-comment"># test layouts</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-comment"># allow to change background color (fill), other than white</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-comment"># page spec parse errors</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-comment"># mobile themes (e.g. 800x480)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-comment"># photo support (like ImageMagick's polaroid effect)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-comment"># .callirhoe/config : default values for plugins (styles/layouts/lang...) and cmdline</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-comment"># MAYBE-TODO:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-comment"># implement various data sources</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-comment"># auto-landscape? should aim for matrix or bars?</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-comment"># allow /usr/bin/date-like formatting %x... </tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-comment"># improve file matching with __init__ when lang known</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-comment"># styles and geometries could be merged, css-like</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-comment">#  then we can apply a chain of --style a --style b ...</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-comment">#  and b inherits from a and so on</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-comment">#  however, this would require dynamically creating a class that inherits from others...</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-comment"># CANNOT UPGRADE TO argparse !!! -- how to handle [[month] year] form?</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">calendar</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">time</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">optparse</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Package lib=lib-module.html"><a title="lib" class="py-name" href="#" onclick="return doclink('link-0', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module lib.xcairo=lib.xcairo-module.html"><a title="lib.xcairo" class="py-name" href="#" onclick="return doclink('link-1', 'xcairo', 'link-1');">xcairo</a></tt> <tt class="py-keyword">as</tt> <tt id="link-2" class="py-name"><a title="lib.xcairo" class="py-name" href="#" onclick="return doclink('link-2', 'xcairo', 'link-1');">xcairo</a></tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-3" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-3', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Module lib.holiday=lib.holiday-module.html"><a title="lib.holiday" class="py-name" href="#" onclick="return doclink('link-4', 'holiday', 'link-4');">holiday</a></tt> <tt class="py-keyword">as</tt> <tt id="link-5" class="py-name"><a title="lib.holiday" class="py-name" href="#" onclick="return doclink('link-5', 'holiday', 'link-4');">holiday</a></tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-6" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-6', 'lib', 'link-0');">lib</a></tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-7" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-7', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Module lib.plugin=lib.plugin-module.html"><a title="lib.plugin" class="py-name" href="#" onclick="return doclink('link-8', 'plugin', 'link-8');">plugin</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-comment"># TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...</tt> </tt>
+<a name="import_plugin"></a><div id="import_plugin-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="import_plugin-toggle" onclick="return toggle('import_plugin');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="callirhoe-module.html#import_plugin">import_plugin</a><tt class="py-op">(</tt><tt class="py-param">plugin_paths</tt><tt class="py-op">,</tt> <tt class="py-param">cat</tt><tt class="py-op">,</tt> <tt class="py-param">longcat</tt><tt class="py-op">,</tt> <tt class="py-param">longcat2</tt><tt class="py-op">,</tt> <tt class="py-param">listopt</tt><tt class="py-op">,</tt> <tt class="py-param">preset</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="import_plugin-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="import_plugin-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-docstring">"""import a plugin making it visible</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    I{Example:}</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; Language = import_plugin(get_plugin_paths(), "lang", "language", "languages", "--list-languages", "EN")</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">    @param plugin_paths: list of plugin search paths</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring">    @param cat: short category name (for folder name)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">    @param longcat: long category name</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">    @param longcat2: long category name in plural form</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">    @param listopt: option name</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-docstring">    @param preset: default value</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: module</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-docstring">    @note: Aimed for internal use with I{lang}, I{style}, I{geom}, I{layouts}.</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-name">found</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">path</tt> <tt class="py-keyword">in</tt> <tt class="py-name">plugin_paths</tt><tt class="py-op">:</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt class="py-name">found</tt> <tt class="py-op">+=</tt> <tt id="link-9" class="py-name" targets="Function lib.plugin.available_files()=lib.plugin-module.html#available_files"><a title="lib.plugin.available_files" class="py-name" href="#" onclick="return doclink('link-9', 'available_files', 'link-9');">available_files</a></tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">,</tt> <tt class="py-name">cat</tt><tt class="py-op">,</tt> <tt class="py-name">preset</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">found</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt class="py-name">IOError</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">found</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">"resource:"</tt><tt class="py-op">:</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-name">m</tt> <tt class="py-op">=</tt> <tt class="py-name">__import__</tt><tt class="py-op">(</tt><tt class="py-string">"%s.%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">cat</tt><tt class="py-op">,</tt><tt class="py-name">preset</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">globals</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">locals</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt> <tt class="py-string">"*"</tt> <tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">insert</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-name">found</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-name">m</tt> <tt class="py-op">=</tt> <tt class="py-name">__import__</tt><tt class="py-op">(</tt><tt class="py-string">"%s.%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">cat</tt><tt class="py-op">,</tt><tt class="py-name">preset</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">globals</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">locals</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt> <tt class="py-string">"*"</tt> <tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">pop</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">m</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">IOError</tt><tt class="py-op">:</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">exit</tt><tt class="py-op">(</tt><tt class="py-string">"callirhoe: %s definition '%s' not found, use %s to see available definitions"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">longcat</tt><tt class="py-op">,</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">                               <tt class="py-name">preset</tt><tt class="py-op">,</tt><tt class="py-name">listopt</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">exit</tt><tt class="py-op">(</tt><tt class="py-string">"callirhoe: error loading %s definition '%s'"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">longcat</tt><tt class="py-op">,</tt> <tt class="py-name">preset</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"> </tt>
+<a name="print_examples"></a><div id="print_examples-def"><a name="L92"></a><tt class="py-lineno"> 92</tt> <a class="py-toggle" href="#" id="print_examples-toggle" onclick="return toggle('print_examples');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="callirhoe-module.html#print_examples">print_examples</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="print_examples-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="print_examples-expanded"><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt class="py-docstring">"""print usage examples"""</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt> <tt class="py-string">"""Examples:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-string">Create a calendar of the current year (by default in a 4x3 grid):</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe my_calendar.pdf </tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-string">Same as above, but in landscape mode (3x4) (for printing):</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe --landscape my_calendar.pdf </tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-string">Landscape via rotation (for screen):</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe --paper=a4w --rows=3 my_calendar.pdf</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-string">Let's try with bars instead of boxes:</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe -t bars my_calendar.pdf</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-string">In landscape mode, one row only looks quite good:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe -t bars --landscape --rows=1 my_calendar.pdf</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-string">How about a more flat look?</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe -t sparse -s bw_sparse --rows=1 --cols=3 my_calendar.pdf</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"><tt class="py-string">Calendar of 24 consecutive months, starting from current month:</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe 0:24 0 my_calendar.pdf</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-string">    </tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-string">Create a 600-dpi PNG file so that we can edit it with some effects in order to print an A3 poster:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe my_poster.png --paper=a3 --dpi=600 --opaque</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-string">Create a calendar as a full-hd wallpaper (1920x1080):</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-string">    $ callirhoe wallpaper.png --paper=-1920:-1080 --opaque --rows=3 --no-shadow -s rainbow-gfs</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-string">and do some magic with ImageMagick! ;)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-string">    $ convert wallpaper.png -negate fancy.png</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-string">    </tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-string">"""</tt> </tt>
+</div><a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"> </tt>
+<a name="add_list_option"></a><div id="add_list_option-def"><a name="L127"></a><tt class="py-lineno">127</tt> <a class="py-toggle" href="#" id="add_list_option-toggle" onclick="return toggle('add_list_option');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="callirhoe-module.html#add_list_option">add_list_option</a><tt class="py-op">(</tt><tt class="py-param">parser</tt><tt class="py-op">,</tt> <tt class="py-param">opt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="add_list_option-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="add_list_option-expanded"><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">    <tt class="py-docstring">"""add a --list-I{plugins} option to parser</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"><tt class="py-docstring">    @note: To be used with I{languages}, I{layouts}, I{styles} and I{geometries}.</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">    <tt id="link-10" class="py-name" targets="Variable layouts.bars.parser=layouts.bars-module.html#parser,Variable layouts.classic.parser=layouts.classic-module.html#parser,Variable layouts.sparse.parser=layouts.sparse-module.html#parser"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-10', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--list-%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">opt</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_true"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"list_%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">opt</tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Module geom.default=geom.default-module.html,Module style.default=style.default-module.html"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-11', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">                       <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"list available %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">opt</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="get_parser"></a><div id="get_parser-def"><a name="L135"></a><tt class="py-lineno">135</tt> <a class="py-toggle" href="#" id="get_parser-toggle" onclick="return toggle('get_parser');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="callirhoe-module.html#get_parser">get_parser</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_parser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_parser-expanded"><a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">    <tt class="py-docstring">"""get the argument parser object</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: optparse.OptionParser</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">    <tt id="link-12" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-12', 'parser', 'link-10');">parser</a></tt> <tt class="py-op">=</tt> <tt class="py-name">optparse</tt><tt class="py-op">.</tt><tt class="py-name">OptionParser</tt><tt class="py-op">(</tt><tt class="py-name">usage</tt><tt class="py-op">=</tt><tt class="py-string">"usage: %prog [options] [[MONTH[-MONTH2|:SPAN]] YEAR] FILE"</tt><tt class="py-op">,</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">           <tt class="py-name">description</tt><tt class="py-op">=</tt><tt class="py-string">"High quality calendar rendering with vector graphics. "</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">           <tt class="py-string">"By default, a calendar of the current year in pdf format is written to FILE. "</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">           <tt class="py-string">"Alternatively, you can select a specific YEAR (0=current), "</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">           <tt class="py-string">"and a month range from MONTH (0-12, 0=current) to MONTH2 or for SPAN months."</tt><tt class="py-op">,</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">           <tt class="py-name">version</tt><tt class="py-op">=</tt><tt class="py-string">"callirhoe "</tt> <tt class="py-op">+</tt> <tt id="link-13" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-13', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Variable lib._version=lib-module.html#_version"><a title="lib._version" class="py-name" href="#" onclick="return doclink('link-14', '_version', 'link-14');">_version</a></tt> <tt class="py-op">+</tt> <tt class="py-string">'\n'</tt> <tt class="py-op">+</tt> <tt id="link-15" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-15', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Variable lib._copyright=lib-module.html#_copyright"><a title="lib._copyright" class="py-name" href="#" onclick="return doclink('link-16', '_copyright', 'link-16');">_copyright</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">    <tt id="link-17" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-17', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-l"</tt><tt class="py-op">,</tt> <tt class="py-string">"--lang"</tt><tt class="py-op">,</tt>  <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"lang"</tt><tt class="py-op">,</tt> <tt id="link-18" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-18', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-string">"EN"</tt><tt class="py-op">,</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"choose language [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">    <tt id="link-19" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-19', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-t"</tt><tt class="py-op">,</tt> <tt class="py-string">"--layout"</tt><tt class="py-op">,</tt>  <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"layout"</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-20', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-string">"classic"</tt><tt class="py-op">,</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"choose layout [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">    <tt id="link-21" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-21', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-?"</tt><tt class="py-op">,</tt> <tt class="py-string">"--layout-help"</tt><tt class="py-op">,</tt>  <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"layouthelp"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_true"</tt><tt class="py-op">,</tt> <tt id="link-22" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-22', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"show layout-specific help"</tt><tt class="py-op">)</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">    <tt id="link-23" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-23', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--examples"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"examples"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_true"</tt><tt class="py-op">,</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"display some usage examples"</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">    <tt id="link-24" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-24', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-s"</tt><tt class="py-op">,</tt> <tt class="py-string">"--style"</tt><tt class="py-op">,</tt>  <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"style"</tt><tt class="py-op">,</tt> <tt id="link-25" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-25', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-string">"default"</tt><tt class="py-op">,</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"choose style [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">    <tt id="link-26" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-26', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-g"</tt><tt class="py-op">,</tt> <tt class="py-string">"--geometry"</tt><tt class="py-op">,</tt>  <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"geom"</tt><tt class="py-op">,</tt> <tt id="link-27" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-27', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-string">"default"</tt><tt class="py-op">,</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"choose geometry [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">    <tt id="link-28" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-28', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--landscape"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_true"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"landscape"</tt><tt class="py-op">,</tt> <tt id="link-29" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-29', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"landscape mode"</tt><tt class="py-op">)</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">    <tt id="link-30" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-30', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--dpi"</tt><tt class="py-op">,</tt> <tt class="py-name">type</tt><tt class="py-op">=</tt><tt class="py-string">"float"</tt><tt class="py-op">,</tt> <tt id="link-31" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-31', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-number">72.0</tt><tt class="py-op">,</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"set DPI (for raster output) [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">    <tt id="link-32" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-32', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--paper"</tt><tt class="py-op">,</tt> <tt id="link-33" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-33', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-string">"a4"</tt><tt class="py-op">,</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"set paper type; PAPER can be an ISO paper type (a0..a9 or a0w..a9w) or of the "</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                    <tt class="py-string">"form W:H; positive values correspond to W or H mm, negative values correspond to "</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                    <tt class="py-string">"-W or -H pixels; 'w' suffix swaps width &amp; height [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">    <tt id="link-34" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-34', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--border"</tt><tt class="py-op">,</tt> <tt class="py-name">type</tt><tt class="py-op">=</tt><tt class="py-string">"float"</tt><tt class="py-op">,</tt> <tt id="link-35" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-35', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-number">3</tt><tt class="py-op">,</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"set border size (in mm) [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">    <tt id="link-36" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-36', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-H"</tt><tt class="py-op">,</tt> <tt class="py-string">"--with-holidays"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"append"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"holidays"</tt><tt class="py-op">,</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"load holiday file (can be used multiple times)"</tt><tt class="py-op">)</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">    <tt id="link-37" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-37', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--short-monthnames"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_true"</tt><tt class="py-op">,</tt> <tt id="link-38" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-38', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">                      <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"user the short version of month names (defined in language file) [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">    <tt id="link-39" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-39', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--long-daynames"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_true"</tt><tt class="py-op">,</tt> <tt id="link-40" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-40', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"user the long version of day names (defined in language file) [%default]"</tt><tt class="py-op">)</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">    <tt id="link-41" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-41', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"-T"</tt><tt class="py-op">,</tt> <tt class="py-string">"--terse-holidays"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"store_false"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"multiday_holidays"</tt><tt class="py-op">,</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">                    <tt id="link-42" class="py-name"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-42', 'default', 'link-11');">default</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"do not print holiday end markers and omit dots"</tt><tt class="py-op">)</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt class="py-string">"languages"</tt><tt class="py-op">,</tt> <tt class="py-string">"layouts"</tt><tt class="py-op">,</tt> <tt class="py-string">"styles"</tt><tt class="py-op">,</tt> <tt class="py-string">"geometries"</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">        <tt id="link-43" class="py-name" targets="Function callirhoe.add_list_option()=callirhoe-module.html#add_list_option"><a title="callirhoe.add_list_option" class="py-name" href="#" onclick="return doclink('link-43', 'add_list_option', 'link-43');">add_list_option</a></tt><tt class="py-op">(</tt><tt id="link-44" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-44', 'parser', 'link-10');">parser</a></tt><tt class="py-op">,</tt> <tt class="py-name">x</tt><tt class="py-op">)</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line"> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">    <tt id="link-45" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-45', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--lang-var"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"append"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"lang_assign"</tt><tt class="py-op">,</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"modify a language variable"</tt><tt class="py-op">)</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">    <tt id="link-46" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-46', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--style-var"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"append"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"style_assign"</tt><tt class="py-op">,</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"modify a style variable, e.g. dom.frame_thickness=0"</tt><tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">    <tt id="link-47" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-47', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">add_option</tt><tt class="py-op">(</tt><tt class="py-string">"--geom-var"</tt><tt class="py-op">,</tt> <tt class="py-name">action</tt><tt class="py-op">=</tt><tt class="py-string">"append"</tt><tt class="py-op">,</tt> <tt class="py-name">dest</tt><tt class="py-op">=</tt><tt class="py-string">"geom_assign"</tt><tt class="py-op">,</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">                    <tt class="py-name">help</tt><tt class="py-op">=</tt><tt class="py-string">"modify a geometry variable"</tt><tt class="py-op">)</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-48" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-48', 'parser', 'link-10');">parser</a></tt> </tt>
+</div><a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"> </tt>
+<a name="main_program"></a><div id="main_program-def"><a name="L188"></a><tt class="py-lineno">188</tt> <a class="py-toggle" href="#" id="main_program-toggle" onclick="return toggle('main_program');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="callirhoe-module.html#main_program">main_program</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="main_program-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="main_program-expanded"><a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">    <tt id="link-49" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-49', 'parser', 'link-10');">parser</a></tt> <tt class="py-op">=</tt> <tt id="link-50" class="py-name" targets="Function callirhoe.get_parser()=callirhoe-module.html#get_parser,Function calmagick.get_parser()=calmagick-module.html#get_parser,Function layouts._base.get_parser()=layouts._base-module.html#get_parser,Function layouts.sparse.get_parser()=layouts.sparse-module.html#get_parser"><a title="callirhoe.get_parser
+calmagick.get_parser
+layouts._base.get_parser
+layouts.sparse.get_parser" class="py-name" href="#" onclick="return doclink('link-50', 'get_parser', 'link-50');">get_parser</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">    <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">,</tt><tt class="py-name">argv2</tt> <tt class="py-op">=</tt> <tt id="link-51" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-51', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-52" class="py-name" targets="Function lib.extract_parser_args()=lib-module.html#extract_parser_args"><a title="lib.extract_parser_args" class="py-name" href="#" onclick="return doclink('link-52', 'extract_parser_args', 'link-52');">extract_parser_args</a></tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">,</tt><tt id="link-53" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-53', 'parser', 'link-10');">parser</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-name">options</tt><tt class="py-op">,</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt id="link-54" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-54', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">parse_args</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">    <tt class="py-name">list_and_exit</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">list_languages</tt><tt class="py-op">:</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt id="link-55" class="py-name" targets="Function lib.plugin.plugin_list()=lib.plugin-module.html#plugin_list"><a title="lib.plugin.plugin_list" class="py-name" href="#" onclick="return doclink('link-55', 'plugin_list', 'link-55');">plugin_list</a></tt><tt class="py-op">(</tt><tt class="py-string">"lang"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-name">x</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">        <tt class="py-name">list_and_exit</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">list_styles</tt><tt class="py-op">:</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt id="link-56" class="py-name"><a title="lib.plugin.plugin_list" class="py-name" href="#" onclick="return doclink('link-56', 'plugin_list', 'link-55');">plugin_list</a></tt><tt class="py-op">(</tt><tt class="py-string">"style"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-name">x</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">        <tt class="py-name">list_and_exit</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">list_geometries</tt><tt class="py-op">:</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt id="link-57" class="py-name"><a title="lib.plugin.plugin_list" class="py-name" href="#" onclick="return doclink('link-57', 'plugin_list', 'link-55');">plugin_list</a></tt><tt class="py-op">(</tt><tt class="py-string">"geom"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-name">x</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt class="py-name">list_and_exit</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">list_layouts</tt><tt class="py-op">:</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt id="link-58" class="py-name"><a title="lib.plugin.plugin_list" class="py-name" href="#" onclick="return doclink('link-58', 'plugin_list', 'link-55');">plugin_list</a></tt><tt class="py-op">(</tt><tt class="py-string">"layouts"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-name">x</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-name">list_and_exit</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">list_and_exit</tt><tt class="py-op">:</tt> <tt class="py-keyword">return</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line"> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">    <tt class="py-name">plugin_paths</tt> <tt class="py-op">=</tt> <tt id="link-59" class="py-name" targets="Function lib.plugin.get_plugin_paths()=lib.plugin-module.html#get_plugin_paths"><a title="lib.plugin.get_plugin_paths" class="py-name" href="#" onclick="return doclink('link-59', 'get_plugin_paths', 'link-59');">get_plugin_paths</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">    <tt class="py-name">Language</tt> <tt class="py-op">=</tt> <tt id="link-60" class="py-name" targets="Function callirhoe.import_plugin()=callirhoe-module.html#import_plugin"><a title="callirhoe.import_plugin" class="py-name" href="#" onclick="return doclink('link-60', 'import_plugin', 'link-60');">import_plugin</a></tt><tt class="py-op">(</tt><tt class="py-name">plugin_paths</tt><tt class="py-op">,</tt> <tt class="py-string">"lang"</tt><tt class="py-op">,</tt> <tt class="py-string">"language"</tt><tt class="py-op">,</tt> <tt class="py-string">"languages"</tt><tt class="py-op">,</tt> <tt class="py-string">"--list-languages"</tt><tt class="py-op">,</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt id="link-61" class="py-name" targets="Package lang=lang-module.html"><a title="lang" class="py-name" href="#" onclick="return doclink('link-61', 'lang', 'link-61');">lang</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">    <tt class="py-name">Style</tt> <tt class="py-op">=</tt> <tt id="link-62" class="py-name"><a title="callirhoe.import_plugin" class="py-name" href="#" onclick="return doclink('link-62', 'import_plugin', 'link-60');">import_plugin</a></tt><tt class="py-op">(</tt><tt class="py-name">plugin_paths</tt><tt class="py-op">,</tt> <tt class="py-string">"style"</tt><tt class="py-op">,</tt> <tt class="py-string">"style"</tt><tt class="py-op">,</tt> <tt class="py-string">"styles"</tt><tt class="py-op">,</tt> <tt class="py-string">"--list-styles"</tt><tt class="py-op">,</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name" targets="Package style=style-module.html"><a title="style" class="py-name" href="#" onclick="return doclink('link-63', 'style', 'link-63');">style</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">    <tt class="py-name">Geometry</tt> <tt class="py-op">=</tt> <tt id="link-64" class="py-name"><a title="callirhoe.import_plugin" class="py-name" href="#" onclick="return doclink('link-64', 'import_plugin', 'link-60');">import_plugin</a></tt><tt class="py-op">(</tt><tt class="py-name">plugin_paths</tt><tt class="py-op">,</tt> <tt class="py-string">"geom"</tt><tt class="py-op">,</tt> <tt class="py-string">"geometry"</tt><tt class="py-op">,</tt> <tt class="py-string">"geometries"</tt><tt class="py-op">,</tt> <tt class="py-string">"--list-geometries"</tt><tt class="py-op">,</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt id="link-65" class="py-name" targets="Package geom=geom-module.html,Module lib.geom=lib.geom-module.html"><a title="geom
+lib.geom" class="py-name" href="#" onclick="return doclink('link-65', 'geom', 'link-65');">geom</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">    <tt class="py-name">Layout</tt> <tt class="py-op">=</tt> <tt id="link-66" class="py-name"><a title="callirhoe.import_plugin" class="py-name" href="#" onclick="return doclink('link-66', 'import_plugin', 'link-60');">import_plugin</a></tt><tt class="py-op">(</tt><tt class="py-name">plugin_paths</tt><tt class="py-op">,</tt> <tt class="py-string">"layouts"</tt><tt class="py-op">,</tt> <tt class="py-string">"layout"</tt><tt class="py-op">,</tt> <tt class="py-string">"layouts"</tt><tt class="py-op">,</tt> <tt class="py-string">"--list-layouts"</tt><tt class="py-op">,</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">layout</tt><tt class="py-op">)</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">argv2</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-string">'='</tt> <tt class="py-keyword">in</tt> <tt class="py-name">x</tt><tt class="py-op">:</tt> <tt class="py-name">x</tt> <tt class="py-op">=</tt> <tt class="py-name">x</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">x</tt><tt class="py-op">.</tt><tt class="py-name">find</tt><tt class="py-op">(</tt><tt class="py-string">'='</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">Layout</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-67', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">has_option</tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">            <tt id="link-68" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-68', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">error</tt><tt class="py-op">(</tt><tt class="py-string">"invalid option %s; use --help (-h) or --layout-help (-?) to see available options"</tt> <tt class="py-op">%</tt> <tt class="py-name">x</tt><tt class="py-op">)</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-name">loptions</tt><tt class="py-op">,</tt><tt class="py-name">largs</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">Layout</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-69', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">parse_args</tt><tt class="py-op">(</tt><tt class="py-name">argv2</tt><tt class="py-op">)</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line"> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">layouthelp</tt><tt class="py-op">:</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">        <tt class="py-comment">#print "Help for layout:", options.layout</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">        <tt class="py-name">Layout</tt><tt class="py-op">.</tt><tt id="link-70" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-70', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">print_help</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line"> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">examples</tt><tt class="py-op">:</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">        <tt id="link-71" class="py-name" targets="Function callirhoe.print_examples()=callirhoe-module.html#print_examples"><a title="callirhoe.print_examples" class="py-name" href="#" onclick="return doclink('link-71', 'print_examples', 'link-71');">print_examples</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line"> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">    <tt class="py-comment"># we can put it separately together with Layout; but we load Layout *after* lang,style,geom</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">1</tt> <tt class="py-keyword">or</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">        <tt id="link-72" class="py-name"><a title="layouts.bars.parser
+layouts.classic.parser
+layouts.sparse.parser" class="py-name" href="#" onclick="return doclink('link-72', 'parser', 'link-10');">parser</a></tt><tt class="py-op">.</tt><tt class="py-name">print_help</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">    <tt class="py-comment">#if (len(args[-1]) == 4 and args[-1].isdigit()):</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">    <tt class="py-comment">#    print "WARNING: file name '%s' looks like a year, writing anyway..." % args[-1]</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">    <tt class="py-comment"># the usual "beware of exec()" crap applies here... but come on,</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">    <tt class="py-comment"># this is a SCRIPTING language, you can always hack the source code!!!</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">lang_assign</tt><tt class="py-op">:</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">lang_assign</tt><tt class="py-op">:</tt> <tt class="py-keyword">exec</tt> <tt class="py-string">"Language.%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">x</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">style_assign</tt><tt class="py-op">:</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">style_assign</tt><tt class="py-op">:</tt> <tt class="py-keyword">exec</tt> <tt class="py-string">"Style.%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">x</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">geom_assign</tt><tt class="py-op">:</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">geom_assign</tt><tt class="py-op">:</tt> <tt class="py-keyword">exec</tt> <tt class="py-string">"Geometry.%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">x</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line"> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">    <tt class="py-name">calendar</tt><tt class="py-op">.</tt><tt id="link-73" class="py-name" targets="Variable lang.DE.long_month_name=lang.DE-module.html#long_month_name,Variable lang.EL.long_month_name=lang.EL-module.html#long_month_name,Variable lang.EN.long_month_name=lang.EN-module.html#long_month_name,Variable lang.FR.long_month_name=lang.FR-module.html#long_month_name,Variable lang.TR.long_month_name=lang.TR-module.html#long_month_name"><a title="lang.DE.long_month_name
+lang.EL.long_month_name
+lang.EN.long_month_name
+lang.FR.long_month_name
+lang.TR.long_month_name" class="py-name" href="#" onclick="return doclink('link-73', 'long_month_name', 'link-73');">long_month_name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name"><a title="lang.DE.long_month_name
+lang.EL.long_month_name
+lang.EN.long_month_name
+lang.FR.long_month_name
+lang.TR.long_month_name" class="py-name" href="#" onclick="return doclink('link-74', 'long_month_name', 'link-73');">long_month_name</a></tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">    <tt class="py-name">calendar</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name" targets="Variable lang.DE.long_day_name=lang.DE-module.html#long_day_name,Variable lang.EL.long_day_name=lang.EL-module.html#long_day_name,Variable lang.EN.long_day_name=lang.EN-module.html#long_day_name,Variable lang.FR.long_day_name=lang.FR-module.html#long_day_name,Variable lang.TR.long_day_name=lang.TR-module.html#long_day_name"><a title="lang.DE.long_day_name
+lang.EL.long_day_name
+lang.EN.long_day_name
+lang.FR.long_day_name
+lang.TR.long_day_name" class="py-name" href="#" onclick="return doclink('link-75', 'long_day_name', 'link-75');">long_day_name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name"><a title="lang.DE.long_day_name
+lang.EL.long_day_name
+lang.EN.long_day_name
+lang.FR.long_day_name
+lang.TR.long_day_name" class="py-name" href="#" onclick="return doclink('link-76', 'long_day_name', 'link-75');">long_day_name</a></tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">    <tt class="py-name">calendar</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name" targets="Variable lang.DE.short_month_name=lang.DE-module.html#short_month_name,Variable lang.EL.short_month_name=lang.EL-module.html#short_month_name,Variable lang.EN.short_month_name=lang.EN-module.html#short_month_name,Variable lang.FR.short_month_name=lang.FR-module.html#short_month_name,Variable lang.TR.short_month_name=lang.TR-module.html#short_month_name"><a title="lang.DE.short_month_name
+lang.EL.short_month_name
+lang.EN.short_month_name
+lang.FR.short_month_name
+lang.TR.short_month_name" class="py-name" href="#" onclick="return doclink('link-77', 'short_month_name', 'link-77');">short_month_name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name"><a title="lang.DE.short_month_name
+lang.EL.short_month_name
+lang.EN.short_month_name
+lang.FR.short_month_name
+lang.TR.short_month_name" class="py-name" href="#" onclick="return doclink('link-78', 'short_month_name', 'link-77');">short_month_name</a></tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">    <tt class="py-name">calendar</tt><tt class="py-op">.</tt><tt id="link-79" class="py-name" targets="Variable lang.DE.short_day_name=lang.DE-module.html#short_day_name,Variable lang.EL.short_day_name=lang.EL-module.html#short_day_name,Variable lang.EN.short_day_name=lang.EN-module.html#short_day_name,Variable lang.FR.short_day_name=lang.FR-module.html#short_day_name,Variable lang.TR.short_day_name=lang.TR-module.html#short_day_name"><a title="lang.DE.short_day_name
+lang.EL.short_day_name
+lang.EN.short_day_name
+lang.FR.short_day_name
+lang.TR.short_day_name" class="py-name" href="#" onclick="return doclink('link-79', 'short_day_name', 'link-79');">short_day_name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-80" class="py-name"><a title="lang.DE.short_day_name
+lang.EL.short_day_name
+lang.EN.short_day_name
+lang.FR.short_day_name
+lang.TR.short_day_name" class="py-name" href="#" onclick="return doclink('link-80', 'short_day_name', 'link-79');">short_day_name</a></tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">        <tt class="py-name">Year</tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">localtime</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">        <tt class="py-name">Month</tt><tt class="py-op">,</tt> <tt class="py-name">MonthSpan</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">12</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-name">Outfile</tt> <tt class="py-op">=</tt> <tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">        <tt class="py-name">Year</tt> <tt class="py-op">=</tt> <tt id="link-81" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-81', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-82" class="py-name" targets="Function lib.parse_year()=lib-module.html#parse_year"><a title="lib.parse_year" class="py-name" href="#" onclick="return doclink('link-82', 'parse_year', 'link-82');">parse_year</a></tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">        <tt class="py-name">Month</tt><tt class="py-op">,</tt> <tt class="py-name">MonthSpan</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">12</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">        <tt class="py-name">Outfile</tt> <tt class="py-op">=</tt> <tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">        <tt class="py-name">Month</tt><tt class="py-op">,</tt> <tt class="py-name">MonthSpan</tt> <tt class="py-op">=</tt> <tt id="link-83" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-83', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-84" class="py-name" targets="Function lib.parse_month_range()=lib-module.html#parse_month_range"><a title="lib.parse_month_range" class="py-name" href="#" onclick="return doclink('link-84', 'parse_month_range', 'link-84');">parse_month_range</a></tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">        <tt class="py-name">Year</tt> <tt class="py-op">=</tt> <tt id="link-85" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-85', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-86" class="py-name"><a title="lib.parse_year" class="py-name" href="#" onclick="return doclink('link-86', 'parse_year', 'link-82');">parse_year</a></tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">        <tt class="py-name">Outfile</tt> <tt class="py-op">=</tt> <tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line"> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">MonthSpan</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-87" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-87', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-88" class="py-name" targets="Class lib.Abort=lib.Abort-class.html"><a title="lib.Abort" class="py-name" href="#" onclick="return doclink('link-88', 'Abort', 'link-88');">Abort</a></tt><tt class="py-op">(</tt><tt class="py-string">"callirhoe: empty calendar requested, aborting"</tt><tt class="py-op">)</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">    <tt class="py-name">Geometry</tt><tt class="py-op">.</tt><tt class="py-name">landscape</tt> <tt class="py-op">=</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">landscape</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">    <tt id="link-89" class="py-name"><a title="lib.xcairo" class="py-name" href="#" onclick="return doclink('link-89', 'xcairo', 'link-1');">xcairo</a></tt><tt class="py-op">.</tt><tt id="link-90" class="py-name" targets="Variable layouts._base.XDPI=layouts._base-module.html#XDPI,Variable layouts.bars.XDPI=layouts.bars-module.html#XDPI,Variable layouts.classic.XDPI=layouts.classic-module.html#XDPI,Variable layouts.sparse.XDPI=layouts.sparse-module.html#XDPI,Variable lib.xcairo.XDPI=lib.xcairo-module.html#XDPI"><a title="layouts._base.XDPI
+layouts.bars.XDPI
+layouts.classic.XDPI
+layouts.sparse.XDPI
+lib.xcairo.XDPI" class="py-name" href="#" onclick="return doclink('link-90', 'XDPI', 'link-90');">XDPI</a></tt> <tt class="py-op">=</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">dpi</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">    <tt class="py-name">Geometry</tt><tt class="py-op">.</tt><tt class="py-name">pagespec</tt> <tt class="py-op">=</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">paper</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">    <tt class="py-name">Geometry</tt><tt class="py-op">.</tt><tt class="py-name">border</tt> <tt class="py-op">=</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">border</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">    <tt class="py-name">hprovider</tt> <tt class="py-op">=</tt> <tt id="link-91" class="py-name"><a title="lib.holiday" class="py-name" href="#" onclick="return doclink('link-91', 'holiday', 'link-4');">holiday</a></tt><tt class="py-op">.</tt><tt id="link-92" class="py-name" targets="Class lib.holiday.HolidayProvider=lib.holiday.HolidayProvider-class.html"><a title="lib.holiday.HolidayProvider" class="py-name" href="#" onclick="return doclink('link-92', 'HolidayProvider', 'link-92');">HolidayProvider</a></tt><tt class="py-op">(</tt><tt class="py-name">Style</tt><tt class="py-op">.</tt><tt id="link-93" class="py-name" targets="Class geom.default.dom=geom.default.dom-class.html,Class geom.sloppy.dom=geom.sloppy.dom-class.html,Class style.bw.dom=style.bw.dom-class.html,Class style.bw_gfs.dom=style.bw_gfs.dom-class.html,Class style.bw_sparse.dom=style.bw_sparse.dom-class.html,Class style.bw_sparse_gfs.dom=style.bw_sparse_gfs.dom-class.html,Class style.default.dom=style.default.dom-class.html,Class style.gfs.dom=style.gfs.dom-class.html,Class style.rainbow.dom=style.rainbow.dom-class.html,Class style.rainbow_gfs.dom=style.rainbow_gfs.dom-class.html,Class style.transparent.dom=style.transparent.dom-class.html,Class style.transparent_gfs.dom=style.transparent_gfs.dom-class.html"><a title="geom.default.dom
+geom.sloppy.dom
+style.bw.dom
+style.bw_gfs.dom
+style.bw_sparse.dom
+style.bw_sparse_gfs.dom
+style.default.dom
+style.gfs.dom
+style.rainbow.dom
+style.rainbow_gfs.dom
+style.transparent.dom
+style.transparent_gfs.dom" class="py-name" href="#" onclick="return doclink('link-93', 'dom', 'link-93');">dom</a></tt><tt class="py-op">,</tt> <tt class="py-name">Style</tt><tt class="py-op">.</tt><tt id="link-94" class="py-name" targets="Class style.bw.dom_weekend=style.bw.dom_weekend-class.html,Class style.bw_gfs.dom_weekend=style.bw_gfs.dom_weekend-class.html,Class style.bw_sparse.dom_weekend=style.bw_sparse.dom_weekend-class.html,Class style.bw_sparse_gfs.dom_weekend=style.bw_sparse_gfs.dom_weekend-class.html,Class style.default.dom_weekend=style.default.dom_weekend-class.html,Class style.gfs.dom_weekend=style.gfs.dom_weekend-class.html,Class style.rainbow.dom_weekend=style.rainbow.dom_weekend-class.html,Class style.rainbow_gfs.dom_weekend=style.rainbow_gfs.dom_weekend-class.html,Class style.transparent.dom_weekend=style.transparent.dom_weekend-class.html,Class style.transparent_gfs.dom_weekend=style.transparent_gfs.dom_weekend-class.html"><a title="style.bw.dom_weekend
+style.bw_gfs.dom_weekend
+style.bw_sparse.dom_weekend
+style.bw_sparse_gfs.dom_weekend
+style.default.dom_weekend
+style.gfs.dom_weekend
+style.rainbow.dom_weekend
+style.rainbow_gfs.dom_weekend
+style.transparent.dom_weekend
+style.transparent_gfs.dom_weekend" class="py-name" href="#" onclick="return doclink('link-94', 'dom_weekend', 'link-94');">dom_weekend</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">                                 <tt class="py-name">Style</tt><tt class="py-op">.</tt><tt id="link-95" class="py-name" targets="Class style.bw.dom_holiday=style.bw.dom_holiday-class.html,Class style.bw_gfs.dom_holiday=style.bw_gfs.dom_holiday-class.html,Class style.bw_sparse.dom_holiday=style.bw_sparse.dom_holiday-class.html,Class style.bw_sparse_gfs.dom_holiday=style.bw_sparse_gfs.dom_holiday-class.html,Class style.default.dom_holiday=style.default.dom_holiday-class.html,Class style.gfs.dom_holiday=style.gfs.dom_holiday-class.html,Class style.rainbow.dom_holiday=style.rainbow.dom_holiday-class.html,Class style.rainbow_gfs.dom_holiday=style.rainbow_gfs.dom_holiday-class.html,Class style.transparent.dom_holiday=style.transparent.dom_holiday-class.html,Class style.transparent_gfs.dom_holiday=style.transparent_gfs.dom_holiday-class.html"><a title="style.bw.dom_holiday
+style.bw_gfs.dom_holiday
+style.bw_sparse.dom_holiday
+style.bw_sparse_gfs.dom_holiday
+style.default.dom_holiday
+style.gfs.dom_holiday
+style.rainbow.dom_holiday
+style.rainbow_gfs.dom_holiday
+style.transparent.dom_holiday
+style.transparent_gfs.dom_holiday" class="py-name" href="#" onclick="return doclink('link-95', 'dom_holiday', 'link-95');">dom_holiday</a></tt><tt class="py-op">,</tt> <tt class="py-name">Style</tt><tt class="py-op">.</tt><tt id="link-96" class="py-name" targets="Class style.bw.dom_weekend_holiday=style.bw.dom_weekend_holiday-class.html,Class style.bw_gfs.dom_weekend_holiday=style.bw_gfs.dom_weekend_holiday-class.html,Class style.bw_sparse.dom_weekend_holiday=style.bw_sparse.dom_weekend_holiday-class.html,Class style.bw_sparse_gfs.dom_weekend_holiday=style.bw_sparse_gfs.dom_weekend_holiday-class.html,Class style.default.dom_weekend_holiday=style.default.dom_weekend_holiday-class.html,Class style.gfs.dom_weekend_holiday=style.gfs.dom_weekend_holiday-class.html,Class style.rainbow.dom_weekend_holiday=style.rainbow.dom_weekend_holiday-class.html,Class style.rainbow_gfs.dom_weekend_holiday=style.rainbow_gfs.dom_weekend_holiday-class.html,Class style.transparent.dom_weekend_holiday=style.transparent.dom_weekend_holiday-class.html,Class style.transparent_gfs.dom_weekend_holiday=style.transparent_gfs.dom_weekend_holiday-class.html"><a title="style.bw.dom_weekend_holiday
+style.bw_gfs.dom_weekend_holiday
+style.bw_sparse.dom_weekend_holiday
+style.bw_sparse_gfs.dom_weekend_holiday
+style.default.dom_weekend_holiday
+style.gfs.dom_weekend_holiday
+style.rainbow.dom_weekend_holiday
+style.rainbow_gfs.dom_weekend_holiday
+style.transparent.dom_weekend_holiday
+style.transparent_gfs.dom_weekend_holiday" class="py-name" href="#" onclick="return doclink('link-96', 'dom_weekend_holiday', 'link-96');">dom_weekend_holiday</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">                                 <tt class="py-name">Style</tt><tt class="py-op">.</tt><tt id="link-97" class="py-name" targets="Class style.bw.dom_multi=style.bw.dom_multi-class.html,Class style.bw_gfs.dom_multi=style.bw_gfs.dom_multi-class.html,Class style.bw_sparse.dom_multi=style.bw_sparse.dom_multi-class.html,Class style.bw_sparse_gfs.dom_multi=style.bw_sparse_gfs.dom_multi-class.html,Class style.default.dom_multi=style.default.dom_multi-class.html,Class style.gfs.dom_multi=style.gfs.dom_multi-class.html,Class style.rainbow.dom_multi=style.rainbow.dom_multi-class.html,Class style.rainbow_gfs.dom_multi=style.rainbow_gfs.dom_multi-class.html,Class style.transparent.dom_multi=style.transparent.dom_multi-class.html,Class style.transparent_gfs.dom_multi=style.transparent_gfs.dom_multi-class.html"><a title="style.bw.dom_multi
+style.bw_gfs.dom_multi
+style.bw_sparse.dom_multi
+style.bw_sparse_gfs.dom_multi
+style.default.dom_multi
+style.gfs.dom_multi
+style.rainbow.dom_multi
+style.rainbow_gfs.dom_multi
+style.transparent.dom_multi
+style.transparent_gfs.dom_multi" class="py-name" href="#" onclick="return doclink('link-97', 'dom_multi', 'link-97');">dom_multi</a></tt><tt class="py-op">,</tt> <tt class="py-name">Style</tt><tt class="py-op">.</tt><tt id="link-98" class="py-name" targets="Class style.bw.dom_weekend_multi=style.bw.dom_weekend_multi-class.html,Class style.bw_gfs.dom_weekend_multi=style.bw_gfs.dom_weekend_multi-class.html,Class style.bw_sparse.dom_weekend_multi=style.bw_sparse.dom_weekend_multi-class.html,Class style.bw_sparse_gfs.dom_weekend_multi=style.bw_sparse_gfs.dom_weekend_multi-class.html,Class style.default.dom_weekend_multi=style.default.dom_weekend_multi-class.html,Class style.gfs.dom_weekend_multi=style.gfs.dom_weekend_multi-class.html,Class style.rainbow.dom_weekend_multi=style.rainbow.dom_weekend_multi-class.html,Class style.rainbow_gfs.dom_weekend_multi=style.rainbow_gfs.dom_weekend_multi-class.html,Class style.transparent.dom_weekend_multi=style.transparent.dom_weekend_multi-class.html,Class style.transparent_gfs.dom_weekend_multi=style.transparent_gfs.dom_weekend_multi-class.html"><a title="style.bw.dom_weekend_multi
+style.bw_gfs.dom_weekend_multi
+style.bw_sparse.dom_weekend_multi
+style.bw_sparse_gfs.dom_weekend_multi
+style.default.dom_weekend_multi
+style.gfs.dom_weekend_multi
+style.rainbow.dom_weekend_multi
+style.rainbow_gfs.dom_weekend_multi
+style.transparent.dom_weekend_multi
+style.transparent_gfs.dom_weekend_multi" class="py-name" href="#" onclick="return doclink('link-98', 'dom_weekend_multi', 'link-98');">dom_weekend_multi</a></tt><tt class="py-op">,</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">multiday_holidays</tt><tt class="py-op">)</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line"> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">holidays</tt><tt class="py-op">:</tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">f</tt> <tt class="py-keyword">in</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">holidays</tt><tt class="py-op">:</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">            <tt class="py-name">hprovider</tt><tt class="py-op">.</tt><tt id="link-99" class="py-name" targets="Method lib.holiday.HolidayProvider.load_holiday_file()=lib.holiday.HolidayProvider-class.html#load_holiday_file"><a title="lib.holiday.HolidayProvider.load_holiday_file" class="py-name" href="#" onclick="return doclink('link-99', 'load_holiday_file', 'link-99');">load_holiday_file</a></tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line"> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">long_daynames</tt><tt class="py-op">:</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">        <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt class="py-name">day_name</tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-100" class="py-name"><a title="lang.DE.long_day_name
+lang.EL.long_day_name
+lang.EN.long_day_name
+lang.FR.long_day_name
+lang.TR.long_day_name" class="py-name" href="#" onclick="return doclink('link-100', 'long_day_name', 'link-75');">long_day_name</a></tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line">        <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt class="py-name">day_name</tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-101" class="py-name"><a title="lang.DE.short_day_name
+lang.EL.short_day_name
+lang.EN.short_day_name
+lang.FR.short_day_name
+lang.TR.short_day_name" class="py-name" href="#" onclick="return doclink('link-101', 'short_day_name', 'link-79');">short_day_name</a></tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">options</tt><tt class="py-op">.</tt><tt class="py-name">short_monthnames</tt><tt class="py-op">:</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">        <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt class="py-name">month_name</tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-102" class="py-name"><a title="lang.DE.short_month_name
+lang.EL.short_month_name
+lang.EN.short_month_name
+lang.FR.short_month_name
+lang.TR.short_month_name" class="py-name" href="#" onclick="return doclink('link-102', 'short_month_name', 'link-77');">short_month_name</a></tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line">        <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt class="py-name">month_name</tt> <tt class="py-op">=</tt> <tt class="py-name">Language</tt><tt class="py-op">.</tt><tt id="link-103" class="py-name"><a title="lang.DE.long_month_name
+lang.EL.long_month_name
+lang.EN.long_month_name
+lang.FR.long_month_name
+lang.TR.long_month_name" class="py-name" href="#" onclick="return doclink('link-103', 'long_month_name', 'link-73');">long_month_name</a></tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line">    <tt class="py-name">renderer</tt> <tt class="py-op">=</tt> <tt class="py-name">Layout</tt><tt class="py-op">.</tt><tt id="link-104" class="py-name" targets="Class layouts._base.CalendarRenderer=layouts._base.CalendarRenderer-class.html,Class layouts.bars.CalendarRenderer=layouts.bars.CalendarRenderer-class.html,Class layouts.classic.CalendarRenderer=layouts.classic.CalendarRenderer-class.html,Class layouts.sparse.CalendarRenderer=layouts.sparse.CalendarRenderer-class.html"><a title="layouts._base.CalendarRenderer
+layouts.bars.CalendarRenderer
+layouts.classic.CalendarRenderer
+layouts.sparse.CalendarRenderer" class="py-name" href="#" onclick="return doclink('link-104', 'CalendarRenderer', 'link-104');">CalendarRenderer</a></tt><tt class="py-op">(</tt><tt class="py-name">Outfile</tt><tt class="py-op">,</tt> <tt class="py-name">Year</tt><tt class="py-op">,</tt> <tt class="py-name">Month</tt><tt class="py-op">,</tt> <tt class="py-name">MonthSpan</tt><tt class="py-op">,</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line">                                        <tt class="py-op">(</tt><tt class="py-name">Style</tt><tt class="py-op">,</tt><tt class="py-name">Geometry</tt><tt class="py-op">,</tt><tt class="py-name">Language</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">hprovider</tt><tt class="py-op">,</tt> <tt id="link-105" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-105', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-106" class="py-name"><a title="lib._version" class="py-name" href="#" onclick="return doclink('link-106', '_version', 'link-14');">_version</a></tt><tt class="py-op">,</tt> <tt class="py-name">loptions</tt><tt class="py-op">)</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line">    <tt class="py-name">renderer</tt><tt class="py-op">.</tt><tt id="link-107" class="py-name" targets="Method layouts._base.CalendarRenderer.render()=layouts._base.CalendarRenderer-class.html#render"><a title="layouts._base.CalendarRenderer.render" class="py-name" href="#" onclick="return doclink('link-107', 'render', 'link-107');">render</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line"> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line">        <tt id="link-108" class="py-name" targets="Function callirhoe.main_program()=callirhoe-module.html#main_program,Function calmagick.main_program()=calmagick-module.html#main_program"><a title="callirhoe.main_program
+calmagick.main_program" class="py-name" href="#" onclick="return doclink('link-108', 'main_program', 'link-108');">main_program</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt id="link-109" class="py-name"><a title="lib" class="py-name" href="#" onclick="return doclink('link-109', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-110" class="py-name"><a title="lib.Abort" class="py-name" href="#" onclick="return doclink('link-110', 'Abort', 'link-88');">Abort</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">e</tt><tt class="py-op">:</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">exit</tt><tt class="py-op">(</tt><tt class="py-name">e</tt><tt class="py-op">.</tt><tt class="py-name">args</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:15 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

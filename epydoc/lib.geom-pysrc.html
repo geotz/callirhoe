@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.geom</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        Module&nbsp;geom
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.geom-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="lib.geom-module.html">Module lib.geom</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment">#    callirhoe - high quality calendar rendering</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#    Copyright (C) 2012 George M. Tzoumas</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment">#    This program is free software: you can redistribute it and/or modify</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">#    it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#    the Free Software Foundation, either version 3 of the License, or</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#    (at your option) any later version.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#    This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#    GNU General Public License for more details.</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#    You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment">#    along with this program.  If not, see http://www.gnu.org/licenses/</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment"># *****************************************</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-comment">#                                         #</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">"""  general-purpose geometry routines  """</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-comment">#                                         #</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-comment"># *****************************************</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="rect_ratio"></a><div id="rect_ratio-def"><a name="L25"></a><tt class="py-lineno"> 25</tt> <a class="py-toggle" href="#" id="rect_ratio-toggle" onclick="return toggle('rect_ratio');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_ratio">rect_ratio</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_ratio-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_ratio-expanded"><a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt class="py-docstring">"""returns the ratio of rect I{r} which is defined as M{width/height}</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: float</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">r</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt class="py-number">1.0</tt><tt class="py-op">/</tt><tt class="py-name">r</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"> </tt>
+<a name="rect_rel_scale"></a><div id="rect_rel_scale-def"><a name="L32"></a><tt class="py-lineno"> 32</tt> <a class="py-toggle" href="#" id="rect_rel_scale-toggle" onclick="return toggle('rect_rel_scale');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_rel_scale">rect_rel_scale</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">,</tt> <tt class="py-param">fw</tt><tt class="py-op">,</tt> <tt class="py-param">fh</tt><tt class="py-op">,</tt> <tt class="py-param">align_x</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">align_y</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_rel_scale-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_rel_scale-expanded"><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-docstring">"""relatively scale a rect</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">    @type fw: float in [0,1]</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">    @param fw: width fraction (to be multiplied)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">    @type fh: float in [0,1]</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">    @param fh: height fraction (to be multiplied)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">    @type align_x: float in [-1,1]</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">    @param align_x: determines the relative position of the new rect with respect to</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">    the old one. A value of 0 aligns in the center, a value of -1 aligns on the</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">    left, a value of 1 aligns on the right hand side. Intermediate values do</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">    linear interpolation.</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    @type align_y: float in [-1,1]</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    @param align_y: Performs vertical (top-bottom) alignment similarly to L{align_x}.</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (float,float,float,float)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">r</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">align_x</tt> <tt class="py-op">+</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">w</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">fw</tt><tt class="py-op">)</tt><tt class="py-op">/</tt><tt class="py-number">2.0</tt><tt class="py-op">,</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">            <tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">align_y</tt> <tt class="py-op">+</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">h</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">fh</tt><tt class="py-op">)</tt><tt class="py-op">/</tt><tt class="py-number">2.0</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">*</tt><tt class="py-name">fw</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt><tt class="py-op">*</tt><tt class="py-name">fh</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"> </tt>
+<a name="rect_pad"></a><div id="rect_pad-def"><a name="L52"></a><tt class="py-lineno"> 52</tt> <a class="py-toggle" href="#" id="rect_pad-toggle" onclick="return toggle('rect_pad');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_pad">rect_pad</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">,</tt> <tt class="py-param">pad</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_pad-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_pad-expanded"><a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt class="py-docstring">"""returns a padded rect by reducing border by the I{pad} tuple (top,left,bottom,right)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (float,float,float,float)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">    <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">r</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-name">t_</tt><tt class="py-op">,</tt> <tt class="py-name">l_</tt><tt class="py-op">,</tt> <tt class="py-name">b_</tt><tt class="py-op">,</tt> <tt class="py-name">r_</tt> <tt class="py-op">=</tt> <tt class="py-name">pad</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-name">l_</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">t_</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt> <tt class="py-op">-</tt> <tt class="py-name">r_</tt> <tt class="py-op">-</tt> <tt class="py-name">l_</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">-</tt> <tt class="py-name">t_</tt> <tt class="py-op">-</tt> <tt class="py-name">b_</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"> </tt>
+<a name="rect_to_abs"></a><div id="rect_to_abs-def"><a name="L61"></a><tt class="py-lineno"> 61</tt> <a class="py-toggle" href="#" id="rect_to_abs-toggle" onclick="return toggle('rect_to_abs');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_to_abs">rect_to_abs</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_to_abs-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_to_abs-expanded"><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-docstring">"""get absolute coordinates (x0,y0,x1,y1) from rect definition (x,y,w,h)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (float,float,float,float)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">    <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">r</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">h</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"> </tt>
+<a name="abs_to_rect"></a><div id="abs_to_rect-def"><a name="L69"></a><tt class="py-lineno"> 69</tt> <a class="py-toggle" href="#" id="abs_to_rect-toggle" onclick="return toggle('abs_to_rect');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#abs_to_rect">abs_to_rect</a><tt class="py-op">(</tt><tt class="py-param">a</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="abs_to_rect-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="abs_to_rect-expanded"><a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-docstring">"""get rect definition (x,y,w,h) from absolute coordinates (x0,y0,x1,y1)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (float,float,float,float)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">,</tt> <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt class="py-name">a</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">,</tt> <tt class="py-name">x2</tt> <tt class="py-op">-</tt> <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">-</tt> <tt class="py-name">y1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
+<a name="rect_from_origin"></a><div id="rect_from_origin-def"><a name="L77"></a><tt class="py-lineno"> 77</tt> <a class="py-toggle" href="#" id="rect_from_origin-toggle" onclick="return toggle('rect_from_origin');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_from_origin">rect_from_origin</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_from_origin-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_from_origin-expanded"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">    <tt class="py-docstring">"""returns a similar rect with top-left corner at (0,0)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (float,float,float,float)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-name">r</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">r</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="rect_hull"></a><div id="rect_hull-def"><a name="L84"></a><tt class="py-lineno"> 84</tt> <a class="py-toggle" href="#" id="rect_hull-toggle" onclick="return toggle('rect_hull');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_hull">rect_hull</a><tt class="py-op">(</tt><tt class="py-param">r1</tt><tt class="py-op">,</tt><tt class="py-param">r2</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_hull-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_hull-expanded"><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">    <tt class="py-docstring">"""returns the smallest rect containing r1 and r2</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (float,float,float,float)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">,</tt> <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt id="link-0" class="py-name" targets="Function lib.geom.rect_to_abs()=lib.geom-module.html#rect_to_abs"><a title="lib.geom.rect_to_abs" class="py-name" href="#" onclick="return doclink('link-0', 'rect_to_abs', 'link-0');">rect_to_abs</a></tt><tt class="py-op">(</tt><tt class="py-name">r1</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">    <tt class="py-name">x3</tt><tt class="py-op">,</tt> <tt class="py-name">y3</tt><tt class="py-op">,</tt> <tt class="py-name">x4</tt><tt class="py-op">,</tt> <tt class="py-name">y4</tt> <tt class="py-op">=</tt> <tt id="link-1" class="py-name"><a title="lib.geom.rect_to_abs" class="py-name" href="#" onclick="return doclink('link-1', 'rect_to_abs', 'link-0');">rect_to_abs</a></tt><tt class="py-op">(</tt><tt class="py-name">r2</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-2" class="py-name" targets="Function lib.geom.abs_to_rect()=lib.geom-module.html#abs_to_rect"><a title="lib.geom.abs_to_rect" class="py-name" href="#" onclick="return doclink('link-2', 'abs_to_rect', 'link-2');">abs_to_rect</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">min</tt><tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt><tt class="py-name">x3</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">min</tt><tt class="py-op">(</tt><tt class="py-name">y1</tt><tt class="py-op">,</tt><tt class="py-name">y3</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">max</tt><tt class="py-op">(</tt><tt class="py-name">x2</tt><tt class="py-op">,</tt><tt class="py-name">x4</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">max</tt><tt class="py-op">(</tt><tt class="py-name">y2</tt><tt class="py-op">,</tt><tt class="py-name">y4</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="rect_hsplit"></a><div id="rect_hsplit-def"><a name="L93"></a><tt class="py-lineno"> 93</tt> <a class="py-toggle" href="#" id="rect_hsplit-toggle" onclick="return toggle('rect_hsplit');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_hsplit">rect_hsplit</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">,</tt> <tt class="py-param">f</tt> <tt class="py-op">=</tt> <tt class="py-number">0.5</tt><tt class="py-op">,</tt> <tt class="py-param">fdist</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_hsplit-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_hsplit-expanded"><a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-docstring">"""split a rect horizontally</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">    @type f: float in [0,1]</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">    @param f: split fraction</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">    @param fdist: fraction of space to discard before splitting (free space)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: ((float,float,float,float),(float,float,float,float))</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">    @return: tuple (r1,r2) with splits and free space evenly distributed</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring">    before r1, between r1 and r2 and after r2</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">r</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">    <tt class="py-name">rw</tt> <tt class="py-op">=</tt> <tt class="py-name">w</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1.0</tt> <tt class="py-op">-</tt> <tt class="py-name">fdist</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt class="py-name">r1</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-name">w</tt><tt class="py-op">*</tt><tt class="py-name">fdist</tt><tt class="py-op">/</tt><tt class="py-number">3.0</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">rw</tt><tt class="py-op">*</tt><tt class="py-name">f</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">    <tt class="py-name">r2</tt> <tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-name">rw</tt><tt class="py-op">*</tt><tt class="py-name">f</tt> <tt class="py-op">+</tt> <tt class="py-name">w</tt><tt class="py-op">*</tt><tt class="py-name">fdist</tt><tt class="py-op">*</tt><tt class="py-number">2.0</tt><tt class="py-op">/</tt><tt class="py-number">3</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">rw</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">f</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt><tt class="py-op">)</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">r1</tt><tt class="py-op">,</tt> <tt class="py-name">r2</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
+<a name="rect_vsplit"></a><div id="rect_vsplit-def"><a name="L109"></a><tt class="py-lineno">109</tt> <a class="py-toggle" href="#" id="rect_vsplit-toggle" onclick="return toggle('rect_vsplit');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#rect_vsplit">rect_vsplit</a><tt class="py-op">(</tt><tt class="py-param">r</tt><tt class="py-op">,</tt> <tt class="py-param">f</tt> <tt class="py-op">=</tt> <tt class="py-number">0.5</tt><tt class="py-op">,</tt> <tt class="py-param">fdist</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="rect_vsplit-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="rect_vsplit-expanded"><a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">    <tt class="py-docstring">"""split a rect vertically, similarly to L{rect_hsplit}</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: ((float,float,float,float),(float,float,float,float))</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">    <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">r</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">    <tt class="py-name">rh</tt> <tt class="py-op">=</tt> <tt class="py-name">h</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1.0</tt> <tt class="py-op">-</tt> <tt class="py-name">fdist</tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">    <tt class="py-name">r1</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">h</tt><tt class="py-op">*</tt><tt class="py-name">fdist</tt><tt class="py-op">/</tt><tt class="py-number">3.0</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">rh</tt><tt class="py-op">*</tt><tt class="py-name">f</tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">    <tt class="py-name">r2</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">rh</tt><tt class="py-op">*</tt><tt class="py-name">f</tt> <tt class="py-op">+</tt> <tt class="py-name">h</tt><tt class="py-op">*</tt><tt class="py-name">fdist</tt><tt class="py-op">*</tt><tt class="py-number">2.0</tt><tt class="py-op">/</tt><tt class="py-number">3</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">rh</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">f</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">r1</tt><tt class="py-op">,</tt> <tt class="py-name">r2</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"> </tt>
+<a name="color_mix"></a><div id="color_mix-def"><a name="L120"></a><tt class="py-lineno">120</tt> <a class="py-toggle" href="#" id="color_mix-toggle" onclick="return toggle('color_mix');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#color_mix">color_mix</a><tt class="py-op">(</tt><tt class="py-param">a</tt><tt class="py-op">,</tt> <tt class="py-param">b</tt><tt class="py-op">,</tt> <tt class="py-param">frac</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="color_mix-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="color_mix-expanded"><a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">    <tt class="py-docstring">"""mix two colors</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring">    @type frac: float in [0,1]</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring">    @param frac: amount of first color</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: tuple</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt><tt class="py-name">y</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">x</tt><tt class="py-op">*</tt><tt class="py-name">frac</tt> <tt class="py-op">+</tt> <tt class="py-name">y</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">frac</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">zip</tt><tt class="py-op">(</tt><tt class="py-name">a</tt><tt class="py-op">,</tt><tt class="py-name">b</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"> </tt>
+<a name="color_scale"></a><div id="color_scale-def"><a name="L129"></a><tt class="py-lineno">129</tt> <a class="py-toggle" href="#" id="color_scale-toggle" onclick="return toggle('color_scale');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#color_scale">color_scale</a><tt class="py-op">(</tt><tt class="py-param">a</tt><tt class="py-op">,</tt> <tt class="py-param">frac</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="color_scale-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="color_scale-expanded"><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">    <tt class="py-docstring">"""scale color values</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"><tt class="py-docstring">    @type frac: float</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"><tt class="py-docstring">    @param frac: scale amount (to be multiplied)</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: tuple</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">x</tt><tt class="py-op">:</tt> <tt class="py-name">min</tt><tt class="py-op">(</tt><tt class="py-number">1.0</tt><tt class="py-op">,</tt><tt class="py-name">x</tt><tt class="py-op">*</tt><tt class="py-name">frac</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">a</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="color_auto_fg"></a><div id="color_auto_fg-def"><a name="L138"></a><tt class="py-lineno">138</tt> <a class="py-toggle" href="#" id="color_auto_fg-toggle" onclick="return toggle('color_auto_fg');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom-module.html#color_auto_fg">color_auto_fg</a><tt class="py-op">(</tt><tt class="py-param">bg</tt><tt class="py-op">,</tt> <tt class="py-param">light</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-param">dark</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="color_auto_fg-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="color_auto_fg-expanded"><a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">    <tt class="py-docstring">"""return I{light} or I{dark} foreground color based on an ad-hoc evaluation of I{bg}</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: tuple</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">light</tt> <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt id="link-3" class="py-name" targets="Variable style.bw.dom.bg=style.bw.dom-class.html#bg,Variable style.bw.dom_holiday.bg=style.bw.dom_holiday-class.html#bg,Variable style.bw.dom_weekend.bg=style.bw.dom_weekend-class.html#bg,Variable style.bw.dom_weekend_holiday.bg=style.bw.dom_weekend_holiday-class.html#bg,Variable style.bw.month.bg=style.bw.month-class.html#bg,Variable style.bw_sparse.dom.bg=style.bw_sparse.dom-class.html#bg,Variable style.bw_sparse.dom_holiday.bg=style.bw_sparse.dom_holiday-class.html#bg,Variable style.bw_sparse.month.bg=style.bw_sparse.month-class.html#bg,Variable style.default.dom.bg=style.default.dom-class.html#bg,Variable style.default.dom_holiday.bg=style.default.dom_holiday-class.html#bg,Variable style.default.dom_multi.bg=style.default.dom_multi-class.html#bg,Variable style.default.dom_weekend.bg=style.default.dom_weekend-class.html#bg,Variable style.default.month.bg=style.default.month-class.html#bg,Variable style.transparent.dom.bg=style.transparent.dom-class.html#bg,Variable style.transparent.dom_holiday.bg=style.transparent.dom_holiday-class.html#bg,Variable style.transparent.dom_weekend.bg=style.transparent.dom_weekend-class.html#bg,Variable style.transparent.dom_weekend_holiday.bg=style.transparent.dom_weekend_holiday-class.html#bg,Variable style.transparent.month.bg=style.transparent.month-class.html#bg"><a title="style.bw.dom.bg
+style.bw.dom_holiday.bg
+style.bw.dom_weekend.bg
+style.bw.dom_weekend_holiday.bg
+style.bw.month.bg
+style.bw_sparse.dom.bg
+style.bw_sparse.dom_holiday.bg
+style.bw_sparse.month.bg
+style.default.dom.bg
+style.default.dom_holiday.bg
+style.default.dom_multi.bg
+style.default.dom_weekend.bg
+style.default.month.bg
+style.transparent.dom.bg
+style.transparent.dom_holiday.bg
+style.transparent.dom_weekend.bg
+style.transparent.dom_weekend_holiday.bg
+style.transparent.month.bg" class="py-name" href="#" onclick="return doclink('link-3', 'bg', 'link-3');">bg</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-number">1.5</tt><tt class="py-op">*</tt><tt id="link-4" class="py-name"><a title="style.bw.dom.bg
+style.bw.dom_holiday.bg
+style.bw.dom_weekend.bg
+style.bw.dom_weekend_holiday.bg
+style.bw.month.bg
+style.bw_sparse.dom.bg
+style.bw_sparse.dom_holiday.bg
+style.bw_sparse.month.bg
+style.default.dom.bg
+style.default.dom_holiday.bg
+style.default.dom_multi.bg
+style.default.dom_weekend.bg
+style.default.month.bg
+style.transparent.dom.bg
+style.transparent.dom_holiday.bg
+style.transparent.dom_weekend.bg
+style.transparent.dom_weekend_holiday.bg
+style.transparent.month.bg" class="py-name" href="#" onclick="return doclink('link-4', 'bg', 'link-3');">bg</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt id="link-5" class="py-name"><a title="style.bw.dom.bg
+style.bw.dom_holiday.bg
+style.bw.dom_weekend.bg
+style.bw.dom_weekend_holiday.bg
+style.bw.month.bg
+style.bw_sparse.dom.bg
+style.bw_sparse.dom_holiday.bg
+style.bw_sparse.month.bg
+style.default.dom.bg
+style.default.dom_holiday.bg
+style.default.dom_multi.bg
+style.default.dom_weekend.bg
+style.default.month.bg
+style.transparent.dom.bg
+style.transparent.dom_holiday.bg
+style.transparent.dom_weekend.bg
+style.transparent.dom_weekend_holiday.bg
+style.transparent.month.bg" class="py-name" href="#" onclick="return doclink('link-5', 'bg', 'link-3');">bg</a></tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">1.0</tt> <tt class="py-keyword">else</tt> <tt class="py-name">dark</tt> </tt>
+</div><a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"><tt class="py-comment"># ********* layout managers ***********</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"> </tt>
+<a name="VLayout"></a><div id="VLayout-def"><a name="L147"></a><tt class="py-lineno">147</tt> <a class="py-toggle" href="#" id="VLayout-toggle" onclick="return toggle('VLayout');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html">VLayout</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="VLayout-expanded"><a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">    <tt class="py-docstring">"""vertical layout manager</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar rect: bounding rect for layout -- this rect will be split and the slices assigned to every item</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar nitems: maximum number of items in the layout</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar pad: tuple(top,left,bottom,right) with item padding</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="VLayout.__init__"></a><div id="VLayout.__init__-def"><a name="L154"></a><tt class="py-lineno">154</tt> <a class="py-toggle" href="#" id="VLayout.__init__-toggle" onclick="return toggle('VLayout.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rect</tt><tt class="py-op">,</tt> <tt class="py-param">nitems</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-param">pad</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-comment"># TLBR</tt> </tt>
+</div><a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rect</tt> <tt class="py-op">=</tt> <tt class="py-name">rect</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">nitems</tt> <tt class="py-op">=</tt> <tt class="py-name">nitems</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pad</tt> <tt class="py-op">=</tt> <tt class="py-name">pad</tt> </tt>
+</div><a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"> </tt>
+<a name="VLayout.count"></a><div id="VLayout.count-def"><a name="L159"></a><tt class="py-lineno">159</tt> <a class="py-toggle" href="#" id="VLayout.count-toggle" onclick="return toggle('VLayout.count');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#count">count</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout.count-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VLayout.count-expanded"><a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt class="py-docstring">"""return maximum number of items in the layout</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">nitems</tt> </tt>
+</div><a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"> </tt>
+<a name="VLayout.resize"></a><div id="VLayout.resize-def"><a name="L166"></a><tt class="py-lineno">166</tt> <a class="py-toggle" href="#" id="VLayout.resize-toggle" onclick="return toggle('VLayout.resize');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#resize">resize</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">k</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout.resize-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VLayout.resize-expanded"><a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">        <tt class="py-docstring">"""set maximum number of items"""</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">nitems</tt> <tt class="py-op">=</tt> <tt class="py-name">k</tt> </tt>
+</div><a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"> </tt>
+<a name="VLayout.grow"></a><div id="VLayout.grow-def"><a name="L170"></a><tt class="py-lineno">170</tt> <a class="py-toggle" href="#" id="VLayout.grow-toggle" onclick="return toggle('VLayout.grow');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#grow">grow</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">delta</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout.grow-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VLayout.grow-expanded"><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-docstring">"""increase number of items by I{delta}"""</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">nitems</tt> <tt class="py-op">+=</tt> <tt class="py-name">delta</tt> </tt>
+</div><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
+<a name="VLayout.item"></a><div id="VLayout.item-def"><a name="L174"></a><tt class="py-lineno">174</tt> <a class="py-toggle" href="#" id="VLayout.item-toggle" onclick="return toggle('VLayout.item');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#item">item</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">i</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout.item-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VLayout.item-expanded"><a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">        <tt class="py-docstring">"""get rect for item I{i}</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float)</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">w</tt><tt class="py-op">,</tt> <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rect</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">        <tt class="py-name">h</tt> <tt class="py-op">*=</tt> <tt class="py-number">1.0</tt><tt class="py-op">/</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">nitems</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">        <tt class="py-name">y</tt> <tt class="py-op">+=</tt> <tt class="py-name">i</tt><tt class="py-op">*</tt><tt class="py-name">h</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-6" class="py-name" targets="Function lib.geom.rect_pad()=lib.geom-module.html#rect_pad"><a title="lib.geom.rect_pad" class="py-name" href="#" onclick="return doclink('link-6', 'rect_pad', 'link-6');">rect_pad</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">w</tt><tt class="py-op">,</tt><tt class="py-name">h</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pad</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">                 </tt>
+<a name="VLayout.item_span"></a><div id="VLayout.item_span-def"><a name="L184"></a><tt class="py-lineno">184</tt> <a class="py-toggle" href="#" id="VLayout.item_span-toggle" onclick="return toggle('VLayout.item_span');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#item_span">item_span</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">n</tt><tt class="py-op">,</tt> <tt class="py-param">k</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout.item_span-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VLayout.item_span-expanded"><a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-docstring">"""get union of I{k} consecutive items, starting at position I{n}</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"><tt class="py-docstring">        @param n: first item</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring">        @param k: number of items, -1 for all remaining items</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float)</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">k</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-name">k</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method lib.geom.GLayout.count()=lib.geom.GLayout-class.html#count,Method lib.geom.VLayout.count()=lib.geom.VLayout-class.html#count"><a title="lib.geom.GLayout.count
+lib.geom.VLayout.count" class="py-name" href="#" onclick="return doclink('link-7', 'count', 'link-7');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">n</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">2</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-8" class="py-name" targets="Function lib.geom.rect_hull()=lib.geom-module.html#rect_hull"><a title="lib.geom.rect_hull" class="py-name" href="#" onclick="return doclink('link-8', 'rect_hull', 'link-8');">rect_hull</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method lib.geom.GLayout.item()=lib.geom.GLayout-class.html#item,Method lib.geom.HLayout.item()=lib.geom.HLayout-class.html#item,Method lib.geom.VLayout.item()=lib.geom.VLayout-class.html#item"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-9', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">k</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-10', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">k</tt> <tt class="py-op">+</tt> <tt class="py-name">n</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">         </tt>
+<a name="VLayout.items"></a><div id="VLayout.items-def"><a name="L194"></a><tt class="py-lineno">194</tt> <a class="py-toggle" href="#" id="VLayout.items-toggle" onclick="return toggle('VLayout.items');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.VLayout-class.html#items">items</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VLayout.items-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VLayout.items-expanded"><a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-docstring">"""returns a sequence of all items</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float),...</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-11', 'item', 'link-9');">item</a></tt><tt class="py-op">,</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="lib.geom.GLayout.count
+lib.geom.VLayout.count" class="py-name" href="#" onclick="return doclink('link-12', 'count', 'link-7');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"> </tt>
+<a name="HLayout"></a><div id="HLayout-def"><a name="L201"></a><tt class="py-lineno">201</tt> <a class="py-toggle" href="#" id="HLayout-toggle" onclick="return toggle('HLayout');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.geom.HLayout-class.html">HLayout</a><tt class="py-op">(</tt><tt class="py-base-class">VLayout</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HLayout-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="HLayout-expanded"><a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">    <tt class="py-docstring">"""horizontal layout manager defined as a transpose of L{VLayout}"""</tt> </tt>
+<a name="HLayout.__init__"></a><div id="HLayout.__init__-def"><a name="L203"></a><tt class="py-lineno">203</tt> <a class="py-toggle" href="#" id="HLayout.__init__-toggle" onclick="return toggle('HLayout.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.HLayout-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rect</tt><tt class="py-op">,</tt> <tt class="py-param">nitems</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-param">pad</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-comment"># TLBR</tt> </tt>
+</div><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-13" class="py-name" targets="Class lib.geom.HLayout=lib.geom.HLayout-class.html"><a title="lib.geom.HLayout" class="py-name" href="#" onclick="return doclink('link-13', 'HLayout', 'link-13');">HLayout</a></tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method calmagick.PNMImage.__init__()=calmagick.PNMImage-class.html#__init__,Method layouts._base.CalendarRenderer.__init__()=layouts._base.CalendarRenderer-class.html#__init__,Method layouts._base.DayCell.__init__()=layouts._base.DayCell-class.html#__init__,Method lib.geom.GLayout.__init__()=lib.geom.GLayout-class.html#__init__,Method lib.geom.HLayout.__init__()=lib.geom.HLayout-class.html#__init__,Method lib.geom.VLayout.__init__()=lib.geom.VLayout-class.html#__init__,Method lib.holiday.Holiday.__init__()=lib.holiday.Holiday-class.html#__init__,Method lib.holiday.HolidayProvider.__init__()=lib.holiday.HolidayProvider-class.html#__init__,Method lib.xcairo.Page.__init__()=lib.xcairo.Page-class.html#__init__,Method lib.xcairo.PageWriter.__init__()=lib.xcairo.PageWriter-class.html#__init__"><a title="calmagick.PNMImage.__init__
+layouts._base.CalendarRenderer.__init__
+layouts._base.DayCell.__init__
+lib.geom.GLayout.__init__
+lib.geom.HLayout.__init__
+lib.geom.VLayout.__init__
+lib.holiday.Holiday.__init__
+lib.holiday.HolidayProvider.__init__
+lib.xcairo.Page.__init__
+lib.xcairo.PageWriter.__init__" class="py-name" href="#" onclick="return doclink('link-14', '__init__', 'link-14');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">rect</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">rect</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">rect</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">rect</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt>  </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">                                      <tt class="py-name">nitems</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"> </tt>
+<a name="HLayout.item"></a><div id="HLayout.item-def"><a name="L207"></a><tt class="py-lineno">207</tt> <a class="py-toggle" href="#" id="HLayout.item-toggle" onclick="return toggle('HLayout.item');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.HLayout-class.html#item">item</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">i</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HLayout.item-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HLayout.item-expanded"><a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-docstring">"""get rect for item I{i}</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float)</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-15" class="py-name"><a title="lib.geom.HLayout" class="py-name" href="#" onclick="return doclink('link-15', 'HLayout', 'link-13');">HLayout</a></tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-16', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">)</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">         </tt>
+<a name="GLayout"></a><div id="GLayout-def"><a name="L215"></a><tt class="py-lineno">215</tt> <a class="py-toggle" href="#" id="GLayout-toggle" onclick="return toggle('GLayout');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html">GLayout</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="GLayout-expanded"><a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">    <tt class="py-docstring">"""grid layout manager</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar vrep: internal L{VLayout} for row computations</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar hrep: internal L{HLayout} for column computations</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="GLayout.__init__"></a><div id="GLayout.__init__-def"><a name="L221"></a><tt class="py-lineno">221</tt> <a class="py-toggle" href="#" id="GLayout.__init__-toggle" onclick="return toggle('GLayout.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rect</tt><tt class="py-op">,</tt> <tt class="py-param">nrows</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-param">ncols</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-param">pad</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-comment"># TLBR</tt> </tt>
+</div><a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-docstring">"""initialize layout</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line"><tt class="py-docstring">        @param rect: layout rect (tuple)</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line"><tt class="py-docstring">        @param nrows: number of rows</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line"><tt class="py-docstring">        @param ncols: number of columns</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line"><tt class="py-docstring">        @param pad: cell padding</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">vrep</tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name" targets="Class lib.geom.VLayout=lib.geom.VLayout-class.html"><a title="lib.geom.VLayout" class="py-name" href="#" onclick="return doclink('link-17', 'VLayout', 'link-17');">VLayout</a></tt><tt class="py-op">(</tt><tt class="py-name">rect</tt><tt class="py-op">,</tt> <tt class="py-name">nrows</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">vrep</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-18', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hrep</tt> <tt class="py-op">=</tt> <tt id="link-19" class="py-name"><a title="lib.geom.HLayout" class="py-name" href="#" onclick="return doclink('link-19', 'HLayout', 'link-13');">HLayout</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">rect</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">rect</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">ncols</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.row_count"></a><div id="GLayout.row_count-def"><a name="L233"></a><tt class="py-lineno">233</tt> <a class="py-toggle" href="#" id="GLayout.row_count-toggle" onclick="return toggle('GLayout.row_count');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#row_count">row_count</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.row_count-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.row_count-expanded"><a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">        <tt class="py-docstring">"""get (max) number of rows in the grid</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">vrep</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="lib.geom.GLayout.count
+lib.geom.VLayout.count" class="py-name" href="#" onclick="return doclink('link-20', 'count', 'link-7');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.col_count"></a><div id="GLayout.col_count-def"><a name="L240"></a><tt class="py-lineno">240</tt> <a class="py-toggle" href="#" id="GLayout.col_count-toggle" onclick="return toggle('GLayout.col_count');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#col_count">col_count</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.col_count-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.col_count-expanded"><a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">        <tt class="py-docstring">"""get (max) number of columns in the grid</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hrep</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="lib.geom.GLayout.count
+lib.geom.VLayout.count" class="py-name" href="#" onclick="return doclink('link-21', 'count', 'link-7');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.count"></a><div id="GLayout.count-def"><a name="L247"></a><tt class="py-lineno">247</tt> <a class="py-toggle" href="#" id="GLayout.count-toggle" onclick="return toggle('GLayout.count');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#count">count</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.count-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.count-expanded"><a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-docstring">"""get total number of cells in the grid (which is M{rows*cols})</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method lib.geom.GLayout.row_count()=lib.geom.GLayout-class.html#row_count"><a title="lib.geom.GLayout.row_count" class="py-name" href="#" onclick="return doclink('link-22', 'row_count', 'link-22');">row_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method lib.geom.GLayout.col_count()=lib.geom.GLayout-class.html#col_count"><a title="lib.geom.GLayout.col_count" class="py-name" href="#" onclick="return doclink('link-23', 'col_count', 'link-23');">col_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.resize"></a><div id="GLayout.resize-def"><a name="L254"></a><tt class="py-lineno">254</tt> <a class="py-toggle" href="#" id="GLayout.resize-toggle" onclick="return toggle('GLayout.resize');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#resize">resize</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rows</tt><tt class="py-op">,</tt> <tt class="py-param">cols</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.resize-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.resize-expanded"><a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">        <tt class="py-docstring">"""resize grid by specifying new number of rows and columns"""</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">vrep</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Method lib.geom.GLayout.resize()=lib.geom.GLayout-class.html#resize,Method lib.geom.VLayout.resize()=lib.geom.VLayout-class.html#resize"><a title="lib.geom.GLayout.resize
+lib.geom.VLayout.resize" class="py-name" href="#" onclick="return doclink('link-24', 'resize', 'link-24');">resize</a></tt><tt class="py-op">(</tt><tt class="py-name">rows</tt><tt class="py-op">)</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">        <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">vrep</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-25', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hrep</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name"><a title="lib.geom.HLayout" class="py-name" href="#" onclick="return doclink('link-26', 'HLayout', 'link-13');">HLayout</a></tt><tt class="py-op">(</tt><tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">:</tt><tt class="py-number">4</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">cols</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">pad</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.item"></a><div id="GLayout.item-def"><a name="L260"></a><tt class="py-lineno">260</tt> <a class="py-toggle" href="#" id="GLayout.item-toggle" onclick="return toggle('GLayout.item');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#item">item</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">row</tt><tt class="py-op">,</tt> <tt class="py-param">col</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.item-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.item-expanded"><a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">        <tt class="py-docstring">"""get rect of cell at position I{row,col}</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float)</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">        <tt class="py-name">ty</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">vrep</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-27', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">        <tt class="py-name">tx</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">hrep</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-28', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">col</tt><tt class="py-op">)</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">tx</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">ty</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">tx</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">tx</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.item_seq"></a><div id="GLayout.item_seq-def"><a name="L269"></a><tt class="py-lineno">269</tt> <a class="py-toggle" href="#" id="GLayout.item_seq-toggle" onclick="return toggle('GLayout.item_seq');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#item_seq">item_seq</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">k</tt><tt class="py-op">,</tt> <tt class="py-param">column_wise</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.item_seq-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.item_seq-expanded"><a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">        <tt class="py-docstring">"""get rect of cell at position I{k} column-wise or row-wise</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float)</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">column_wise</tt><tt class="py-op">:</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">            <tt class="py-name">row</tt><tt class="py-op">,</tt> <tt class="py-name">col</tt> <tt class="py-op">=</tt> <tt class="py-name">k</tt> <tt class="py-op">//</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="lib.geom.GLayout.col_count" class="py-name" href="#" onclick="return doclink('link-29', 'col_count', 'link-23');">col_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">k</tt> <tt class="py-op">%</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="lib.geom.GLayout.col_count" class="py-name" href="#" onclick="return doclink('link-30', 'col_count', 'link-23');">col_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">            <tt class="py-name">col</tt><tt class="py-op">,</tt> <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">k</tt> <tt class="py-op">//</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="lib.geom.GLayout.row_count" class="py-name" href="#" onclick="return doclink('link-31', 'row_count', 'link-22');">row_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">k</tt> <tt class="py-op">%</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="lib.geom.GLayout.row_count" class="py-name" href="#" onclick="return doclink('link-32', 'row_count', 'link-22');">row_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-33', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">,</tt> <tt class="py-name">col</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">         </tt>
+<a name="GLayout.items"></a><div id="GLayout.items-def"><a name="L280"></a><tt class="py-lineno">280</tt> <a class="py-toggle" href="#" id="GLayout.items-toggle" onclick="return toggle('GLayout.items');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#items">items</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">column_wise</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.items-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.items-expanded"><a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">        <tt class="py-docstring">"""get sequence of rects of cells column-wise or row-wise</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float),...</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Method lib.geom.GLayout.item_seq()=lib.geom.GLayout-class.html#item_seq"><a title="lib.geom.GLayout.item_seq" class="py-name" href="#" onclick="return doclink('link-34', 'item_seq', 'link-34');">item_seq</a></tt><tt class="py-op">,</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="lib.geom.GLayout.count
+lib.geom.VLayout.count" class="py-name" href="#" onclick="return doclink('link-35', 'count', 'link-7');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line"> </tt>
+<a name="GLayout.row_items"></a><div id="GLayout.row_items-def"><a name="L287"></a><tt class="py-lineno">287</tt> <a class="py-toggle" href="#" id="GLayout.row_items-toggle" onclick="return toggle('GLayout.row_items');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#row_items">row_items</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">row</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.row_items-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.row_items-expanded"><a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">        <tt class="py-docstring">"""get sequence of cell rects of a row</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float),...</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">x</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-36', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">,</tt> <tt class="py-name">x</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="lib.geom.GLayout.col_count" class="py-name" href="#" onclick="return doclink('link-37', 'col_count', 'link-23');">col_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">         </tt>
+<a name="GLayout.col_items"></a><div id="GLayout.col_items-def"><a name="L294"></a><tt class="py-lineno">294</tt> <a class="py-toggle" href="#" id="GLayout.col_items-toggle" onclick="return toggle('GLayout.col_items');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#col_items">col_items</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">col</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.col_items-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.col_items-expanded"><a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">        <tt class="py-docstring">"""get sequence of cell rects of a column</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float),...</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">x</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-38', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">col</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="lib.geom.GLayout.row_count" class="py-name" href="#" onclick="return doclink('link-39', 'row_count', 'link-22');">row_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">         </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">         </tt>
+<a name="GLayout.item_span"></a><div id="GLayout.item_span-def"><a name="L302"></a><tt class="py-lineno">302</tt> <a class="py-toggle" href="#" id="GLayout.item_span-toggle" onclick="return toggle('GLayout.item_span');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.geom.GLayout-class.html#item_span">item_span</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">nr</tt><tt class="py-op">,</tt> <tt class="py-param">nc</tt><tt class="py-op">,</tt> <tt class="py-param">row</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-param">col</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GLayout.item_span-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="GLayout.item_span-expanded"><a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">        <tt class="py-docstring">"""get union of cell rects spanning a subgrid</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"><tt class="py-docstring">        @param nr: number of spanning rows</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line"><tt class="py-docstring">        @param nc: number of spanning columns</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line"><tt class="py-docstring">        @param row: starting row, -1 for vertically centered</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line"><tt class="py-docstring">        @param col: starting column, -1 for horizontally centered</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (float,float,float,float)</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">row</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="lib.geom.GLayout.row_count" class="py-name" href="#" onclick="return doclink('link-40', 'row_count', 'link-22');">row_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">nr</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">2</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">col</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-name">col</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="lib.geom.GLayout.col_count" class="py-name" href="#" onclick="return doclink('link-41', 'col_count', 'link-23');">col_count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">nc</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">2</tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-42" class="py-name"><a title="lib.geom.rect_hull" class="py-name" href="#" onclick="return doclink('link-42', 'rect_hull', 'link-8');">rect_hull</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-43', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">,</tt> <tt class="py-name">col</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="lib.geom.GLayout.item
+lib.geom.HLayout.item
+lib.geom.VLayout.item" class="py-name" href="#" onclick="return doclink('link-44', 'item', 'link-9');">item</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt> <tt class="py-op">+</tt> <tt class="py-name">nr</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">col</tt> <tt class="py-op">+</tt> <tt class="py-name">nc</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:15 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

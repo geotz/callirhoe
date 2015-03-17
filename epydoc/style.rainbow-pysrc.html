@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>style.rainbow</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="style-module.html">Package&nbsp;style</a> ::
+        Module&nbsp;rainbow
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="style.rainbow-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="style.rainbow-module.html">Module style.rainbow</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#    callirhoe - high quality calendar rendering</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#    Copyright (C) 2012 George M. Tzoumas</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment">#    This program is free software: you can redistribute it and/or modify</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">#    it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment">#    the Free Software Foundation, either version 3 of the License, or</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment">#    (at your option) any later version.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment">#    This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment">#    GNU General Public License for more details.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment">#    You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment">#    along with this program.  If not, see http://www.gnu.org/licenses/</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment"># --- style.rainbow ---</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">"""module defining rainbow color style"""</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module geom.default=geom.default-module.html,Module style.default=style.default-module.html"><a title="geom.default
+style.default" class="py-name" href="#" onclick="return doclink('link-0', 'default', 'link-0');">default</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-comment"># day of week</tt> </tt>
+<a name="dow"></a><div id="dow-def"><a name="L24"></a><tt class="py-lineno">24</tt> <a class="py-toggle" href="#" id="dow-toggle" onclick="return toggle('dow');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dow-class.html">dow</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dow</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">     </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt class="py-comment"># day of month</tt> </tt>
+<a name="dom"></a><div id="dom-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="dom-toggle" onclick="return toggle('dom');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dom-class.html">dom</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="dom_weekend"></a><div id="dom_weekend-def"><a name="L29"></a><tt class="py-lineno">29</tt> <a class="py-toggle" href="#" id="dom_weekend-toggle" onclick="return toggle('dom_weekend');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dom_weekend-class.html">dom_weekend</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dom_weekend</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt>  </tt>
+</div><a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="dom_holiday"></a><div id="dom_holiday-def"><a name="L31"></a><tt class="py-lineno">31</tt> <a class="py-toggle" href="#" id="dom_holiday-toggle" onclick="return toggle('dom_holiday');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dom_holiday-class.html">dom_holiday</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dom_holiday</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">     </tt>
+<a name="dom_weekend_holiday"></a><div id="dom_weekend_holiday-def"><a name="L33"></a><tt class="py-lineno">33</tt> <a class="py-toggle" href="#" id="dom_weekend_holiday-toggle" onclick="return toggle('dom_weekend_holiday');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dom_weekend_holiday-class.html">dom_weekend_holiday</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dom_weekend_holiday</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="dom_multi"></a><div id="dom_multi-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="dom_multi-toggle" onclick="return toggle('dom_multi');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dom_multi-class.html">dom_multi</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dom_multi</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt>
+<a name="dom_weekend_multi"></a><div id="dom_weekend_multi-def"><a name="L37"></a><tt class="py-lineno">37</tt> <a class="py-toggle" href="#" id="dom_weekend_multi-toggle" onclick="return toggle('dom_weekend_multi');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.dom_weekend_multi-class.html">dom_weekend_multi</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">dom_weekend_multi</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Package lib=lib-module.html"><a title="lib" class="py-name" href="#" onclick="return doclink('link-1', 'lib', 'link-1');">lib</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Package geom=geom-module.html,Module lib.geom=lib.geom-module.html"><a title="geom
+lib.geom" class="py-name" href="#" onclick="return doclink('link-2', 'geom', 'link-2');">geom</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Function lib.geom.color_mix()=lib.geom-module.html#color_mix"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-3', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">,</tt> <tt id="link-4" class="py-name" targets="Function lib.geom.color_scale()=lib.geom-module.html#color_scale"><a title="lib.geom.color_scale" class="py-name" href="#" onclick="return doclink('link-4', 'color_scale', 'link-4');">color_scale</a></tt><tt class="py-op">,</tt> <tt id="link-5" class="py-name" targets="Function lib.geom.color_auto_fg()=lib.geom-module.html#color_auto_fg"><a title="lib.geom.color_auto_fg" class="py-name" href="#" onclick="return doclink('link-5', 'color_auto_fg', 'link-5');">color_auto_fg</a></tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"> </tt>
+<a name="month"></a><div id="month-def"><a name="L41"></a><tt class="py-lineno">41</tt> <a class="py-toggle" href="#" id="month-toggle" onclick="return toggle('month');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.rainbow.month-class.html">month</a><tt class="py-op">(</tt><tt class="py-base-class">default</tt><tt class="py-op">.</tt><tt class="py-base-class">month</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="month-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="month-expanded"><a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">    <tt id="link-6" class="py-name" targets="Variable style.rainbow.month.winter=style.rainbow.month-class.html#winter,Variable style.rainbow_gfs.month.winter=style.rainbow_gfs.month-class.html#winter"><a title="style.rainbow.month.winter
+style.rainbow_gfs.month.winter" class="py-name" href="#" onclick="return doclink('link-6', 'winter', 'link-6');">winter</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0.5</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Variable style.rainbow.month.spring=style.rainbow.month-class.html#spring,Variable style.rainbow_gfs.month.spring=style.rainbow_gfs.month-class.html#spring"><a title="style.rainbow.month.spring
+style.rainbow_gfs.month.spring" class="py-name" href="#" onclick="return doclink('link-7', 'spring', 'link-7');">spring</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt><tt class="py-number">0.7</tt><tt class="py-op">,</tt><tt class="py-number">0.0</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt id="link-8" class="py-name" targets="Variable style.rainbow.month.summer=style.rainbow.month-class.html#summer,Variable style.rainbow_gfs.month.summer=style.rainbow_gfs.month-class.html#summer"><a title="style.rainbow.month.summer
+style.rainbow_gfs.month.summer" class="py-name" href="#" onclick="return doclink('link-8', 'summer', 'link-8');">summer</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">0.3</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Variable style.rainbow.month.autumn=style.rainbow.month-class.html#autumn,Variable style.rainbow_gfs.month.autumn=style.rainbow_gfs.month-class.html#autumn"><a title="style.rainbow.month.autumn
+style.rainbow_gfs.month.autumn" class="py-name" href="#" onclick="return doclink('link-9', 'autumn', 'link-9');">autumn</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.9</tt><tt class="py-op">,</tt><tt class="py-number">0.9</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt id="link-10" class="py-name" targets="Variable style.rainbow.month._c1=style.rainbow.month-class.html#_c1,Variable style.rainbow_gfs.month._c1=style.rainbow_gfs.month-class.html#_c1"><a title="style.rainbow.month._c1
+style.rainbow_gfs.month._c1" class="py-name" href="#" onclick="return doclink('link-10', '_c1', 'link-10');">_c1</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name"><a title="style.rainbow.month.winter
+style.rainbow_gfs.month.winter" class="py-name" href="#" onclick="return doclink('link-11', 'winter', 'link-6');">winter</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt id="link-12" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-12', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-13" class="py-name"><a title="style.rainbow.month.winter
+style.rainbow_gfs.month.winter" class="py-name" href="#" onclick="return doclink('link-13', 'winter', 'link-6');">winter</a></tt><tt class="py-op">,</tt><tt id="link-14" class="py-name"><a title="style.rainbow.month.spring
+style.rainbow_gfs.month.spring" class="py-name" href="#" onclick="return doclink('link-14', 'spring', 'link-7');">spring</a></tt><tt class="py-op">,</tt><tt class="py-number">0.66</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-15" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-15', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-16" class="py-name"><a title="style.rainbow.month.winter
+style.rainbow_gfs.month.winter" class="py-name" href="#" onclick="return doclink('link-16', 'winter', 'link-6');">winter</a></tt><tt class="py-op">,</tt><tt id="link-17" class="py-name"><a title="style.rainbow.month.spring
+style.rainbow_gfs.month.spring" class="py-name" href="#" onclick="return doclink('link-17', 'spring', 'link-7');">spring</a></tt><tt class="py-op">,</tt><tt class="py-number">0.33</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-18" class="py-name"><a title="style.rainbow.month.spring
+style.rainbow_gfs.month.spring" class="py-name" href="#" onclick="return doclink('link-18', 'spring', 'link-7');">spring</a></tt><tt class="py-op">,</tt> <tt class="py-comment"># april</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">        <tt id="link-19" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-19', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-20" class="py-name"><a title="style.rainbow.month.spring
+style.rainbow_gfs.month.spring" class="py-name" href="#" onclick="return doclink('link-20', 'spring', 'link-7');">spring</a></tt><tt class="py-op">,</tt><tt id="link-21" class="py-name"><a title="style.rainbow.month.summer
+style.rainbow_gfs.month.summer" class="py-name" href="#" onclick="return doclink('link-21', 'summer', 'link-8');">summer</a></tt><tt class="py-op">,</tt><tt class="py-number">0.66</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-22" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-22', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-23" class="py-name"><a title="style.rainbow.month.spring
+style.rainbow_gfs.month.spring" class="py-name" href="#" onclick="return doclink('link-23', 'spring', 'link-7');">spring</a></tt><tt class="py-op">,</tt><tt id="link-24" class="py-name"><a title="style.rainbow.month.summer
+style.rainbow_gfs.month.summer" class="py-name" href="#" onclick="return doclink('link-24', 'summer', 'link-8');">summer</a></tt><tt class="py-op">,</tt><tt class="py-number">0.33</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-25" class="py-name"><a title="style.rainbow.month.summer
+style.rainbow_gfs.month.summer" class="py-name" href="#" onclick="return doclink('link-25', 'summer', 'link-8');">summer</a></tt><tt class="py-op">,</tt> <tt class="py-comment"># july</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt id="link-26" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-26', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-27" class="py-name"><a title="style.rainbow.month.summer
+style.rainbow_gfs.month.summer" class="py-name" href="#" onclick="return doclink('link-27', 'summer', 'link-8');">summer</a></tt><tt class="py-op">,</tt><tt id="link-28" class="py-name"><a title="style.rainbow.month.autumn
+style.rainbow_gfs.month.autumn" class="py-name" href="#" onclick="return doclink('link-28', 'autumn', 'link-9');">autumn</a></tt><tt class="py-op">,</tt><tt class="py-number">0.66</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-29" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-29', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="style.rainbow.month.summer
+style.rainbow_gfs.month.summer" class="py-name" href="#" onclick="return doclink('link-30', 'summer', 'link-8');">summer</a></tt><tt class="py-op">,</tt><tt id="link-31" class="py-name"><a title="style.rainbow.month.autumn
+style.rainbow_gfs.month.autumn" class="py-name" href="#" onclick="return doclink('link-31', 'autumn', 'link-9');">autumn</a></tt><tt class="py-op">,</tt><tt class="py-number">0.33</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-32" class="py-name"><a title="style.rainbow.month.autumn
+style.rainbow_gfs.month.autumn" class="py-name" href="#" onclick="return doclink('link-32', 'autumn', 'link-9');">autumn</a></tt><tt class="py-op">,</tt> <tt class="py-comment"># october</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt id="link-33" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-33', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-34" class="py-name"><a title="style.rainbow.month.autumn
+style.rainbow_gfs.month.autumn" class="py-name" href="#" onclick="return doclink('link-34', 'autumn', 'link-9');">autumn</a></tt><tt class="py-op">,</tt><tt id="link-35" class="py-name"><a title="style.rainbow.month.winter
+style.rainbow_gfs.month.winter" class="py-name" href="#" onclick="return doclink('link-35', 'winter', 'link-6');">winter</a></tt><tt class="py-op">,</tt><tt class="py-number">0.66</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-36" class="py-name"><a title="lib.geom.color_mix" class="py-name" href="#" onclick="return doclink('link-36', 'color_mix', 'link-3');">color_mix</a></tt><tt class="py-op">(</tt><tt id="link-37" class="py-name"><a title="style.rainbow.month.autumn
+style.rainbow_gfs.month.autumn" class="py-name" href="#" onclick="return doclink('link-37', 'autumn', 'link-9');">autumn</a></tt><tt class="py-op">,</tt><tt id="link-38" class="py-name"><a title="style.rainbow.month.winter
+style.rainbow_gfs.month.winter" class="py-name" href="#" onclick="return doclink('link-38', 'winter', 'link-6');">winter</a></tt><tt class="py-op">,</tt><tt class="py-number">0.33</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-comment"># december</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt id="link-39" class="py-name" targets="Variable style.bw.month.color_map_bg=style.bw.month-class.html#color_map_bg,Variable style.bw_sparse.month.color_map_bg=style.bw_sparse.month-class.html#color_map_bg,Variable style.default.month.color_map_bg=style.default.month-class.html#color_map_bg,Variable style.rainbow.month.color_map_bg=style.rainbow.month-class.html#color_map_bg,Variable style.rainbow_gfs.month.color_map_bg=style.rainbow_gfs.month-class.html#color_map_bg,Variable style.transparent.month.color_map_bg=style.transparent.month-class.html#color_map_bg"><a title="style.bw.month.color_map_bg
+style.bw_sparse.month.color_map_bg
+style.default.month.color_map_bg
+style.rainbow.month.color_map_bg
+style.rainbow_gfs.month.color_map_bg
+style.transparent.month.color_map_bg" class="py-name" href="#" onclick="return doclink('link-39', 'color_map_bg', 'link-39');">color_map_bg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">x</tt><tt class="py-op">:</tt> <tt id="link-40" class="py-name"><a title="lib.geom.color_scale" class="py-name" href="#" onclick="return doclink('link-40', 'color_scale', 'link-4');">color_scale</a></tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-number">0.5</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-41" class="py-name"><a title="style.rainbow.month._c1
+style.rainbow_gfs.month._c1" class="py-name" href="#" onclick="return doclink('link-41', '_c1', 'link-10');">_c1</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-42" class="py-name"><a title="style.rainbow.month._c1
+style.rainbow_gfs.month._c1" class="py-name" href="#" onclick="return doclink('link-42', '_c1', 'link-10');">_c1</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">    <tt id="link-43" class="py-name" targets="Variable style.bw.month.color_map_fg=style.bw.month-class.html#color_map_fg,Variable style.bw_sparse.month.color_map_fg=style.bw_sparse.month-class.html#color_map_fg,Variable style.default.month.color_map_fg=style.default.month-class.html#color_map_fg,Variable style.rainbow.month.color_map_fg=style.rainbow.month-class.html#color_map_fg,Variable style.rainbow_gfs.month.color_map_fg=style.rainbow_gfs.month-class.html#color_map_fg,Variable style.transparent.month.color_map_fg=style.transparent.month-class.html#color_map_fg"><a title="style.bw.month.color_map_fg
+style.bw_sparse.month.color_map_fg
+style.default.month.color_map_fg
+style.rainbow.month.color_map_fg
+style.rainbow_gfs.month.color_map_fg
+style.transparent.month.color_map_fg" class="py-name" href="#" onclick="return doclink('link-43', 'color_map_fg', 'link-43');">color_map_fg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"><tt class="py-comment">#                    map(lambda x: color_auto_fg(x), color_map_bg[1]</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:15 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

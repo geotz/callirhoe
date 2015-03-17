@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>style.bw_sparse</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="style-module.html">Package&nbsp;style</a> ::
+        Module&nbsp;bw_sparse
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="style.bw_sparse-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="style.bw_sparse-module.html">Module style.bw_sparse</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#    callirhoe - high quality calendar rendering</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#    Copyright (C) 2012 George M. Tzoumas</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment">#    Sparse Style Definition</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">#    Copyright (C) 2013 Neels Hofmeyr</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment">#    This program is free software: you can redistribute it and/or modify</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment">#    it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment">#    the Free Software Foundation, either version 3 of the License, or</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment">#    (at your option) any later version.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment">#    This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment">#    GNU General Public License for more details.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment">#    You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-comment">#    along with this program.  If not, see http://www.gnu.org/licenses/</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-comment"># --- style.bw_sparse ---</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-docstring">"""module defining the black &amp; white sparse style</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-docstring">to be used with sparse layout</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="dow"></a><div id="dow-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="dow-toggle" onclick="return toggle('dow');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dow-class.html">dow</a><tt class="py-op">:</tt> </tt>
+</div><div id="dow-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dow-expanded"><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of week style"""</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">    <tt id="link-0" class="py-name" targets="Variable style.bw.dom.fg=style.bw.dom-class.html#fg,Variable style.bw.dom_holiday.fg=style.bw.dom_holiday-class.html#fg,Variable style.bw.dom_weekend.fg=style.bw.dom_weekend-class.html#fg,Variable style.bw.dom_weekend_holiday.fg=style.bw.dom_weekend_holiday-class.html#fg,Variable style.bw.dow.fg=style.bw.dow-class.html#fg,Variable style.bw_sparse.dom.fg=style.bw_sparse.dom-class.html#fg,Variable style.bw_sparse.dow.fg=style.bw_sparse.dow-class.html#fg,Variable style.default.dom.fg=style.default.dom-class.html#fg,Variable style.default.dom_holiday.fg=style.default.dom_holiday-class.html#fg,Variable style.default.dom_weekend.fg=style.default.dom_weekend-class.html#fg,Variable style.default.dow.fg=style.default.dow-class.html#fg,Variable style.transparent.dom.fg=style.transparent.dom-class.html#fg,Variable style.transparent.dom_holiday.fg=style.transparent.dom_holiday-class.html#fg,Variable style.transparent.dom_weekend.fg=style.transparent.dom_weekend-class.html#fg,Variable style.transparent.dow.fg=style.transparent.dow-class.html#fg"><a title="style.bw.dom.fg
+style.bw.dom_holiday.fg
+style.bw.dom_weekend.fg
+style.bw.dom_weekend_holiday.fg
+style.bw.dow.fg
+style.bw_sparse.dom.fg
+style.bw_sparse.dow.fg
+style.default.dom.fg
+style.default.dom_holiday.fg
+style.default.dom_weekend.fg
+style.default.dow.fg
+style.transparent.dom.fg
+style.transparent.dom_holiday.fg
+style.transparent.dom_weekend.fg
+style.transparent.dow.fg" class="py-name" href="#" onclick="return doclink('link-0', 'fg', 'link-0');">fg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable style.bw.dom.frame_thickness=style.bw.dom-class.html#frame_thickness,Variable style.bw.dow.frame_thickness=style.bw.dow-class.html#frame_thickness,Variable style.bw.month.frame_thickness=style.bw.month-class.html#frame_thickness,Variable style.bw_sparse.dom.frame_thickness=style.bw_sparse.dom-class.html#frame_thickness,Variable style.bw_sparse.dow.frame_thickness=style.bw_sparse.dow-class.html#frame_thickness,Variable style.bw_sparse.month.frame_thickness=style.bw_sparse.month-class.html#frame_thickness,Variable style.default.dom.frame_thickness=style.default.dom-class.html#frame_thickness,Variable style.default.dow.frame_thickness=style.default.dow-class.html#frame_thickness,Variable style.default.month.frame_thickness=style.default.month-class.html#frame_thickness,Variable style.transparent.dom.frame_thickness=style.transparent.dom-class.html#frame_thickness,Variable style.transparent.dow.frame_thickness=style.transparent.dow-class.html#frame_thickness,Variable style.transparent.month.frame_thickness=style.transparent.month-class.html#frame_thickness"><a title="style.bw.dom.frame_thickness
+style.bw.dow.frame_thickness
+style.bw.month.frame_thickness
+style.bw_sparse.dom.frame_thickness
+style.bw_sparse.dow.frame_thickness
+style.bw_sparse.month.frame_thickness
+style.default.dom.frame_thickness
+style.default.dow.frame_thickness
+style.default.month.frame_thickness
+style.transparent.dom.frame_thickness
+style.transparent.dow.frame_thickness
+style.transparent.month.frame_thickness" class="py-name" href="#" onclick="return doclink('link-1', 'frame_thickness', 'link-1');">frame_thickness</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0.1</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable style.bw.dom.frame=style.bw.dom-class.html#frame,Variable style.bw.dow.frame=style.bw.dow-class.html#frame,Variable style.bw.month.frame=style.bw.month-class.html#frame,Variable style.bw_sparse.dom.frame=style.bw_sparse.dom-class.html#frame,Variable style.bw_sparse.dow.frame=style.bw_sparse.dow-class.html#frame,Variable style.bw_sparse.month.frame=style.bw_sparse.month-class.html#frame,Variable style.default.dom.frame=style.default.dom-class.html#frame,Variable style.default.dow.frame=style.default.dow-class.html#frame,Variable style.default.month.frame=style.default.month-class.html#frame,Variable style.transparent.dom.frame=style.transparent.dom-class.html#frame,Variable style.transparent.dow.frame=style.transparent.dow-class.html#frame,Variable style.transparent.month.frame=style.transparent.month-class.html#frame"><a title="style.bw.dom.frame
+style.bw.dow.frame
+style.bw.month.frame
+style.bw_sparse.dom.frame
+style.bw_sparse.dow.frame
+style.bw_sparse.month.frame
+style.default.dom.frame
+style.default.dow.frame
+style.default.month.frame
+style.transparent.dom.frame
+style.transparent.dow.frame
+style.transparent.month.frame" class="py-name" href="#" onclick="return doclink('link-2', 'frame', 'link-2');">frame</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">.5</tt><tt class="py-op">,</tt> <tt class="py-number">.5</tt><tt class="py-op">,</tt> <tt class="py-number">.5</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Variable style.bw.dom.font=style.bw.dom-class.html#font,Variable style.bw.dom_holiday.font=style.bw.dom_holiday-class.html#font,Variable style.bw.dom_weekend.font=style.bw.dom_weekend-class.html#font,Variable style.bw.dow.font=style.bw.dow-class.html#font,Variable style.bw.month.font=style.bw.month-class.html#font,Variable style.bw_gfs.dom.font=style.bw_gfs.dom-class.html#font,Variable style.bw_gfs.dom_holiday.font=style.bw_gfs.dom_holiday-class.html#font,Variable style.bw_gfs.dom_multi.font=style.bw_gfs.dom_multi-class.html#font,Variable style.bw_gfs.dom_weekend.font=style.bw_gfs.dom_weekend-class.html#font,Variable style.bw_gfs.dom_weekend_holiday.font=style.bw_gfs.dom_weekend_holiday-class.html#font,Variable style.bw_gfs.dom_weekend_multi.font=style.bw_gfs.dom_weekend_multi-class.html#font,Variable style.bw_gfs.dow.font=style.bw_gfs.dow-class.html#font,Variable style.bw_gfs.month.font=style.bw_gfs.month-class.html#font,Variable style.bw_sparse.dom.font=style.bw_sparse.dom-class.html#font,Variable style.bw_sparse.dom_weekend.font=style.bw_sparse.dom_weekend-class.html#font,Variable style.bw_sparse.dow.font=style.bw_sparse.dow-class.html#font,Variable style.bw_sparse.month.font=style.bw_sparse.month-class.html#font,Variable style.bw_sparse_gfs.dom.font=style.bw_sparse_gfs.dom-class.html#font,Variable style.bw_sparse_gfs.dom_holiday.font=style.bw_sparse_gfs.dom_holiday-class.html#font,Variable style.bw_sparse_gfs.dom_multi.font=style.bw_sparse_gfs.dom_multi-class.html#font,Variable style.bw_sparse_gfs.dom_weekend.font=style.bw_sparse_gfs.dom_weekend-class.html#font,Variable style.bw_sparse_gfs.dom_weekend_holiday.font=style.bw_sparse_gfs.dom_weekend_holiday-class.html#font,Variable style.bw_sparse_gfs.dom_weekend_multi.font=style.bw_sparse_gfs.dom_weekend_multi-class.html#font,Variable style.bw_sparse_gfs.dow.font=style.bw_sparse_gfs.dow-class.html#font,Variable style.bw_sparse_gfs.month.font=style.bw_sparse_gfs.month-class.html#font,Variable style.default.dom.font=style.default.dom-class.html#font,Variable style.default.dow.font=style.default.dow-class.html#font,Variable style.default.month.font=style.default.month-class.html#font,Variable style.gfs.dom.font=style.gfs.dom-class.html#font,Variable style.gfs.dom_holiday.font=style.gfs.dom_holiday-class.html#font,Variable style.gfs.dom_multi.font=style.gfs.dom_multi-class.html#font,Variable style.gfs.dom_weekend.font=style.gfs.dom_weekend-class.html#font,Variable style.gfs.dom_weekend_holiday.font=style.gfs.dom_weekend_holiday-class.html#font,Variable style.gfs.dom_weekend_multi.font=style.gfs.dom_weekend_multi-class.html#font,Variable style.gfs.dow.font=style.gfs.dow-class.html#font,Variable style.gfs.month.font=style.gfs.month-class.html#font,Variable style.transparent.dom.font=style.transparent.dom-class.html#font,Variable style.transparent.dom_holiday.font=style.transparent.dom_holiday-class.html#font,Variable style.transparent.dom_weekend.font=style.transparent.dom_weekend-class.html#font,Variable style.transparent.dow.font=style.transparent.dow-class.html#font,Variable style.transparent.month.font=style.transparent.month-class.html#font,Variable style.transparent_gfs.dom.font=style.transparent_gfs.dom-class.html#font,Variable style.transparent_gfs.dom_holiday.font=style.transparent_gfs.dom_holiday-class.html#font,Variable style.transparent_gfs.dom_multi.font=style.transparent_gfs.dom_multi-class.html#font,Variable style.transparent_gfs.dom_weekend.font=style.transparent_gfs.dom_weekend-class.html#font,Variable style.transparent_gfs.dom_weekend_holiday.font=style.transparent_gfs.dom_weekend_holiday-class.html#font,Variable style.transparent_gfs.dom_weekend_multi.font=style.transparent_gfs.dom_weekend_multi-class.html#font,Variable style.transparent_gfs.dow.font=style.transparent_gfs.dow-class.html#font,Variable style.transparent_gfs.month.font=style.transparent_gfs.month-class.html#font"><a title="style.bw.dom.font
+style.bw.dom_holiday.font
+style.bw.dom_weekend.font
+style.bw.dow.font
+style.bw.month.font
+style.bw_gfs.dom.font
+style.bw_gfs.dom_holiday.font
+style.bw_gfs.dom_multi.font
+style.bw_gfs.dom_weekend.font
+style.bw_gfs.dom_weekend_holiday.font
+style.bw_gfs.dom_weekend_multi.font
+style.bw_gfs.dow.font
+style.bw_gfs.month.font
+style.bw_sparse.dom.font
+style.bw_sparse.dom_weekend.font
+style.bw_sparse.dow.font
+style.bw_sparse.month.font
+style.bw_sparse_gfs.dom.font
+style.bw_sparse_gfs.dom_holiday.font
+style.bw_sparse_gfs.dom_multi.font
+style.bw_sparse_gfs.dom_weekend.font
+style.bw_sparse_gfs.dom_weekend_holiday.font
+style.bw_sparse_gfs.dom_weekend_multi.font
+style.bw_sparse_gfs.dow.font
+style.bw_sparse_gfs.month.font
+style.default.dom.font
+style.default.dow.font
+style.default.month.font
+style.gfs.dom.font
+style.gfs.dom_holiday.font
+style.gfs.dom_multi.font
+style.gfs.dom_weekend.font
+style.gfs.dom_weekend_holiday.font
+style.gfs.dom_weekend_multi.font
+style.gfs.dow.font
+style.gfs.month.font
+style.transparent.dom.font
+style.transparent.dom_holiday.font
+style.transparent.dom_weekend.font
+style.transparent.dow.font
+style.transparent.month.font
+style.transparent_gfs.dom.font
+style.transparent_gfs.dom_holiday.font
+style.transparent_gfs.dom_multi.font
+style.transparent_gfs.dom_weekend.font
+style.transparent_gfs.dom_weekend_holiday.font
+style.transparent_gfs.dom_weekend_multi.font
+style.transparent_gfs.dow.font
+style.transparent_gfs.month.font" class="py-name" href="#" onclick="return doclink('link-3', 'font', 'link-3');">font</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Arial"</tt> </tt>
+</div><a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">     </tt>
+<a name="dom"></a><div id="dom-def"><a name="L34"></a><tt class="py-lineno">34</tt> <a class="py-toggle" href="#" id="dom-toggle" onclick="return toggle('dom');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dom-class.html">dom</a><tt class="py-op">:</tt> </tt>
+</div><div id="dom-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dom-expanded"><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of month style"""</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">    <tt id="link-4" class="py-name" targets="Variable style.bw.dom.bg=style.bw.dom-class.html#bg,Variable style.bw.dom_holiday.bg=style.bw.dom_holiday-class.html#bg,Variable style.bw.dom_weekend.bg=style.bw.dom_weekend-class.html#bg,Variable style.bw.dom_weekend_holiday.bg=style.bw.dom_weekend_holiday-class.html#bg,Variable style.bw.month.bg=style.bw.month-class.html#bg,Variable style.bw_sparse.dom.bg=style.bw_sparse.dom-class.html#bg,Variable style.bw_sparse.dom_holiday.bg=style.bw_sparse.dom_holiday-class.html#bg,Variable style.bw_sparse.month.bg=style.bw_sparse.month-class.html#bg,Variable style.default.dom.bg=style.default.dom-class.html#bg,Variable style.default.dom_holiday.bg=style.default.dom_holiday-class.html#bg,Variable style.default.dom_multi.bg=style.default.dom_multi-class.html#bg,Variable style.default.dom_weekend.bg=style.default.dom_weekend-class.html#bg,Variable style.default.month.bg=style.default.month-class.html#bg,Variable style.transparent.dom.bg=style.transparent.dom-class.html#bg,Variable style.transparent.dom_holiday.bg=style.transparent.dom_holiday-class.html#bg,Variable style.transparent.dom_weekend.bg=style.transparent.dom_weekend-class.html#bg,Variable style.transparent.dom_weekend_holiday.bg=style.transparent.dom_weekend_holiday-class.html#bg,Variable style.transparent.month.bg=style.transparent.month-class.html#bg"><a title="style.bw.dom.bg
+style.bw.dom_holiday.bg
+style.bw.dom_weekend.bg
+style.bw.dom_weekend_holiday.bg
+style.bw.month.bg
+style.bw_sparse.dom.bg
+style.bw_sparse.dom_holiday.bg
+style.bw_sparse.month.bg
+style.default.dom.bg
+style.default.dom_holiday.bg
+style.default.dom_multi.bg
+style.default.dom_weekend.bg
+style.default.month.bg
+style.transparent.dom.bg
+style.transparent.dom_holiday.bg
+style.transparent.dom_weekend.bg
+style.transparent.dom_weekend_holiday.bg
+style.transparent.month.bg" class="py-name" href="#" onclick="return doclink('link-4', 'bg', 'link-4');">bg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">    <tt id="link-5" class="py-name"><a title="style.bw.dom.frame
+style.bw.dow.frame
+style.bw.month.frame
+style.bw_sparse.dom.frame
+style.bw_sparse.dow.frame
+style.bw_sparse.month.frame
+style.default.dom.frame
+style.default.dow.frame
+style.default.month.frame
+style.transparent.dom.frame
+style.transparent.dow.frame
+style.transparent.month.frame" class="py-name" href="#" onclick="return doclink('link-5', 'frame', 'link-2');">frame</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">.9</tt><tt class="py-op">,</tt> <tt class="py-number">.9</tt><tt class="py-op">,</tt> <tt class="py-number">.9</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt id="link-6" class="py-name"><a title="style.bw.dom.frame_thickness
+style.bw.dow.frame_thickness
+style.bw.month.frame_thickness
+style.bw_sparse.dom.frame_thickness
+style.bw_sparse.dow.frame_thickness
+style.bw_sparse.month.frame_thickness
+style.default.dom.frame_thickness
+style.default.dow.frame_thickness
+style.default.month.frame_thickness
+style.transparent.dom.frame_thickness
+style.transparent.dow.frame_thickness
+style.transparent.month.frame_thickness" class="py-name" href="#" onclick="return doclink('link-6', 'frame_thickness', 'link-1');">frame_thickness</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0.1</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">    <tt id="link-7" class="py-name"><a title="style.bw.dom.fg
+style.bw.dom_holiday.fg
+style.bw.dom_weekend.fg
+style.bw.dom_weekend_holiday.fg
+style.bw.dow.fg
+style.bw_sparse.dom.fg
+style.bw_sparse.dow.fg
+style.default.dom.fg
+style.default.dom_holiday.fg
+style.default.dom_weekend.fg
+style.default.dow.fg
+style.transparent.dom.fg
+style.transparent.dom_holiday.fg
+style.transparent.dom_weekend.fg
+style.transparent.dow.fg" class="py-name" href="#" onclick="return doclink('link-7', 'fg', 'link-0');">fg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.3</tt><tt class="py-op">,</tt><tt class="py-number">0.3</tt><tt class="py-op">,</tt><tt class="py-number">0.3</tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">    <tt id="link-8" class="py-name"><a title="style.bw.dom.font
+style.bw.dom_holiday.font
+style.bw.dom_weekend.font
+style.bw.dow.font
+style.bw.month.font
+style.bw_gfs.dom.font
+style.bw_gfs.dom_holiday.font
+style.bw_gfs.dom_multi.font
+style.bw_gfs.dom_weekend.font
+style.bw_gfs.dom_weekend_holiday.font
+style.bw_gfs.dom_weekend_multi.font
+style.bw_gfs.dow.font
+style.bw_gfs.month.font
+style.bw_sparse.dom.font
+style.bw_sparse.dom_weekend.font
+style.bw_sparse.dow.font
+style.bw_sparse.month.font
+style.bw_sparse_gfs.dom.font
+style.bw_sparse_gfs.dom_holiday.font
+style.bw_sparse_gfs.dom_multi.font
+style.bw_sparse_gfs.dom_weekend.font
+style.bw_sparse_gfs.dom_weekend_holiday.font
+style.bw_sparse_gfs.dom_weekend_multi.font
+style.bw_sparse_gfs.dow.font
+style.bw_sparse_gfs.month.font
+style.default.dom.font
+style.default.dow.font
+style.default.month.font
+style.gfs.dom.font
+style.gfs.dom_holiday.font
+style.gfs.dom_multi.font
+style.gfs.dom_weekend.font
+style.gfs.dom_weekend_holiday.font
+style.gfs.dom_weekend_multi.font
+style.gfs.dow.font
+style.gfs.month.font
+style.transparent.dom.font
+style.transparent.dom_holiday.font
+style.transparent.dom_weekend.font
+style.transparent.dow.font
+style.transparent.month.font
+style.transparent_gfs.dom.font
+style.transparent_gfs.dom_holiday.font
+style.transparent_gfs.dom_multi.font
+style.transparent_gfs.dom_weekend.font
+style.transparent_gfs.dom_weekend_holiday.font
+style.transparent_gfs.dom_weekend_multi.font
+style.transparent_gfs.dow.font
+style.transparent_gfs.month.font" class="py-name" href="#" onclick="return doclink('link-8', 'font', 'link-3');">font</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Times New Roman"</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Method lib.holiday.Holiday.header()=lib.holiday.Holiday-class.html#header,Variable style.bw.dom.header=style.bw.dom-class.html#header,Variable style.bw.dom_holiday.header=style.bw.dom_holiday-class.html#header,Variable style.bw_sparse.dom.header=style.bw_sparse.dom-class.html#header,Variable style.default.dom.header=style.default.dom-class.html#header,Variable style.default.dom_holiday.header=style.default.dom_holiday-class.html#header,Variable style.transparent.dom.header=style.transparent.dom-class.html#header,Variable style.transparent.dom_holiday.header=style.transparent.dom_holiday-class.html#header"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-9', 'header', 'link-9');">header</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.3</tt><tt class="py-op">,</tt><tt class="py-number">0.3</tt><tt class="py-op">,</tt><tt class="py-number">0.3</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">    <tt id="link-10" class="py-name" targets="Method lib.holiday.Holiday.footer()=lib.holiday.Holiday-class.html#footer,Variable style.bw.dom.footer=style.bw.dom-class.html#footer,Variable style.bw_sparse.dom.footer=style.bw_sparse.dom-class.html#footer,Variable style.default.dom.footer=style.default.dom-class.html#footer,Variable style.transparent.dom.footer=style.transparent.dom-class.html#footer"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-10', 'footer', 'link-10');">footer</a></tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-11', 'header', 'link-9');">header</a></tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt id="link-12" class="py-name" targets="Variable style.bw.dom.header_font=style.bw.dom-class.html#header_font,Variable style.bw_gfs.dom.header_font=style.bw_gfs.dom-class.html#header_font,Variable style.bw_gfs.dom_holiday.header_font=style.bw_gfs.dom_holiday-class.html#header_font,Variable style.bw_gfs.dom_multi.header_font=style.bw_gfs.dom_multi-class.html#header_font,Variable style.bw_gfs.dom_weekend.header_font=style.bw_gfs.dom_weekend-class.html#header_font,Variable style.bw_gfs.dom_weekend_holiday.header_font=style.bw_gfs.dom_weekend_holiday-class.html#header_font,Variable style.bw_gfs.dom_weekend_multi.header_font=style.bw_gfs.dom_weekend_multi-class.html#header_font,Variable style.bw_sparse.dom.header_font=style.bw_sparse.dom-class.html#header_font,Variable style.bw_sparse_gfs.dom.header_font=style.bw_sparse_gfs.dom-class.html#header_font,Variable style.bw_sparse_gfs.dom_holiday.header_font=style.bw_sparse_gfs.dom_holiday-class.html#header_font,Variable style.bw_sparse_gfs.dom_multi.header_font=style.bw_sparse_gfs.dom_multi-class.html#header_font,Variable style.bw_sparse_gfs.dom_weekend.header_font=style.bw_sparse_gfs.dom_weekend-class.html#header_font,Variable style.bw_sparse_gfs.dom_weekend_holiday.header_font=style.bw_sparse_gfs.dom_weekend_holiday-class.html#header_font,Variable style.bw_sparse_gfs.dom_weekend_multi.header_font=style.bw_sparse_gfs.dom_weekend_multi-class.html#header_font,Variable style.default.dom.header_font=style.default.dom-class.html#header_font,Variable style.gfs.dom.header_font=style.gfs.dom-class.html#header_font,Variable style.gfs.dom_holiday.header_font=style.gfs.dom_holiday-class.html#header_font,Variable style.gfs.dom_multi.header_font=style.gfs.dom_multi-class.html#header_font,Variable style.gfs.dom_weekend.header_font=style.gfs.dom_weekend-class.html#header_font,Variable style.gfs.dom_weekend_holiday.header_font=style.gfs.dom_weekend_holiday-class.html#header_font,Variable style.gfs.dom_weekend_multi.header_font=style.gfs.dom_weekend_multi-class.html#header_font,Variable style.transparent.dom.header_font=style.transparent.dom-class.html#header_font,Variable style.transparent_gfs.dom.header_font=style.transparent_gfs.dom-class.html#header_font,Variable style.transparent_gfs.dom_holiday.header_font=style.transparent_gfs.dom_holiday-class.html#header_font,Variable style.transparent_gfs.dom_multi.header_font=style.transparent_gfs.dom_multi-class.html#header_font,Variable style.transparent_gfs.dom_weekend.header_font=style.transparent_gfs.dom_weekend-class.html#header_font,Variable style.transparent_gfs.dom_weekend_holiday.header_font=style.transparent_gfs.dom_weekend_holiday-class.html#header_font,Variable style.transparent_gfs.dom_weekend_multi.header_font=style.transparent_gfs.dom_weekend_multi-class.html#header_font"><a title="style.bw.dom.header_font
+style.bw_gfs.dom.header_font
+style.bw_gfs.dom_holiday.header_font
+style.bw_gfs.dom_multi.header_font
+style.bw_gfs.dom_weekend.header_font
+style.bw_gfs.dom_weekend_holiday.header_font
+style.bw_gfs.dom_weekend_multi.header_font
+style.bw_sparse.dom.header_font
+style.bw_sparse_gfs.dom.header_font
+style.bw_sparse_gfs.dom_holiday.header_font
+style.bw_sparse_gfs.dom_multi.header_font
+style.bw_sparse_gfs.dom_weekend.header_font
+style.bw_sparse_gfs.dom_weekend_holiday.header_font
+style.bw_sparse_gfs.dom_weekend_multi.header_font
+style.default.dom.header_font
+style.gfs.dom.header_font
+style.gfs.dom_holiday.header_font
+style.gfs.dom_multi.header_font
+style.gfs.dom_weekend.header_font
+style.gfs.dom_weekend_holiday.header_font
+style.gfs.dom_weekend_multi.header_font
+style.transparent.dom.header_font
+style.transparent_gfs.dom.header_font
+style.transparent_gfs.dom_holiday.header_font
+style.transparent_gfs.dom_multi.header_font
+style.transparent_gfs.dom_weekend.header_font
+style.transparent_gfs.dom_weekend_holiday.header_font
+style.transparent_gfs.dom_weekend_multi.header_font" class="py-name" href="#" onclick="return doclink('link-12', 'header_font', 'link-12');">header_font</a></tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name" targets="Variable style.bw.dom.footer_font=style.bw.dom-class.html#footer_font,Variable style.bw_gfs.dom.footer_font=style.bw_gfs.dom-class.html#footer_font,Variable style.bw_gfs.dom_holiday.footer_font=style.bw_gfs.dom_holiday-class.html#footer_font,Variable style.bw_gfs.dom_multi.footer_font=style.bw_gfs.dom_multi-class.html#footer_font,Variable style.bw_gfs.dom_weekend.footer_font=style.bw_gfs.dom_weekend-class.html#footer_font,Variable style.bw_gfs.dom_weekend_holiday.footer_font=style.bw_gfs.dom_weekend_holiday-class.html#footer_font,Variable style.bw_gfs.dom_weekend_multi.footer_font=style.bw_gfs.dom_weekend_multi-class.html#footer_font,Variable style.bw_sparse.dom.footer_font=style.bw_sparse.dom-class.html#footer_font,Variable style.bw_sparse_gfs.dom.footer_font=style.bw_sparse_gfs.dom-class.html#footer_font,Variable style.bw_sparse_gfs.dom_holiday.footer_font=style.bw_sparse_gfs.dom_holiday-class.html#footer_font,Variable style.bw_sparse_gfs.dom_multi.footer_font=style.bw_sparse_gfs.dom_multi-class.html#footer_font,Variable style.bw_sparse_gfs.dom_weekend.footer_font=style.bw_sparse_gfs.dom_weekend-class.html#footer_font,Variable style.bw_sparse_gfs.dom_weekend_holiday.footer_font=style.bw_sparse_gfs.dom_weekend_holiday-class.html#footer_font,Variable style.bw_sparse_gfs.dom_weekend_multi.footer_font=style.bw_sparse_gfs.dom_weekend_multi-class.html#footer_font,Variable style.default.dom.footer_font=style.default.dom-class.html#footer_font,Variable style.gfs.dom.footer_font=style.gfs.dom-class.html#footer_font,Variable style.gfs.dom_holiday.footer_font=style.gfs.dom_holiday-class.html#footer_font,Variable style.gfs.dom_multi.footer_font=style.gfs.dom_multi-class.html#footer_font,Variable style.gfs.dom_weekend.footer_font=style.gfs.dom_weekend-class.html#footer_font,Variable style.gfs.dom_weekend_holiday.footer_font=style.gfs.dom_weekend_holiday-class.html#footer_font,Variable style.gfs.dom_weekend_multi.footer_font=style.gfs.dom_weekend_multi-class.html#footer_font,Variable style.transparent.dom.footer_font=style.transparent.dom-class.html#footer_font,Variable style.transparent_gfs.dom.footer_font=style.transparent_gfs.dom-class.html#footer_font,Variable style.transparent_gfs.dom_holiday.footer_font=style.transparent_gfs.dom_holiday-class.html#footer_font,Variable style.transparent_gfs.dom_multi.footer_font=style.transparent_gfs.dom_multi-class.html#footer_font,Variable style.transparent_gfs.dom_weekend.footer_font=style.transparent_gfs.dom_weekend-class.html#footer_font,Variable style.transparent_gfs.dom_weekend_holiday.footer_font=style.transparent_gfs.dom_weekend_holiday-class.html#footer_font,Variable style.transparent_gfs.dom_weekend_multi.footer_font=style.transparent_gfs.dom_weekend_multi-class.html#footer_font"><a title="style.bw.dom.footer_font
+style.bw_gfs.dom.footer_font
+style.bw_gfs.dom_holiday.footer_font
+style.bw_gfs.dom_multi.footer_font
+style.bw_gfs.dom_weekend.footer_font
+style.bw_gfs.dom_weekend_holiday.footer_font
+style.bw_gfs.dom_weekend_multi.footer_font
+style.bw_sparse.dom.footer_font
+style.bw_sparse_gfs.dom.footer_font
+style.bw_sparse_gfs.dom_holiday.footer_font
+style.bw_sparse_gfs.dom_multi.footer_font
+style.bw_sparse_gfs.dom_weekend.footer_font
+style.bw_sparse_gfs.dom_weekend_holiday.footer_font
+style.bw_sparse_gfs.dom_weekend_multi.footer_font
+style.default.dom.footer_font
+style.gfs.dom.footer_font
+style.gfs.dom_holiday.footer_font
+style.gfs.dom_multi.footer_font
+style.gfs.dom_weekend.footer_font
+style.gfs.dom_weekend_holiday.footer_font
+style.gfs.dom_weekend_multi.footer_font
+style.transparent.dom.footer_font
+style.transparent_gfs.dom.footer_font
+style.transparent_gfs.dom_holiday.footer_font
+style.transparent_gfs.dom_multi.footer_font
+style.transparent_gfs.dom_weekend.footer_font
+style.transparent_gfs.dom_weekend_holiday.footer_font
+style.transparent_gfs.dom_weekend_multi.footer_font" class="py-name" href="#" onclick="return doclink('link-13', 'footer_font', 'link-13');">footer_font</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Arial"</tt> </tt>
+</div><a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"> </tt>
+<a name="dom_holiday"></a><div id="dom_holiday-def"><a name="L45"></a><tt class="py-lineno">45</tt> <a class="py-toggle" href="#" id="dom_holiday-toggle" onclick="return toggle('dom_holiday');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dom_holiday-class.html">dom_holiday</a><tt class="py-op">(</tt><tt class="py-base-class">dom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="dom_holiday-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dom_holiday-expanded"><a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of month (holiday, indicated by the OFF flag in the holiday file)"""</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">    <tt id="link-14" class="py-name"><a title="style.bw.dom.bg
+style.bw.dom_holiday.bg
+style.bw.dom_weekend.bg
+style.bw.dom_weekend_holiday.bg
+style.bw.month.bg
+style.bw_sparse.dom.bg
+style.bw_sparse.dom_holiday.bg
+style.bw_sparse.month.bg
+style.default.dom.bg
+style.default.dom_holiday.bg
+style.default.dom_multi.bg
+style.default.dom_weekend.bg
+style.default.month.bg
+style.transparent.dom.bg
+style.transparent.dom_holiday.bg
+style.transparent.dom_weekend.bg
+style.transparent.dom_weekend_holiday.bg
+style.transparent.month.bg" class="py-name" href="#" onclick="return doclink('link-14', 'bg', 'link-4');">bg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0.95</tt><tt class="py-op">,</tt><tt class="py-number">0.95</tt><tt class="py-op">,</tt><tt class="py-number">0.95</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"> </tt>
+<a name="dom_weekend"></a><div id="dom_weekend-def"><a name="L49"></a><tt class="py-lineno">49</tt> <a class="py-toggle" href="#" id="dom_weekend-toggle" onclick="return toggle('dom_weekend');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dom_weekend-class.html">dom_weekend</a><tt class="py-op">(</tt><tt class="py-base-class">dom_holiday</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="dom_weekend-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dom_weekend-expanded"><a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of month style (weekend)"""</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt id="link-15" class="py-name"><a title="style.bw.dom.font
+style.bw.dom_holiday.font
+style.bw.dom_weekend.font
+style.bw.dow.font
+style.bw.month.font
+style.bw_gfs.dom.font
+style.bw_gfs.dom_holiday.font
+style.bw_gfs.dom_multi.font
+style.bw_gfs.dom_weekend.font
+style.bw_gfs.dom_weekend_holiday.font
+style.bw_gfs.dom_weekend_multi.font
+style.bw_gfs.dow.font
+style.bw_gfs.month.font
+style.bw_sparse.dom.font
+style.bw_sparse.dom_weekend.font
+style.bw_sparse.dow.font
+style.bw_sparse.month.font
+style.bw_sparse_gfs.dom.font
+style.bw_sparse_gfs.dom_holiday.font
+style.bw_sparse_gfs.dom_multi.font
+style.bw_sparse_gfs.dom_weekend.font
+style.bw_sparse_gfs.dom_weekend_holiday.font
+style.bw_sparse_gfs.dom_weekend_multi.font
+style.bw_sparse_gfs.dow.font
+style.bw_sparse_gfs.month.font
+style.default.dom.font
+style.default.dow.font
+style.default.month.font
+style.gfs.dom.font
+style.gfs.dom_holiday.font
+style.gfs.dom_multi.font
+style.gfs.dom_weekend.font
+style.gfs.dom_weekend_holiday.font
+style.gfs.dom_weekend_multi.font
+style.gfs.dow.font
+style.gfs.month.font
+style.transparent.dom.font
+style.transparent.dom_holiday.font
+style.transparent.dom_weekend.font
+style.transparent.dow.font
+style.transparent.month.font
+style.transparent_gfs.dom.font
+style.transparent_gfs.dom_holiday.font
+style.transparent_gfs.dom_multi.font
+style.transparent_gfs.dom_weekend.font
+style.transparent_gfs.dom_weekend_holiday.font
+style.transparent_gfs.dom_weekend_multi.font
+style.transparent_gfs.dow.font
+style.transparent_gfs.month.font" class="py-name" href="#" onclick="return doclink('link-15', 'font', 'link-3');">font</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">"Times New Roman"</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"> </tt>
+<a name="dom_weekend_holiday"></a><div id="dom_weekend_holiday-def"><a name="L53"></a><tt class="py-lineno">53</tt> <a class="py-toggle" href="#" id="dom_weekend_holiday-toggle" onclick="return toggle('dom_weekend_holiday');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dom_weekend_holiday-class.html">dom_weekend_holiday</a><tt class="py-op">(</tt><tt class="py-base-class">dom_weekend</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="dom_weekend_holiday-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dom_weekend_holiday-expanded"><a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of month (weekend &amp; holiday)"""</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt>
+<a name="dom_multi"></a><div id="dom_multi-def"><a name="L57"></a><tt class="py-lineno">57</tt> <a class="py-toggle" href="#" id="dom_multi-toggle" onclick="return toggle('dom_multi');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dom_multi-class.html">dom_multi</a><tt class="py-op">(</tt><tt class="py-base-class">dom_holiday</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="dom_multi-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dom_multi-expanded"><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of month (multi-day holiday)"""</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"> </tt>
+<a name="dom_weekend_multi"></a><div id="dom_weekend_multi-def"><a name="L61"></a><tt class="py-lineno">61</tt> <a class="py-toggle" href="#" id="dom_weekend_multi-toggle" onclick="return toggle('dom_weekend_multi');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.dom_weekend_multi-class.html">dom_weekend_multi</a><tt class="py-op">(</tt><tt class="py-base-class">dom_weekend_holiday</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="dom_weekend_multi-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="dom_weekend_multi-expanded"><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">    <tt class="py-docstring">"""day of month (weekend in multi-day holiday)"""</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line"> </tt>
+<a name="month"></a><div id="month-def"><a name="L65"></a><tt class="py-lineno">65</tt> <a class="py-toggle" href="#" id="month-toggle" onclick="return toggle('month');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="style.bw_sparse.month-class.html">month</a><tt class="py-op">:</tt>     </tt>
+</div><a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">    <tt class="py-docstring">"""month style"""</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">    <tt id="link-16" class="py-name"><a title="style.bw.dom.font
+style.bw.dom_holiday.font
+style.bw.dom_weekend.font
+style.bw.dow.font
+style.bw.month.font
+style.bw_gfs.dom.font
+style.bw_gfs.dom_holiday.font
+style.bw_gfs.dom_multi.font
+style.bw_gfs.dom_weekend.font
+style.bw_gfs.dom_weekend_holiday.font
+style.bw_gfs.dom_weekend_multi.font
+style.bw_gfs.dow.font
+style.bw_gfs.month.font
+style.bw_sparse.dom.font
+style.bw_sparse.dom_weekend.font
+style.bw_sparse.dow.font
+style.bw_sparse.month.font
+style.bw_sparse_gfs.dom.font
+style.bw_sparse_gfs.dom_holiday.font
+style.bw_sparse_gfs.dom_multi.font
+style.bw_sparse_gfs.dom_weekend.font
+style.bw_sparse_gfs.dom_weekend_holiday.font
+style.bw_sparse_gfs.dom_weekend_multi.font
+style.bw_sparse_gfs.dow.font
+style.bw_sparse_gfs.month.font
+style.default.dom.font
+style.default.dow.font
+style.default.month.font
+style.gfs.dom.font
+style.gfs.dom_holiday.font
+style.gfs.dom_multi.font
+style.gfs.dom_weekend.font
+style.gfs.dom_weekend_holiday.font
+style.gfs.dom_weekend_multi.font
+style.gfs.dow.font
+style.gfs.month.font
+style.transparent.dom.font
+style.transparent.dom_holiday.font
+style.transparent.dom_weekend.font
+style.transparent.dow.font
+style.transparent.month.font
+style.transparent_gfs.dom.font
+style.transparent_gfs.dom_holiday.font
+style.transparent_gfs.dom_multi.font
+style.transparent_gfs.dom_weekend.font
+style.transparent_gfs.dom_weekend_holiday.font
+style.transparent_gfs.dom_weekend_multi.font
+style.transparent_gfs.dow.font
+style.transparent_gfs.month.font" class="py-name" href="#" onclick="return doclink('link-16', 'font', 'link-3');">font</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">"Times New Roman"</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">    <tt id="link-17" class="py-name"><a title="style.bw.dom.frame
+style.bw.dow.frame
+style.bw.month.frame
+style.bw_sparse.dom.frame
+style.bw_sparse.dow.frame
+style.bw_sparse.month.frame
+style.default.dom.frame
+style.default.dow.frame
+style.default.month.frame
+style.transparent.dom.frame
+style.transparent.dow.frame
+style.transparent.month.frame" class="py-name" href="#" onclick="return doclink('link-17', 'frame', 'link-2');">frame</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">    <tt id="link-18" class="py-name"><a title="style.bw.dom.frame_thickness
+style.bw.dow.frame_thickness
+style.bw.month.frame_thickness
+style.bw_sparse.dom.frame_thickness
+style.bw_sparse.dow.frame_thickness
+style.bw_sparse.month.frame_thickness
+style.default.dom.frame_thickness
+style.default.dow.frame_thickness
+style.default.month.frame_thickness
+style.transparent.dom.frame_thickness
+style.transparent.dow.frame_thickness
+style.transparent.month.frame_thickness" class="py-name" href="#" onclick="return doclink('link-18', 'frame_thickness', 'link-1');">frame_thickness</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0.2</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">    <tt id="link-19" class="py-name"><a title="style.bw.dom.bg
+style.bw.dom_holiday.bg
+style.bw.dom_weekend.bg
+style.bw.dom_weekend_holiday.bg
+style.bw.month.bg
+style.bw_sparse.dom.bg
+style.bw_sparse.dom_holiday.bg
+style.bw_sparse.month.bg
+style.default.dom.bg
+style.default.dom_holiday.bg
+style.default.dom_multi.bg
+style.default.dom_weekend.bg
+style.default.month.bg
+style.transparent.dom.bg
+style.transparent.dom_holiday.bg
+style.transparent.dom_weekend.bg
+style.transparent.dom_weekend_holiday.bg
+style.transparent.month.bg" class="py-name" href="#" onclick="return doclink('link-19', 'bg', 'link-4');">bg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">    <tt id="link-20" class="py-name" targets="Variable style.bw.month.color_map=style.bw.month-class.html#color_map,Variable style.bw_sparse.month.color_map=style.bw_sparse.month-class.html#color_map,Variable style.transparent.month.color_map=style.transparent.month-class.html#color_map"><a title="style.bw.month.color_map
+style.bw_sparse.month.color_map
+style.transparent.month.color_map" class="py-name" href="#" onclick="return doclink('link-20', 'color_map', 'link-20');">color_map</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">    <tt id="link-21" class="py-name" targets="Variable style.bw.month.color_map_bg=style.bw.month-class.html#color_map_bg,Variable style.bw_sparse.month.color_map_bg=style.bw_sparse.month-class.html#color_map_bg,Variable style.default.month.color_map_bg=style.default.month-class.html#color_map_bg,Variable style.rainbow.month.color_map_bg=style.rainbow.month-class.html#color_map_bg,Variable style.rainbow_gfs.month.color_map_bg=style.rainbow_gfs.month-class.html#color_map_bg,Variable style.transparent.month.color_map_bg=style.transparent.month-class.html#color_map_bg"><a title="style.bw.month.color_map_bg
+style.bw_sparse.month.color_map_bg
+style.default.month.color_map_bg
+style.rainbow.month.color_map_bg
+style.rainbow_gfs.month.color_map_bg
+style.transparent.month.color_map_bg" class="py-name" href="#" onclick="return doclink('link-21', 'color_map_bg', 'link-21');">color_map_bg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt><tt class="py-op">,</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">.8</tt><tt class="py-op">,</tt><tt class="py-number">.8</tt><tt class="py-op">,</tt><tt class="py-number">.8</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">    <tt id="link-22" class="py-name" targets="Variable style.bw.month.color_map_fg=style.bw.month-class.html#color_map_fg,Variable style.bw_sparse.month.color_map_fg=style.bw_sparse.month-class.html#color_map_fg,Variable style.default.month.color_map_fg=style.default.month-class.html#color_map_fg,Variable style.rainbow.month.color_map_fg=style.rainbow.month-class.html#color_map_fg,Variable style.rainbow_gfs.month.color_map_fg=style.rainbow_gfs.month-class.html#color_map_fg,Variable style.transparent.month.color_map_fg=style.transparent.month-class.html#color_map_fg"><a title="style.bw.month.color_map_fg
+style.bw_sparse.month.color_map_fg
+style.default.month.color_map_fg
+style.rainbow.month.color_map_fg
+style.rainbow_gfs.month.color_map_fg
+style.transparent.month.color_map_fg" class="py-name" href="#" onclick="return doclink('link-22', 'color_map_fg', 'link-22');">color_map_fg</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt><tt class="py-op">,</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-number">13</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">    <tt id="link-23" class="py-name" targets="Variable style.bw.month.box_shadow=style.bw.month-class.html#box_shadow,Variable style.bw_sparse.month.box_shadow=style.bw_sparse.month-class.html#box_shadow,Variable style.default.month.box_shadow=style.default.month-class.html#box_shadow,Variable style.transparent.month.box_shadow=style.transparent.month-class.html#box_shadow"><a title="style.bw.month.box_shadow
+style.bw_sparse.month.box_shadow
+style.default.month.box_shadow
+style.transparent.month.box_shadow" class="py-name" href="#" onclick="return doclink('link-23', 'box_shadow', 'link-23');">box_shadow</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">    <tt id="link-24" class="py-name" targets="Variable style.bw.month.text_shadow=style.bw.month-class.html#text_shadow,Variable style.bw_sparse.month.text_shadow=style.bw_sparse.month-class.html#text_shadow,Variable style.default.month.text_shadow=style.default.month-class.html#text_shadow,Variable style.transparent.month.text_shadow=style.transparent.month-class.html#text_shadow"><a title="style.bw.month.text_shadow
+style.bw_sparse.month.text_shadow
+style.default.month.text_shadow
+style.transparent.month.text_shadow" class="py-name" href="#" onclick="return doclink('link-24', 'text_shadow', 'link-24');">text_shadow</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:14 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -602,6 +602,15 @@ td {
   border: 1px solid #ebebeb;
 }
 
+td.button {
+  background-color: #2e7bcf;
+  color: black;
+}
+
+td.button a {
+  color: #9ddcff;
+}
+
 form {
   padding: 20px;
   background: #f2f2f2;

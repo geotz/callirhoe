@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.holiday</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        Module&nbsp;holiday
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.holiday-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="lib.holiday-module.html">Module lib.holiday</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment">#    callirhoe - high quality calendar rendering</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#    Copyright (C) 2012-2013 George M. Tzoumas</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment">#    This program is free software: you can redistribute it and/or modify</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">#    it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#    the Free Software Foundation, either version 3 of the License, or</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#    (at your option) any later version.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#    This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#    GNU General Public License for more details.</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#    You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment">#    along with this program.  If not, see http://www.gnu.org/licenses/</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment"># *****************************************</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-comment">#                                         #</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">"""       holiday support routines       """</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-comment">#                                         #</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-comment"># *****************************************</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">datetime</tt> <tt class="py-keyword">import</tt> <tt class="py-name">date</tt><tt class="py-op">,</tt> <tt class="py-name">timedelta</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"> </tt>
+<a name="_get_orthodox_easter"></a><div id="_get_orthodox_easter-def"><a name="L27"></a><tt class="py-lineno"> 27</tt> <a class="py-toggle" href="#" id="_get_orthodox_easter-toggle" onclick="return toggle('_get_orthodox_easter');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday-module.html#_get_orthodox_easter">_get_orthodox_easter</a><tt class="py-op">(</tt><tt class="py-param">year</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_orthodox_easter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_orthodox_easter-expanded"><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt class="py-docstring">"""compute date of orthodox easter</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: datetime.date</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">    <tt class="py-name">y1</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt><tt class="py-op">,</tt> <tt class="py-name">y3</tt> <tt class="py-op">=</tt> <tt class="py-name">year</tt> <tt class="py-op">%</tt> <tt class="py-number">4</tt> <tt class="py-op">,</tt> <tt class="py-name">year</tt> <tt class="py-op">%</tt> <tt class="py-number">7</tt><tt class="py-op">,</tt> <tt class="py-name">year</tt> <tt class="py-op">%</tt> <tt class="py-number">19</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">    <tt class="py-name">a</tt> <tt class="py-op">=</tt> <tt class="py-number">19</tt><tt class="py-op">*</tt><tt class="py-name">y3</tt> <tt class="py-op">+</tt> <tt class="py-number">15</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-name">y4</tt> <tt class="py-op">=</tt> <tt class="py-name">a</tt> <tt class="py-op">%</tt> <tt class="py-number">30</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-name">b</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt><tt class="py-op">*</tt><tt class="py-name">y1</tt> <tt class="py-op">+</tt> <tt class="py-number">4</tt><tt class="py-op">*</tt><tt class="py-name">y2</tt> <tt class="py-op">+</tt> <tt class="py-number">6</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">y4</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-name">y5</tt> <tt class="py-op">=</tt> <tt class="py-name">b</tt> <tt class="py-op">%</tt> <tt class="py-number">7</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">    <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> <tt class="py-op">+</tt> <tt class="py-number">3</tt> <tt class="py-op">+</tt> <tt class="py-name">y4</tt> <tt class="py-op">+</tt> <tt class="py-name">y5</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">year</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">,</tt> <tt class="py-number">31</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-name">r</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-comment">#    res = date(year, 5, r - 30) if r &gt; 30 else date(year, 4, r)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-comment">#    return res</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"> </tt>
+<a name="_get_catholic_easter"></a><div id="_get_catholic_easter-def"><a name="L41"></a><tt class="py-lineno"> 41</tt> <a class="py-toggle" href="#" id="_get_catholic_easter-toggle" onclick="return toggle('_get_catholic_easter');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday-module.html#_get_catholic_easter">_get_catholic_easter</a><tt class="py-op">(</tt><tt class="py-param">year</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_catholic_easter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_catholic_easter-expanded"><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">    <tt class="py-docstring">"""compute date of catholic easter</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: datetime.date</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-name">a</tt><tt class="py-op">,</tt> <tt class="py-name">b</tt><tt class="py-op">,</tt> <tt class="py-name">c</tt> <tt class="py-op">=</tt> <tt class="py-name">year</tt> <tt class="py-op">%</tt> <tt class="py-number">19</tt><tt class="py-op">,</tt> <tt class="py-name">year</tt> <tt class="py-op">//</tt> <tt class="py-number">100</tt><tt class="py-op">,</tt> <tt class="py-name">year</tt> <tt class="py-op">%</tt> <tt class="py-number">100</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt class="py-name">d</tt><tt class="py-op">,</tt> <tt class="py-name">e</tt> <tt class="py-op">=</tt> <tt class="py-name">divmod</tt><tt class="py-op">(</tt><tt class="py-name">b</tt><tt class="py-op">,</tt><tt class="py-number">4</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt class="py-name">f</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">b</tt> <tt class="py-op">+</tt> <tt class="py-number">8</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">25</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-name">g</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">b</tt> <tt class="py-op">-</tt> <tt class="py-name">f</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">3</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">19</tt><tt class="py-op">*</tt><tt class="py-name">a</tt> <tt class="py-op">+</tt> <tt class="py-name">b</tt> <tt class="py-op">-</tt> <tt class="py-name">d</tt> <tt class="py-op">-</tt> <tt class="py-name">g</tt> <tt class="py-op">+</tt> <tt class="py-number">15</tt><tt class="py-op">)</tt> <tt class="py-op">%</tt> <tt class="py-number">30</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">k</tt> <tt class="py-op">=</tt> <tt class="py-name">divmod</tt><tt class="py-op">(</tt><tt class="py-name">c</tt><tt class="py-op">,</tt><tt class="py-number">4</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt class="py-name">l</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">32</tt> <tt class="py-op">+</tt> <tt class="py-number">2</tt><tt class="py-op">*</tt><tt class="py-name">e</tt> <tt class="py-op">+</tt> <tt class="py-number">2</tt><tt class="py-op">*</tt><tt class="py-name">i</tt> <tt class="py-op">-</tt> <tt class="py-name">h</tt> <tt class="py-op">-</tt> <tt class="py-name">k</tt><tt class="py-op">)</tt> <tt class="py-op">%</tt> <tt class="py-number">7</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt class="py-name">m</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">a</tt> <tt class="py-op">+</tt> <tt class="py-number">11</tt><tt class="py-op">*</tt><tt class="py-name">h</tt> <tt class="py-op">+</tt> <tt class="py-number">22</tt><tt class="py-op">*</tt><tt class="py-name">l</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">451</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">    <tt class="py-name">emonth</tt><tt class="py-op">,</tt><tt class="py-name">edate</tt> <tt class="py-op">=</tt> <tt class="py-name">divmod</tt><tt class="py-op">(</tt><tt class="py-name">h</tt> <tt class="py-op">+</tt> <tt class="py-name">l</tt> <tt class="py-op">-</tt> <tt class="py-number">7</tt><tt class="py-op">*</tt><tt class="py-name">m</tt> <tt class="py-op">+</tt> <tt class="py-number">114</tt><tt class="py-op">,</tt><tt class="py-number">31</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">year</tt><tt class="py-op">,</tt> <tt class="py-name">emonth</tt><tt class="py-op">,</tt> <tt class="py-name">edate</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="_strip_empty"></a><div id="_strip_empty-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="_strip_empty-toggle" onclick="return toggle('_strip_empty');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday-module.html#_strip_empty">_strip_empty</a><tt class="py-op">(</tt><tt class="py-param">sl</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_strip_empty-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_strip_empty-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-docstring">"""strip empty strings from list I{sl}</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: [str,...]</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">filter</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">z</tt><tt class="py-op">:</tt> <tt class="py-name">z</tt><tt class="py-op">,</tt> <tt class="py-name">sl</tt><tt class="py-op">)</tt> <tt class="py-keyword">if</tt> <tt class="py-name">sl</tt> <tt class="py-keyword">else</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"> </tt>
+<a name="_flatten"></a><div id="_flatten-def"><a name="L64"></a><tt class="py-lineno"> 64</tt> <a class="py-toggle" href="#" id="_flatten-toggle" onclick="return toggle('_flatten');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday-module.html#_flatten">_flatten</a><tt class="py-op">(</tt><tt class="py-param">sl</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_flatten-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_flatten-expanded"><a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-docstring">"""join list I{sl} into a comma-separated string</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: str</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">sl</tt><tt class="py-op">:</tt> <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">', '</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">sl</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"> </tt>
+<a name="Holiday"></a><div id="Holiday-def"><a name="L72"></a><tt class="py-lineno"> 72</tt> <a class="py-toggle" href="#" id="Holiday-toggle" onclick="return toggle('Holiday');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html">Holiday</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Holiday-expanded"><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt class="py-docstring">"""class holding a Holiday object (date is I{not} stored, use L{HolidayProvider} for that)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar header_list: string list for header (primary text)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar footer_list: string list for footer (secondary text)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar flags: bit combination of {OFF=1, MULTI=2, REMINDER=4}</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">            I{OFF}: day off (real holiday)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">            I{MULTI}: multi-day event (used to mark long day ranges,</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring">            not necessarily holidays)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">            I{REMINDER}: do not mark the day as holiday</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">    @note: Rendering style is determined considering L{flags} in this order:</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">                1. OFF</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring">                2. MULTI</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">            First flag that matches determines the style.</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">    <tt id="link-0" class="py-name" targets="Variable lib.holiday.Holiday.OFF=lib.holiday.Holiday-class.html#OFF"><a title="lib.holiday.Holiday.OFF" class="py-name" href="#" onclick="return doclink('link-0', 'OFF', 'link-0');">OFF</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable lib.holiday.Holiday.MULTI=lib.holiday.Holiday-class.html#MULTI"><a title="lib.holiday.Holiday.MULTI" class="py-name" href="#" onclick="return doclink('link-1', 'MULTI', 'link-1');">MULTI</a></tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable lib.holiday.Holiday.REMINDER=lib.holiday.Holiday-class.html#REMINDER"><a title="lib.holiday.Holiday.REMINDER" class="py-name" href="#" onclick="return doclink('link-2', 'REMINDER', 'link-2');">REMINDER</a></tt> <tt class="py-op">=</tt> <tt class="py-number">4</tt> </tt>
+<a name="Holiday.__init__"></a><div id="Holiday.__init__-def"><a name="L95"></a><tt class="py-lineno"> 95</tt> <a class="py-toggle" href="#" id="Holiday.__init__-toggle" onclick="return toggle('Holiday.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">header</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-param">footer</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-param">flags_str</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Holiday.__init__-expanded"><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">header_list</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name" targets="Function lib.holiday._strip_empty()=lib.holiday-module.html#_strip_empty"><a title="lib.holiday._strip_empty" class="py-name" href="#" onclick="return doclink('link-3', '_strip_empty', 'link-3');">_strip_empty</a></tt><tt class="py-op">(</tt><tt id="link-4" class="py-name" targets="Method lib.holiday.Holiday.header()=lib.holiday.Holiday-class.html#header,Variable style.bw.dom.header=style.bw.dom-class.html#header,Variable style.bw.dom_holiday.header=style.bw.dom_holiday-class.html#header,Variable style.bw_sparse.dom.header=style.bw_sparse.dom-class.html#header,Variable style.default.dom.header=style.default.dom-class.html#header,Variable style.default.dom_holiday.header=style.default.dom_holiday-class.html#header,Variable style.transparent.dom.header=style.transparent.dom-class.html#header,Variable style.transparent.dom_holiday.header=style.transparent.dom_holiday-class.html#header"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-4', 'header', 'link-4');">header</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">footer_list</tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="lib.holiday._strip_empty" class="py-name" href="#" onclick="return doclink('link-5', '_strip_empty', 'link-3');">_strip_empty</a></tt><tt class="py-op">(</tt><tt id="link-6" class="py-name" targets="Method lib.holiday.Holiday.footer()=lib.holiday.Holiday-class.html#footer,Variable style.bw.dom.footer=style.bw.dom-class.html#footer,Variable style.bw_sparse.dom.footer=style.bw_sparse.dom-class.html#footer,Variable style.default.dom.footer=style.default.dom-class.html#footer,Variable style.transparent.dom.footer=style.transparent.dom-class.html#footer"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-6', 'footer', 'link-6');">footer</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method lib.holiday.Holiday._parse_flags()=lib.holiday.Holiday-class.html#_parse_flags"><a title="lib.holiday.Holiday._parse_flags" class="py-name" href="#" onclick="return doclink('link-7', '_parse_flags', 'link-7');">_parse_flags</a></tt><tt class="py-op">(</tt><tt class="py-name">flags_str</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"> </tt>
+<a name="Holiday.merge_with"></a><div id="Holiday.merge_with-def"><a name="L100"></a><tt class="py-lineno">100</tt> <a class="py-toggle" href="#" id="Holiday.merge_with-toggle" onclick="return toggle('Holiday.merge_with');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html#merge_with">merge_with</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">hol_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday.merge_with-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Holiday.merge_with-expanded"><a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-docstring">"""merge a list of holiday objects into this object"""</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">hol</tt> <tt class="py-keyword">in</tt> <tt class="py-name">hol_list</tt><tt class="py-op">:</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">header_list</tt><tt class="py-op">.</tt><tt class="py-name">extend</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">.</tt><tt class="py-name">header_list</tt><tt class="py-op">)</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">footer_list</tt><tt class="py-op">.</tt><tt class="py-name">extend</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">.</tt><tt class="py-name">footer_list</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">flags</tt> <tt class="py-op">|=</tt> <tt class="py-name">hol</tt><tt class="py-op">.</tt><tt class="py-name">flags</tt> </tt>
+</div><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="Holiday.header"></a><div id="Holiday.header-def"><a name="L107"></a><tt class="py-lineno">107</tt> <a class="py-toggle" href="#" id="Holiday.header-toggle" onclick="return toggle('Holiday.header');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html#header">header</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday.header-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Holiday.header-expanded"><a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-docstring">"""return a comma-separated string for L{header_list}</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: str</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-8" class="py-name" targets="Function lib.holiday._flatten()=lib.holiday-module.html#_flatten"><a title="lib.holiday._flatten" class="py-name" href="#" onclick="return doclink('link-8', '_flatten', 'link-8');">_flatten</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">header_list</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt>
+<a name="Holiday.footer"></a><div id="Holiday.footer-def"><a name="L114"></a><tt class="py-lineno">114</tt> <a class="py-toggle" href="#" id="Holiday.footer-toggle" onclick="return toggle('Holiday.footer');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html#footer">footer</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday.footer-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Holiday.footer-expanded"><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-docstring">"""return a comma-separated string for L{footer_list}</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: str</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-9" class="py-name"><a title="lib.holiday._flatten" class="py-name" href="#" onclick="return doclink('link-9', '_flatten', 'link-8');">_flatten</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">footer_list</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"> </tt>
+<a name="Holiday.__str__"></a><div id="Holiday.__str__-def"><a name="L121"></a><tt class="py-lineno">121</tt> <a class="py-toggle" href="#" id="Holiday.__str__-toggle" onclick="return toggle('Holiday.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Holiday.__str__-expanded"><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-docstring">"""string representation for debugging purposes</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: str</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-10', 'footer', 'link-6');">footer</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-11', 'header', 'link-4');">header</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">flags</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"> </tt>
+<a name="Holiday._parse_flags"></a><div id="Holiday._parse_flags-def"><a name="L128"></a><tt class="py-lineno">128</tt> <a class="py-toggle" href="#" id="Holiday._parse_flags-toggle" onclick="return toggle('Holiday._parse_flags');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.Holiday-class.html#_parse_flags">_parse_flags</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">fstr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Holiday._parse_flags-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Holiday._parse_flags-expanded"><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt class="py-docstring">"""return a bit combination of flags, from a comma-separated string list</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">fstr</tt><tt class="py-op">:</tt> <tt class="py-keyword">return</tt> <tt class="py-number">0</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-name">fs</tt> <tt class="py-op">=</tt> <tt class="py-name">fstr</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-name">val</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">s</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fs</tt><tt class="py-op">:</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">s</tt> <tt class="py-op">==</tt> <tt class="py-string">'off'</tt><tt class="py-op">:</tt> <tt class="py-name">val</tt> <tt class="py-op">|=</tt> <tt id="link-12" class="py-name" targets="Class lib.holiday.Holiday=lib.holiday.Holiday-class.html"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-12', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="lib.holiday.Holiday.OFF" class="py-name" href="#" onclick="return doclink('link-13', 'OFF', 'link-0');">OFF</a></tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">s</tt> <tt class="py-op">==</tt> <tt class="py-string">'multi'</tt><tt class="py-op">:</tt> <tt class="py-name">val</tt> <tt class="py-op">|=</tt> <tt id="link-14" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-14', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="lib.holiday.Holiday.MULTI" class="py-name" href="#" onclick="return doclink('link-15', 'MULTI', 'link-1');">MULTI</a></tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-comment"># allow for prefix abbrev.</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-string">'reminder'</tt><tt class="py-op">.</tt><tt class="py-name">startswith</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">val</tt> <tt class="py-op">|=</tt> <tt id="link-16" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-16', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="lib.holiday.Holiday.REMINDER" class="py-name" href="#" onclick="return doclink('link-17', 'REMINDER', 'link-2');">REMINDER</a></tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">val</tt> </tt>
+</div></div><a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"> </tt>
+<a name="_decode_date_str"></a><div id="_decode_date_str-def"><a name="L143"></a><tt class="py-lineno">143</tt> <a class="py-toggle" href="#" id="_decode_date_str-toggle" onclick="return toggle('_decode_date_str');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday-module.html#_decode_date_str">_decode_date_str</a><tt class="py-op">(</tt><tt class="py-param">ddef</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_decode_date_str-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_decode_date_str-expanded"><a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">    <tt class="py-docstring">"""decode a date definition string into a I{(year,month,day)} tuple</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"><tt class="py-docstring">    @param ddef: date definition string of length 2, 4 or 8</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"><tt class="py-docstring">        If C{ddef} is of the form "DD" then tuple (0,0,DD) is returned, which</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"><tt class="py-docstring">        stands for any year - any month - day DD.</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring">        If C{ddef} is of the form "MMDD" then tuple (0,MM,DD) is returned, which</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">        stands for any year - month MM - day DD.</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring">        If C{ddef} is of the form "YYYYMMDD" then tuple (YYYY,MM,DD) is returned, which</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">        stands for year YYYY - month MM - day DD.</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: (int,int,int)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">4</tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">2</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">8</tt><tt class="py-op">:</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">4</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-number">4</tt><tt class="py-op">:</tt><tt class="py-number">6</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">2</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">    <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"invalid date definition '%s'"</tt> <tt class="py-op">%</tt> <tt class="py-name">ddef</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider"></a><div id="HolidayProvider-def"><a name="L167"></a><tt class="py-lineno">167</tt> <a class="py-toggle" href="#" id="HolidayProvider-toggle" onclick="return toggle('HolidayProvider');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html">HolidayProvider</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="HolidayProvider-expanded"><a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">    <tt class="py-docstring">"""class holding the holidays throught the year(s)</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar annual: dict of events occuring annually, indexed by tuple I{(day,month)}. Note</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"><tt class="py-docstring">    each dict entry is actually a list of L{Holiday} objects. This is also true for the other</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"><tt class="py-docstring">    instance variables: L{monthly}, L{fixed}, L{orth_easter}, L{george}, L{cath_easter}.</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar monthly: event occuring monthly, indexed by int I{day}</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar fixed: fixed date events, indexed by a C{date()} object</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar orth_easter: dict of events relative to the orthodox easter Sunday, indexed by</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">    an integer days offset</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar george: events occuring on St George's day (orthodox calendar special computation)</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar cath_easter: dict of events relative to the catholic easter Sunday, indexed by</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line"><tt class="py-docstring">    an integer days offset</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar cache: for each year requested, all holidays occuring</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"><tt class="py-docstring">    within that year (annual, monthly, easter-based etc.) are precomputed and stored into</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"><tt class="py-docstring">    dict C{cache}, indexed by a C{date()} object</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"><tt class="py-docstring">    @ivar ycache: set holding cached years; each new year requested, triggers a cache-fill</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"><tt class="py-docstring">    operation</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="HolidayProvider.__init__"></a><div id="HolidayProvider.__init__-def"><a name="L186"></a><tt class="py-lineno">186</tt> <a class="py-toggle" href="#" id="HolidayProvider.__init__-toggle" onclick="return toggle('HolidayProvider.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">s_normal</tt><tt class="py-op">,</tt> <tt class="py-param">s_weekend</tt><tt class="py-op">,</tt> <tt class="py-param">s_holiday</tt><tt class="py-op">,</tt> <tt class="py-param">s_weekend_holiday</tt><tt class="py-op">,</tt> <tt class="py-param">s_multi</tt><tt class="py-op">,</tt> <tt class="py-param">s_weekend_multi</tt><tt class="py-op">,</tt> <tt class="py-param">multiday_markers</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider.__init__-expanded"><a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">        <tt class="py-docstring">"""initialize a C{HolidayProvider} object</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring">        @param s_normal: style class object for normal (weekday) day cells</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring">        @param s_weekend: style for weekend day cells</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring">        @param s_holiday: style for holiday day cells</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">        @param s_weekend_holiday: style for holiday cells on weekends</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring">        @param s_multi: style for multi-day holiday weekday cells</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">        @param s_weekend_multi: style for multi-day holiday weekend cells</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"><tt class="py-docstring">        @param multiday_markers: if C{True}, then use end-of-multiday-holiday markers and range markers (with dots),</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"><tt class="py-docstring">        otherwise only first day and first-day-of-month are marked</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">annual</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = (d,m)</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">monthly</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = d</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = date()</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">orth_easter</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = daysdelta</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">george</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> <tt class="py-comment"># key = n/a</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cath_easter</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = daysdelta</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = date()</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ycache</tt> <tt class="py-op">=</tt> <tt class="py-name">set</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment"># key = year</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_normal</tt> <tt class="py-op">=</tt> <tt class="py-name">s_normal</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_weekend</tt> <tt class="py-op">=</tt> <tt class="py-name">s_weekend</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_holiday</tt> <tt class="py-op">=</tt> <tt class="py-name">s_holiday</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_weekend_holiday</tt> <tt class="py-op">=</tt> <tt class="py-name">s_weekend_holiday</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_multi</tt> <tt class="py-op">=</tt> <tt class="py-name">s_multi</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_weekend_multi</tt> <tt class="py-op">=</tt> <tt class="py-name">s_weekend_multi</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">multiday_markers</tt> <tt class="py-op">=</tt> <tt class="py-name">multiday_markers</tt> </tt>
+</div><a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider._parse_day_record"></a><div id="HolidayProvider._parse_day_record-def"><a name="L214"></a><tt class="py-lineno">214</tt> <a class="py-toggle" href="#" id="HolidayProvider._parse_day_record-toggle" onclick="return toggle('HolidayProvider._parse_day_record');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#_parse_day_record">_parse_day_record</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">fields</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider._parse_day_record-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider._parse_day_record-expanded"><a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-docstring">"""return tuple (etype,ddef,footer,header,flags)</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line"><tt class="py-docstring">           @rtype: (char,type(ddef),str,str,int)</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"><tt class="py-docstring">           @note: I{ddef} is one of the following:</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"><tt class="py-docstring">                - None</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line"><tt class="py-docstring">                - int</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"><tt class="py-docstring">                - ((y,m,d),)</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line"><tt class="py-docstring">                - ((y,m,d),(y,m,d))</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-number">5</tt><tt class="py-op">:</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Too many fields: "</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'d'</tt><tt class="py-op">:</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-string">'*'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt class="py-string">'d'</tt><tt class="py-op">:</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">                        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"multi-day events not allowed with event type '%s'"</tt> <tt class="py-op">%</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">                    <tt class="py-name">dstr</tt><tt class="py-op">,</tt><tt class="py-name">spanstr</tt> <tt class="py-op">=</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">'*'</tt><tt class="py-op">)</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">dstr</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-number">8</tt><tt class="py-op">:</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">                        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"multi-day events allowed only with full date, not '%s'"</tt> <tt class="py-op">%</tt> <tt class="py-name">dstr</tt><tt class="py-op">)</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">                    <tt class="py-name">span</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">spanstr</tt><tt class="py-op">)</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">                    <tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name" targets="Function lib.holiday._decode_date_str()=lib.holiday-module.html#_decode_date_str"><a title="lib.holiday._decode_date_str" class="py-name" href="#" onclick="return doclink('link-18', '_decode_date_str', 'link-18');">_decode_date_str</a></tt><tt class="py-op">(</tt><tt class="py-name">dstr</tt><tt class="py-op">)</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">                    <tt class="py-name">dt1</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">                    <tt class="py-name">dt2</tt> <tt class="py-op">=</tt> <tt class="py-name">dt1</tt> <tt class="py-op">+</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-name">span</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">                    <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">(</tt><tt class="py-name">dt2</tt><tt class="py-op">.</tt><tt class="py-name">year</tt><tt class="py-op">,</tt><tt class="py-name">dt2</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Class geom.default.month=geom.default.month-class.html,Class geom.sloppy.month=geom.sloppy.month-class.html,Class style.bw.month=style.bw.month-class.html,Class style.bw_gfs.month=style.bw_gfs.month-class.html,Class style.bw_sparse.month=style.bw_sparse.month-class.html,Class style.bw_sparse_gfs.month=style.bw_sparse_gfs.month-class.html,Class style.default.month=style.default.month-class.html,Class style.gfs.month=style.gfs.month-class.html,Class style.rainbow.month=style.rainbow.month-class.html,Class style.rainbow_gfs.month=style.rainbow_gfs.month-class.html,Class style.transparent.month=style.transparent.month-class.html,Class style.transparent_gfs.month=style.transparent_gfs.month-class.html"><a title="geom.default.month
+geom.sloppy.month
+style.bw.month
+style.bw_gfs.month
+style.bw_sparse.month
+style.bw_sparse_gfs.month
+style.default.month
+style.gfs.month
+style.rainbow.month
+style.rainbow_gfs.month
+style.transparent.month
+style.transparent_gfs.month" class="py-name" href="#" onclick="return doclink('link-19', 'month', 'link-19');">month</a></tt><tt class="py-op">,</tt><tt class="py-name">dt2</tt><tt class="py-op">.</tt><tt class="py-name">day</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-string">'-'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt class="py-string">'d'</tt><tt class="py-op">:</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">                        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"multi-day events not allowed with event type '%s'"</tt> <tt class="py-op">%</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">                    <tt class="py-name">dstr</tt><tt class="py-op">,</tt><tt class="py-name">dstr2</tt> <tt class="py-op">=</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">'-'</tt><tt class="py-op">)</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">dstr</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-number">8</tt><tt class="py-op">:</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">                        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"multi-day events allowed only with full date, not '%s'"</tt> <tt class="py-op">%</tt> <tt class="py-name">dstr</tt><tt class="py-op">)</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">                    <tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt id="link-20" class="py-name"><a title="lib.holiday._decode_date_str" class="py-name" href="#" onclick="return doclink('link-20', '_decode_date_str', 'link-18');">_decode_date_str</a></tt><tt class="py-op">(</tt><tt class="py-name">dstr</tt><tt class="py-op">)</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">                    <tt class="py-name">y2</tt><tt class="py-op">,</tt><tt class="py-name">m2</tt><tt class="py-op">,</tt><tt class="py-name">d2</tt> <tt class="py-op">=</tt> <tt id="link-21" class="py-name"><a title="lib.holiday._decode_date_str" class="py-name" href="#" onclick="return doclink('link-21', '_decode_date_str', 'link-18');">_decode_date_str</a></tt><tt class="py-op">(</tt><tt class="py-name">dstr2</tt><tt class="py-op">)</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">                    <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">(</tt><tt class="py-name">y2</tt><tt class="py-op">,</tt><tt class="py-name">m2</tt><tt class="py-op">,</tt><tt class="py-name">d2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">                    <tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="lib.holiday._decode_date_str" class="py-name" href="#" onclick="return doclink('link-22', '_decode_date_str', 'link-18');">_decode_date_str</a></tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">8</tt><tt class="py-op">:</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">                        <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">                    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">                        <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">                <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">            <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">res</tt><tt class="py-op">,</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">4</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider._multi_holiday_tuple"></a><div id="HolidayProvider._multi_holiday_tuple-def"><a name="L262"></a><tt class="py-lineno">262</tt> <a class="py-toggle" href="#" id="HolidayProvider._multi_holiday_tuple-toggle" onclick="return toggle('HolidayProvider._multi_holiday_tuple');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#_multi_holiday_tuple">_multi_holiday_tuple</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">header</tt><tt class="py-op">,</tt> <tt class="py-param">footer</tt><tt class="py-op">,</tt> <tt class="py-param">flags</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider._multi_holiday_tuple-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider._multi_holiday_tuple-expanded"><a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">        <tt class="py-docstring">"""returns a 4-tuple of L{Holiday} objects representing (beginning, end, first-day-of-month, rest)</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line"><tt class="py-docstring">        @param header: passed as C{[header]} of the generated L{Holiday} object</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line"><tt class="py-docstring">        @param footer: passed as C{[footer]} of the generated L{Holiday} object</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line"><tt class="py-docstring">        @param flags: C{flags} of the generated L{Holiday} object</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (Holiday,Holiday,Holiday,Holiday)</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-23" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-23', 'header', 'link-4');">header</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">multiday_markers</tt><tt class="py-op">:</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">              <tt class="py-name">header_tuple</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-24" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-24', 'header', 'link-4');">header</a></tt><tt class="py-op">+</tt><tt class="py-string">'..'</tt><tt class="py-op">,</tt> <tt class="py-string">'..'</tt><tt class="py-op">+</tt><tt id="link-25" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-25', 'header', 'link-4');">header</a></tt><tt class="py-op">,</tt> <tt class="py-string">'..'</tt><tt class="py-op">+</tt><tt id="link-26" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-26', 'header', 'link-4');">header</a></tt><tt class="py-op">+</tt><tt class="py-string">'..'</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">              <tt class="py-name">header_tuple</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-27" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-27', 'header', 'link-4');">header</a></tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt id="link-28" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-28', 'header', 'link-4');">header</a></tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">            <tt class="py-name">header_tuple</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-29" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-29', 'footer', 'link-6');">footer</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">multiday_markers</tt><tt class="py-op">:</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">              <tt class="py-name">footer_tuple</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-30', 'footer', 'link-6');">footer</a></tt><tt class="py-op">+</tt><tt class="py-string">'..'</tt><tt class="py-op">,</tt> <tt class="py-string">'..'</tt><tt class="py-op">+</tt><tt id="link-31" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-31', 'footer', 'link-6');">footer</a></tt><tt class="py-op">,</tt> <tt class="py-string">'..'</tt><tt class="py-op">+</tt><tt id="link-32" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-32', 'footer', 'link-6');">footer</a></tt><tt class="py-op">+</tt><tt class="py-string">'..'</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">              <tt class="py-name">footer_tuple</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-33" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-33', 'footer', 'link-6');">footer</a></tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt id="link-34" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-34', 'footer', 'link-6');">footer</a></tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">            <tt class="py-name">footer_tuple</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">map</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">k</tt><tt class="py-op">:</tt> <tt id="link-35" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-35', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">header_tuple</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-name">footer_tuple</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">flags</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">                         <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-number">4</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider.load_holiday_file"></a><div id="HolidayProvider.load_holiday_file-def"><a name="L287"></a><tt class="py-lineno">287</tt> <a class="py-toggle" href="#" id="HolidayProvider.load_holiday_file-toggle" onclick="return toggle('HolidayProvider.load_holiday_file');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#load_holiday_file">load_holiday_file</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">filename</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider.load_holiday_file-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider.load_holiday_file-expanded"><a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">        <tt class="py-docstring">"""load a holiday file into the C{HolidayProvider} object</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"><tt class="py-docstring">        B{File Format:}</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line"><tt class="py-docstring">            - C{type|date*span|footer|header|flags}</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line"><tt class="py-docstring">            - C{type|date1-date2|footer|header|flags}</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"><tt class="py-docstring">            - C{type|date|footer|header|flags}</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"><tt class="py-docstring">        I{type:}</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring">            - C{d}: event occurs annually fixed day/month; I{date}=MMDD</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">            - C{d}: event occurs monthly, fixed day; I{date}=DD</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring">            - C{d}: fixed day/month/year combination (e.g. deadline, trip, etc.); I{date}=YYYYMMDD</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line"><tt class="py-docstring">            - C{oe}: Orthodox Easter-dependent holiday, annually; I{date}=integer offset in days</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"><tt class="py-docstring">            - C{ge}: Georgios' name day, Orthodox Easter dependent holiday, annually; I{date} field is ignored</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line"><tt class="py-docstring">            - C{ce}: Catholic Easter holiday; I{date}=integer offset in days</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line"><tt class="py-docstring">        I{date*span} and range I{date1-date2} supported only for I{date}=YYYYMMDD (fixed) events</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"><tt class="py-docstring">        I{flags:} comma-separated list of the following:</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line"><tt class="py-docstring">            1. off</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line"><tt class="py-docstring">            2. multi</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line"><tt class="py-docstring">            3. reminder (or any prefix of it)</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"><tt class="py-docstring">        B{Example}::</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line"><tt class="py-docstring">            d|0101||New year's|off</tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line"><tt class="py-docstring">            d|0501||Labour day|off</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line"><tt class="py-docstring">            ce|-2||Good Friday|</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"><tt class="py-docstring">            ce|0||Easter|off</tt> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line"><tt class="py-docstring">            ce|1||Easter Monday|off</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line"><tt class="py-docstring">            d|20130223-20130310|winter vacations (B)||multi</tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line"><tt class="py-docstring">        @param filename: file to be loaded</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line">        <tt class="py-keyword">with</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">,</tt> <tt class="py-string">'r'</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">f</tt><tt class="py-op">:</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">f</tt><tt class="py-op">:</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line">                <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> <tt class="py-keyword">continue</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'#'</tt><tt class="py-op">:</tt> <tt class="py-keyword">continue</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">                <tt class="py-name">fields</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">'|'</tt><tt class="py-op">)</tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">                <tt class="py-name">etype</tt><tt class="py-op">,</tt><tt class="py-name">ddef</tt><tt class="py-op">,</tt><tt id="link-36" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-36', 'footer', 'link-6');">footer</a></tt><tt class="py-op">,</tt><tt id="link-37" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-37', 'header', 'link-4');">header</a></tt><tt class="py-op">,</tt><tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method lib.holiday.HolidayProvider._parse_day_record()=lib.holiday.HolidayProvider-class.html#_parse_day_record"><a title="lib.holiday.HolidayProvider._parse_day_record" class="py-name" href="#" onclick="return doclink('link-38', '_parse_day_record', 'link-38');">_parse_day_record</a></tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">)</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">                <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt id="link-39" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-39', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt id="link-40" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-40', 'header', 'link-4');">header</a></tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt id="link-41" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-41', 'footer', 'link-6');">footer</a></tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">flags</tt><tt class="py-op">)</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">etype</tt> <tt class="py-op">==</tt> <tt class="py-string">'d'</tt><tt class="py-op">:</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ddef</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">                        <tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">m</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt>           <tt class="py-comment"># annual event</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line">                            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">d</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">)</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">annual</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">annual</tt><tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">d</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line">                            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">annual</tt><tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">d</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line">                        <tt class="py-keyword">else</tt><tt class="py-op">:</tt>               <tt class="py-comment"># monthly event</tt> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line">                            <tt class="py-keyword">if</tt> <tt class="py-name">d</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">monthly</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">monthly</tt><tt class="py-op">[</tt><tt class="py-name">d</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line">                            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">monthly</tt><tt class="py-op">[</tt><tt class="py-name">d</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line">                    <tt class="py-keyword">else</tt><tt class="py-op">:</tt>                   <tt class="py-comment"># fixed date event</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line">                        <tt class="py-name">dt1</tt><tt class="py-op">,</tt><tt class="py-name">dt2</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">ddef</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line">                        <tt class="py-name">span</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">dt2</tt><tt class="py-op">-</tt><tt class="py-name">dt1</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">days</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">span</tt> <tt class="py-op">==</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line">                            <tt class="py-keyword">if</tt> <tt class="py-name">dt1</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">[</tt><tt class="py-name">dt1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line">                            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">[</tt><tt class="py-name">dt1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">                        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line">                            <tt class="py-comment"># properly annotate multi-day events</tt> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">                            <tt class="py-name">hols</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name" targets="Method lib.holiday.HolidayProvider._multi_holiday_tuple()=lib.holiday.HolidayProvider-class.html#_multi_holiday_tuple"><a title="lib.holiday.HolidayProvider._multi_holiday_tuple" class="py-name" href="#" onclick="return doclink('link-42', '_multi_holiday_tuple', 'link-42');">_multi_holiday_tuple</a></tt><tt class="py-op">(</tt><tt id="link-43" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-43', 'header', 'link-4');">header</a></tt><tt class="py-op">,</tt> <tt id="link-44" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-44', 'footer', 'link-6');">footer</a></tt><tt class="py-op">,</tt> <tt class="py-name">flags</tt><tt class="py-op">)</tt> </tt>
+<a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line">                            <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">dt1</tt> </tt>
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">                            <tt class="py-keyword">while</tt> <tt class="py-name">dt</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">dt2</tt><tt class="py-op">:</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">                                <tt class="py-keyword">if</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line">                                <tt class="py-keyword">if</tt> <tt class="py-name">dt</tt> <tt class="py-op">==</tt> <tt class="py-name">dt1</tt><tt class="py-op">:</tt> <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt class="py-name">hols</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L351"></a><tt class="py-lineno">351</tt>  <tt class="py-line">                                <tt class="py-keyword">elif</tt> <tt class="py-name">dt</tt> <tt class="py-op">==</tt> <tt class="py-name">dt2</tt><tt class="py-op">:</tt> <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt class="py-name">hols</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L352"></a><tt class="py-lineno">352</tt>  <tt class="py-line">                                <tt class="py-keyword">elif</tt> <tt class="py-name">dt</tt><tt class="py-op">.</tt><tt class="py-name">day</tt> <tt class="py-op">==</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt class="py-name">hols</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+<a name="L353"></a><tt class="py-lineno">353</tt>  <tt class="py-line">                                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt class="py-name">hols</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt> </tt>
+<a name="L354"></a><tt class="py-lineno">354</tt>  <tt class="py-line">                                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+<a name="L355"></a><tt class="py-lineno">355</tt>  <tt class="py-line">                                <tt class="py-name">dt</tt> <tt class="py-op">+=</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L356"></a><tt class="py-lineno">356</tt>  <tt class="py-line"> </tt>
+<a name="L357"></a><tt class="py-lineno">357</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">etype</tt> <tt class="py-op">==</tt> <tt class="py-string">'oe'</tt><tt class="py-op">:</tt> </tt>
+<a name="L358"></a><tt class="py-lineno">358</tt>  <tt class="py-line">                    <tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt class="py-name">ddef</tt> </tt>
+<a name="L359"></a><tt class="py-lineno">359</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">d</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">orth_easter</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">orth_easter</tt><tt class="py-op">[</tt><tt class="py-name">d</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L360"></a><tt class="py-lineno">360</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">orth_easter</tt><tt class="py-op">[</tt><tt class="py-name">d</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+<a name="L361"></a><tt class="py-lineno">361</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">etype</tt> <tt class="py-op">==</tt> <tt class="py-string">'ge'</tt><tt class="py-op">:</tt> </tt>
+<a name="L362"></a><tt class="py-lineno">362</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">george</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+<a name="L363"></a><tt class="py-lineno">363</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">etype</tt> <tt class="py-op">==</tt> <tt class="py-string">'ce'</tt><tt class="py-op">:</tt> </tt>
+<a name="L364"></a><tt class="py-lineno">364</tt>  <tt class="py-line">                    <tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt class="py-name">ddef</tt> </tt>
+<a name="L365"></a><tt class="py-lineno">365</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">d</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cath_easter</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cath_easter</tt><tt class="py-op">[</tt><tt class="py-name">d</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L366"></a><tt class="py-lineno">366</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cath_easter</tt><tt class="py-op">[</tt><tt class="py-name">d</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L367"></a><tt class="py-lineno">367</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider.get_holiday"></a><div id="HolidayProvider.get_holiday-def"><a name="L368"></a><tt class="py-lineno">368</tt> <a class="py-toggle" href="#" id="HolidayProvider.get_holiday-toggle" onclick="return toggle('HolidayProvider.get_holiday');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#get_holiday">get_holiday</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">y</tt><tt class="py-op">,</tt> <tt class="py-param">m</tt><tt class="py-op">,</tt> <tt class="py-param">d</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider.get_holiday-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider.get_holiday-expanded"><a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line">        <tt class="py-docstring">"""return a L{Holiday} object for the specified date (y,m,d) or C{None} if no holiday is defined</tt> </tt>
+<a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: Holiday</tt> </tt>
+<a name="L372"></a><tt class="py-lineno">372</tt>  <tt class="py-line"><tt class="py-docstring">        @note: If year I{y} has not been requested before, the cache is updated first</tt> </tt>
+<a name="L373"></a><tt class="py-lineno">373</tt>  <tt class="py-line"><tt class="py-docstring">        with all holidays that belong in I{y}, indexed by C{date()} objects.</tt> </tt>
+<a name="L374"></a><tt class="py-lineno">374</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L375"></a><tt class="py-lineno">375</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">y</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ycache</tt><tt class="py-op">:</tt> </tt>
+<a name="L376"></a><tt class="py-lineno">376</tt>  <tt class="py-line">            <tt class="py-comment"># fill-in events for year y</tt> </tt>
+<a name="L377"></a><tt class="py-lineno">377</tt>  <tt class="py-line">            <tt class="py-comment"># annual</tt> </tt>
+<a name="L378"></a><tt class="py-lineno">378</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">d0</tt><tt class="py-op">,</tt><tt class="py-name">m0</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">annual</tt><tt class="py-op">:</tt> </tt>
+<a name="L379"></a><tt class="py-lineno">379</tt>  <tt class="py-line">                <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m0</tt><tt class="py-op">,</tt><tt class="py-name">d0</tt><tt class="py-op">)</tt> </tt>
+<a name="L380"></a><tt class="py-lineno">380</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-45" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-45', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L381"></a><tt class="py-lineno">381</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name" targets="Method lib.holiday.Holiday.merge_with()=lib.holiday.Holiday-class.html#merge_with"><a title="lib.holiday.Holiday.merge_with" class="py-name" href="#" onclick="return doclink('link-46', 'merge_with', 'link-46');">merge_with</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">annual</tt><tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">d0</tt><tt class="py-op">,</tt><tt class="py-name">m0</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L382"></a><tt class="py-lineno">382</tt>  <tt class="py-line">            <tt class="py-comment"># monthly</tt> </tt>
+<a name="L383"></a><tt class="py-lineno">383</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">d0</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">monthly</tt><tt class="py-op">:</tt> </tt>
+<a name="L384"></a><tt class="py-lineno">384</tt>  <tt class="py-line">              <tt class="py-keyword">for</tt> <tt class="py-name">m0</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">13</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L385"></a><tt class="py-lineno">385</tt>  <tt class="py-line">                <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m0</tt><tt class="py-op">,</tt><tt class="py-name">d0</tt><tt class="py-op">)</tt> </tt>
+<a name="L386"></a><tt class="py-lineno">386</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-47', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L387"></a><tt class="py-lineno">387</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="lib.holiday.Holiday.merge_with" class="py-name" href="#" onclick="return doclink('link-48', 'merge_with', 'link-46');">merge_with</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">monthly</tt><tt class="py-op">[</tt><tt class="py-name">m0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L388"></a><tt class="py-lineno">388</tt>  <tt class="py-line">            <tt class="py-comment"># fixed</tt> </tt>
+<a name="L389"></a><tt class="py-lineno">389</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">filter</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">z</tt><tt class="py-op">:</tt> <tt class="py-name">z</tt><tt class="py-op">.</tt><tt class="py-name">year</tt> <tt class="py-op">==</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L390"></a><tt class="py-lineno">390</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-49', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L391"></a><tt class="py-lineno">391</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="lib.holiday.Holiday.merge_with" class="py-name" href="#" onclick="return doclink('link-50', 'merge_with', 'link-46');">merge_with</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fixed</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L392"></a><tt class="py-lineno">392</tt>  <tt class="py-line">            <tt class="py-comment"># orthodox easter</tt> </tt>
+<a name="L393"></a><tt class="py-lineno">393</tt>  <tt class="py-line">            <tt class="py-name">edt</tt> <tt class="py-op">=</tt> <tt id="link-51" class="py-name" targets="Function lib.holiday._get_orthodox_easter()=lib.holiday-module.html#_get_orthodox_easter"><a title="lib.holiday._get_orthodox_easter" class="py-name" href="#" onclick="return doclink('link-51', '_get_orthodox_easter', 'link-51');">_get_orthodox_easter</a></tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">)</tt> </tt>
+<a name="L394"></a><tt class="py-lineno">394</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">delta</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">orth_easter</tt><tt class="py-op">:</tt> </tt>
+<a name="L395"></a><tt class="py-lineno">395</tt>  <tt class="py-line">                <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">edt</tt> <tt class="py-op">+</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-name">delta</tt><tt class="py-op">)</tt> </tt>
+<a name="L396"></a><tt class="py-lineno">396</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-52" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-52', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L397"></a><tt class="py-lineno">397</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="lib.holiday.Holiday.merge_with" class="py-name" href="#" onclick="return doclink('link-53', 'merge_with', 'link-46');">merge_with</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">orth_easter</tt><tt class="py-op">[</tt><tt class="py-name">delta</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L398"></a><tt class="py-lineno">398</tt>  <tt class="py-line">            <tt class="py-comment"># Georgios day</tt> </tt>
+<a name="L399"></a><tt class="py-lineno">399</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">george</tt><tt class="py-op">:</tt> </tt>
+<a name="L400"></a><tt class="py-lineno">400</tt>  <tt class="py-line">                <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-number">4</tt><tt class="py-op">,</tt><tt class="py-number">23</tt><tt class="py-op">)</tt> </tt>
+<a name="L401"></a><tt class="py-lineno">401</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">edt</tt> <tt class="py-op">&gt;=</tt> <tt class="py-name">dt</tt><tt class="py-op">:</tt> <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">edt</tt> <tt class="py-op">+</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt>  <tt class="py-comment"># &gt;= or &gt; ??</tt> </tt>
+<a name="L402"></a><tt class="py-lineno">402</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-54" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-54', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L403"></a><tt class="py-lineno">403</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name"><a title="lib.holiday.Holiday.merge_with" class="py-name" href="#" onclick="return doclink('link-55', 'merge_with', 'link-46');">merge_with</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">george</tt><tt class="py-op">)</tt> </tt>
+<a name="L404"></a><tt class="py-lineno">404</tt>  <tt class="py-line">            <tt class="py-comment"># catholic easter</tt> </tt>
+<a name="L405"></a><tt class="py-lineno">405</tt>  <tt class="py-line">            <tt class="py-name">edt</tt> <tt class="py-op">=</tt> <tt id="link-56" class="py-name" targets="Function lib.holiday._get_catholic_easter()=lib.holiday-module.html#_get_catholic_easter"><a title="lib.holiday._get_catholic_easter" class="py-name" href="#" onclick="return doclink('link-56', '_get_catholic_easter', 'link-56');">_get_catholic_easter</a></tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">)</tt> </tt>
+<a name="L406"></a><tt class="py-lineno">406</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">delta</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cath_easter</tt><tt class="py-op">:</tt> </tt>
+<a name="L407"></a><tt class="py-lineno">407</tt>  <tt class="py-line">                <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">edt</tt> <tt class="py-op">+</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-name">delta</tt><tt class="py-op">)</tt> </tt>
+<a name="L408"></a><tt class="py-lineno">408</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-57" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-57', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L409"></a><tt class="py-lineno">409</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="lib.holiday.Holiday.merge_with" class="py-name" href="#" onclick="return doclink('link-58', 'merge_with', 'link-46');">merge_with</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cath_easter</tt><tt class="py-op">[</tt><tt class="py-name">delta</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L410"></a><tt class="py-lineno">410</tt>  <tt class="py-line"> </tt>
+<a name="L411"></a><tt class="py-lineno">411</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ycache</tt><tt class="py-op">.</tt><tt class="py-name">add</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">)</tt> </tt>
+<a name="L412"></a><tt class="py-lineno">412</tt>  <tt class="py-line"> </tt>
+<a name="L413"></a><tt class="py-lineno">413</tt>  <tt class="py-line">        <tt class="py-name">dt</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt> </tt>
+<a name="L414"></a><tt class="py-lineno">414</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dt</tt><tt class="py-op">]</tt> <tt class="py-keyword">if</tt> <tt class="py-name">dt</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt> <tt class="py-keyword">else</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L415"></a><tt class="py-lineno">415</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider.get_style"></a><div id="HolidayProvider.get_style-def"><a name="L416"></a><tt class="py-lineno">416</tt> <a class="py-toggle" href="#" id="HolidayProvider.get_style-toggle" onclick="return toggle('HolidayProvider.get_style');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#get_style">get_style</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">flags</tt><tt class="py-op">,</tt> <tt class="py-param">dow</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider.get_style-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider.get_style-expanded"><a name="L417"></a><tt class="py-lineno">417</tt>  <tt class="py-line">        <tt class="py-docstring">"""return appropriate style object, depending on I{flags} and I{dow}</tt> </tt>
+<a name="L418"></a><tt class="py-lineno">418</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L419"></a><tt class="py-lineno">419</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: Style</tt> </tt>
+<a name="L420"></a><tt class="py-lineno">420</tt>  <tt class="py-line"><tt class="py-docstring">        @param flags: bit combination of holiday flags</tt> </tt>
+<a name="L421"></a><tt class="py-lineno">421</tt>  <tt class="py-line"><tt class="py-docstring">        @param dow: day of week</tt> </tt>
+<a name="L422"></a><tt class="py-lineno">422</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L423"></a><tt class="py-lineno">423</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">flags</tt> <tt class="py-op">&amp;</tt> <tt id="link-59" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-59', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="lib.holiday.Holiday.OFF" class="py-name" href="#" onclick="return doclink('link-60', 'OFF', 'link-0');">OFF</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L424"></a><tt class="py-lineno">424</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_weekend_holiday</tt> <tt class="py-keyword">if</tt> <tt id="link-61" class="py-name" targets="Class style.bw.dow=style.bw.dow-class.html,Class style.bw_gfs.dow=style.bw_gfs.dow-class.html,Class style.bw_sparse.dow=style.bw_sparse.dow-class.html,Class style.bw_sparse_gfs.dow=style.bw_sparse_gfs.dow-class.html,Class style.default.dow=style.default.dow-class.html,Class style.gfs.dow=style.gfs.dow-class.html,Class style.rainbow.dow=style.rainbow.dow-class.html,Class style.rainbow_gfs.dow=style.rainbow_gfs.dow-class.html,Class style.transparent.dow=style.transparent.dow-class.html,Class style.transparent_gfs.dow=style.transparent_gfs.dow-class.html"><a title="style.bw.dow
+style.bw_gfs.dow
+style.bw_sparse.dow
+style.bw_sparse_gfs.dow
+style.default.dow
+style.gfs.dow
+style.rainbow.dow
+style.rainbow_gfs.dow
+style.transparent.dow
+style.transparent_gfs.dow" class="py-name" href="#" onclick="return doclink('link-61', 'dow', 'link-61');">dow</a></tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">5</tt> <tt class="py-keyword">else</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_holiday</tt> </tt>
+<a name="L425"></a><tt class="py-lineno">425</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">flags</tt> <tt class="py-op">&amp;</tt> <tt id="link-62" class="py-name"><a title="lib.holiday.Holiday" class="py-name" href="#" onclick="return doclink('link-62', 'Holiday', 'link-12');">Holiday</a></tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="lib.holiday.Holiday.MULTI" class="py-name" href="#" onclick="return doclink('link-63', 'MULTI', 'link-1');">MULTI</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L426"></a><tt class="py-lineno">426</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_weekend_multi</tt> <tt class="py-keyword">if</tt> <tt id="link-64" class="py-name"><a title="style.bw.dow
+style.bw_gfs.dow
+style.bw_sparse.dow
+style.bw_sparse_gfs.dow
+style.default.dow
+style.gfs.dow
+style.rainbow.dow
+style.rainbow_gfs.dow
+style.transparent.dow
+style.transparent_gfs.dow" class="py-name" href="#" onclick="return doclink('link-64', 'dow', 'link-61');">dow</a></tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">5</tt> <tt class="py-keyword">else</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_multi</tt> </tt>
+<a name="L427"></a><tt class="py-lineno">427</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_weekend</tt> <tt class="py-keyword">if</tt> <tt id="link-65" class="py-name"><a title="style.bw.dow
+style.bw_gfs.dow
+style.bw_sparse.dow
+style.bw_sparse_gfs.dow
+style.default.dow
+style.gfs.dow
+style.rainbow.dow
+style.rainbow_gfs.dow
+style.transparent.dow
+style.transparent_gfs.dow" class="py-name" href="#" onclick="return doclink('link-65', 'dow', 'link-61');">dow</a></tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">5</tt> <tt class="py-keyword">else</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_normal</tt> </tt>
+</div><a name="L428"></a><tt class="py-lineno">428</tt>  <tt class="py-line"> </tt>
+<a name="HolidayProvider.__call__"></a><div id="HolidayProvider.__call__-def"><a name="L429"></a><tt class="py-lineno">429</tt> <a class="py-toggle" href="#" id="HolidayProvider.__call__-toggle" onclick="return toggle('HolidayProvider.__call__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.holiday.HolidayProvider-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">year</tt><tt class="py-op">,</tt> <tt class="py-param">month</tt><tt class="py-op">,</tt> <tt class="py-param">dom</tt><tt class="py-op">,</tt> <tt class="py-param">dow</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HolidayProvider.__call__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="HolidayProvider.__call__-expanded"><a name="L430"></a><tt class="py-lineno">430</tt>  <tt class="py-line">        <tt class="py-docstring">"""returns (header,footer,day_style)</tt> </tt>
+<a name="L431"></a><tt class="py-lineno">431</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L432"></a><tt class="py-lineno">432</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: (str,str,Style)</tt> </tt>
+<a name="L433"></a><tt class="py-lineno">433</tt>  <tt class="py-line"><tt class="py-docstring">        @param month: month (0-12)</tt> </tt>
+<a name="L434"></a><tt class="py-lineno">434</tt>  <tt class="py-line"><tt class="py-docstring">        @param dom: day of month (1-31)</tt> </tt>
+<a name="L435"></a><tt class="py-lineno">435</tt>  <tt class="py-line"><tt class="py-docstring">        @param dow: day of week (0-6)</tt> </tt>
+<a name="L436"></a><tt class="py-lineno">436</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L437"></a><tt class="py-lineno">437</tt>  <tt class="py-line">        <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name" targets="Method lib.holiday.HolidayProvider.get_holiday()=lib.holiday.HolidayProvider-class.html#get_holiday"><a title="lib.holiday.HolidayProvider.get_holiday" class="py-name" href="#" onclick="return doclink('link-66', 'get_holiday', 'link-66');">get_holiday</a></tt><tt class="py-op">(</tt><tt class="py-name">year</tt><tt class="py-op">,</tt><tt id="link-67" class="py-name"><a title="geom.default.month
+geom.sloppy.month
+style.bw.month
+style.bw_gfs.month
+style.bw_sparse.month
+style.bw_sparse_gfs.month
+style.default.month
+style.gfs.month
+style.rainbow.month
+style.rainbow_gfs.month
+style.transparent.month
+style.transparent_gfs.month" class="py-name" href="#" onclick="return doclink('link-67', 'month', 'link-19');">month</a></tt><tt class="py-op">,</tt><tt id="link-68" class="py-name" targets="Class geom.default.dom=geom.default.dom-class.html,Class geom.sloppy.dom=geom.sloppy.dom-class.html,Class style.bw.dom=style.bw.dom-class.html,Class style.bw_gfs.dom=style.bw_gfs.dom-class.html,Class style.bw_sparse.dom=style.bw_sparse.dom-class.html,Class style.bw_sparse_gfs.dom=style.bw_sparse_gfs.dom-class.html,Class style.default.dom=style.default.dom-class.html,Class style.gfs.dom=style.gfs.dom-class.html,Class style.rainbow.dom=style.rainbow.dom-class.html,Class style.rainbow_gfs.dom=style.rainbow_gfs.dom-class.html,Class style.transparent.dom=style.transparent.dom-class.html,Class style.transparent_gfs.dom=style.transparent_gfs.dom-class.html"><a title="geom.default.dom
+geom.sloppy.dom
+style.bw.dom
+style.bw_gfs.dom
+style.bw_sparse.dom
+style.bw_sparse_gfs.dom
+style.default.dom
+style.gfs.dom
+style.rainbow.dom
+style.rainbow_gfs.dom
+style.transparent.dom
+style.transparent_gfs.dom" class="py-name" href="#" onclick="return doclink('link-68', 'dom', 'link-68');">dom</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L438"></a><tt class="py-lineno">438</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">hol</tt><tt class="py-op">:</tt> </tt>
+<a name="L439"></a><tt class="py-lineno">439</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="lib.holiday.Holiday.header
+style.bw.dom.header
+style.bw.dom_holiday.header
+style.bw_sparse.dom.header
+style.default.dom.header
+style.default.dom_holiday.header
+style.transparent.dom.header
+style.transparent.dom_holiday.header" class="py-name" href="#" onclick="return doclink('link-69', 'header', 'link-4');">header</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">hol</tt><tt class="py-op">.</tt><tt id="link-70" class="py-name"><a title="lib.holiday.Holiday.footer
+style.bw.dom.footer
+style.bw_sparse.dom.footer
+style.default.dom.footer
+style.transparent.dom.footer" class="py-name" href="#" onclick="return doclink('link-70', 'footer', 'link-6');">footer</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-71" class="py-name" targets="Method lib.holiday.HolidayProvider.get_style()=lib.holiday.HolidayProvider-class.html#get_style"><a title="lib.holiday.HolidayProvider.get_style" class="py-name" href="#" onclick="return doclink('link-71', 'get_style', 'link-71');">get_style</a></tt><tt class="py-op">(</tt><tt class="py-name">hol</tt><tt class="py-op">.</tt><tt class="py-name">flags</tt><tt class="py-op">,</tt><tt id="link-72" class="py-name"><a title="style.bw.dow
+style.bw_gfs.dow
+style.bw_sparse.dow
+style.bw_sparse_gfs.dow
+style.default.dow
+style.gfs.dow
+style.rainbow.dow
+style.rainbow_gfs.dow
+style.transparent.dow
+style.transparent_gfs.dow" class="py-name" href="#" onclick="return doclink('link-72', 'dow', 'link-61');">dow</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L440"></a><tt class="py-lineno">440</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L441"></a><tt class="py-lineno">441</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt><tt class="py-name">None</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-73" class="py-name"><a title="lib.holiday.HolidayProvider.get_style" class="py-name" href="#" onclick="return doclink('link-73', 'get_style', 'link-71');">get_style</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt id="link-74" class="py-name"><a title="style.bw.dow
+style.bw_gfs.dow
+style.bw_sparse.dow
+style.bw_sparse_gfs.dow
+style.default.dow
+style.gfs.dow
+style.rainbow.dow
+style.rainbow_gfs.dow
+style.transparent.dow
+style.transparent_gfs.dow" class="py-name" href="#" onclick="return doclink('link-74', 'dow', 'link-61');">dow</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L442"></a><tt class="py-lineno">442</tt>  <tt class="py-line"> </tt>
+<a name="L443"></a><tt class="py-lineno">443</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">'__main__'</tt><tt class="py-op">:</tt> </tt>
+<a name="L444"></a><tt class="py-lineno">444</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L445"></a><tt class="py-lineno">445</tt>  <tt class="py-line">    <tt class="py-name">hp</tt> <tt class="py-op">=</tt> <tt id="link-75" class="py-name" targets="Class lib.holiday.HolidayProvider=lib.holiday.HolidayProvider-class.html"><a title="lib.holiday.HolidayProvider" class="py-name" href="#" onclick="return doclink('link-75', 'HolidayProvider', 'link-75');">HolidayProvider</a></tt><tt class="py-op">(</tt><tt class="py-string">'n'</tt><tt class="py-op">,</tt> <tt class="py-string">'w'</tt><tt class="py-op">,</tt> <tt class="py-string">'h'</tt><tt class="py-op">,</tt> <tt class="py-string">'wh'</tt><tt class="py-op">,</tt> <tt class="py-string">'m'</tt><tt class="py-op">,</tt> <tt class="py-string">'wm'</tt><tt class="py-op">)</tt> </tt>
+<a name="L446"></a><tt class="py-lineno">446</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L447"></a><tt class="py-lineno">447</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">SystemExit</tt><tt class="py-op">(</tt><tt class="py-string">"Usage: %s YEAR holiday_file ..."</tt> <tt class="py-op">%</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">;</tt> </tt>
+<a name="L448"></a><tt class="py-lineno">448</tt>  <tt class="py-line">    <tt class="py-name">y</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L449"></a><tt class="py-lineno">449</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">f</tt> <tt class="py-keyword">in</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L450"></a><tt class="py-lineno">450</tt>  <tt class="py-line">        <tt class="py-name">hp</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name" targets="Method lib.holiday.HolidayProvider.load_holiday_file()=lib.holiday.HolidayProvider-class.html#load_holiday_file"><a title="lib.holiday.HolidayProvider.load_holiday_file" class="py-name" href="#" onclick="return doclink('link-76', 'load_holiday_file', 'link-76');">load_holiday_file</a></tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt> </tt>
+<a name="L451"></a><tt class="py-lineno">451</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">y</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-name">y</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">.</tt><tt class="py-name">today</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">year</tt> </tt>
+<a name="L452"></a><tt class="py-lineno">452</tt>  <tt class="py-line">    <tt class="py-name">cur</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L453"></a><tt class="py-lineno">453</tt>  <tt class="py-line">    <tt class="py-name">d2</tt> <tt class="py-op">=</tt> <tt class="py-name">date</tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-number">12</tt><tt class="py-op">,</tt><tt class="py-number">31</tt><tt class="py-op">)</tt> </tt>
+<a name="L454"></a><tt class="py-lineno">454</tt>  <tt class="py-line">    <tt class="py-keyword">while</tt> <tt class="py-name">cur</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">d2</tt><tt class="py-op">:</tt> </tt>
+<a name="L455"></a><tt class="py-lineno">455</tt>  <tt class="py-line">        <tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt class="py-name">cur</tt><tt class="py-op">.</tt><tt class="py-name">year</tt><tt class="py-op">,</tt> <tt class="py-name">cur</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name"><a title="geom.default.month
+geom.sloppy.month
+style.bw.month
+style.bw_gfs.month
+style.bw_sparse.month
+style.bw_sparse_gfs.month
+style.default.month
+style.gfs.month
+style.rainbow.month
+style.rainbow_gfs.month
+style.transparent.month
+style.transparent_gfs.month" class="py-name" href="#" onclick="return doclink('link-77', 'month', 'link-19');">month</a></tt><tt class="py-op">,</tt> <tt class="py-name">cur</tt><tt class="py-op">.</tt><tt class="py-name">day</tt> </tt>
+<a name="L456"></a><tt class="py-lineno">456</tt>  <tt class="py-line">        <tt class="py-name">hol</tt> <tt class="py-op">=</tt> <tt class="py-name">hp</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name"><a title="lib.holiday.HolidayProvider.get_holiday" class="py-name" href="#" onclick="return doclink('link-78', 'get_holiday', 'link-66');">get_holiday</a></tt><tt class="py-op">(</tt><tt class="py-name">y</tt><tt class="py-op">,</tt><tt class="py-name">m</tt><tt class="py-op">,</tt><tt class="py-name">d</tt><tt class="py-op">)</tt> </tt>
+<a name="L457"></a><tt class="py-lineno">457</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">hol</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-name">cur</tt><tt class="py-op">.</tt><tt class="py-name">strftime</tt><tt class="py-op">(</tt><tt class="py-string">"%a %b %d %Y"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">hol</tt> </tt>
+<a name="L458"></a><tt class="py-lineno">458</tt>  <tt class="py-line">        <tt class="py-name">cur</tt> <tt class="py-op">+=</tt> <tt class="py-name">timedelta</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L459"></a><tt class="py-lineno">459</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:14 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

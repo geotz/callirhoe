@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.holiday.HolidayProvider</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        <a href="lib.holiday-module.html">Module&nbsp;holiday</a> ::
+        Class&nbsp;HolidayProvider
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.holiday.HolidayProvider-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class HolidayProvider</h1><p class="nomargin-top"><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">HolidayProvider</strong>
+</pre>
+
+<hr />
+<p>class holding the holidays throught the year(s)</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">s_normal</span>,
+        <span class="summary-sig-arg">s_weekend</span>,
+        <span class="summary-sig-arg">s_holiday</span>,
+        <span class="summary-sig-arg">s_weekend_holiday</span>,
+        <span class="summary-sig-arg">s_multi</span>,
+        <span class="summary-sig-arg">s_weekend_multi</span>,
+        <span class="summary-sig-arg">multiday_markers</span>=<span class="summary-sig-default">True</span>)</span><br />
+      initialize a <code>HolidayProvider</code> object</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">(char,type(ddef),str,str,int)</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#_parse_day_record" class="summary-sig-name" onclick="show_private();">_parse_day_record</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">fields</span>)</span><br />
+      return tuple (etype,ddef,footer,header,flags)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider._parse_day_record">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">(Holiday,Holiday,Holiday,Holiday)</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#_multi_holiday_tuple" class="summary-sig-name" onclick="show_private();">_multi_holiday_tuple</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">header</span>,
+        <span class="summary-sig-arg">footer</span>,
+        <span class="summary-sig-arg">flags</span>)</span><br />
+      returns a 4-tuple of <a href="lib.holiday.Holiday-class.html" 
+      class="link">Holiday</a> objects representing (beginning, end, 
+      first-day-of-month, rest)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider._multi_holiday_tuple">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#load_holiday_file" class="summary-sig-name">load_holiday_file</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">filename</span>)</span><br />
+      load a holiday file into the <code>HolidayProvider</code> object</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.load_holiday_file">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">Holiday</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#get_holiday" class="summary-sig-name">get_holiday</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">y</span>,
+        <span class="summary-sig-arg">m</span>,
+        <span class="summary-sig-arg">d</span>)</span><br />
+      return a <a href="lib.holiday.Holiday-class.html" 
+      class="link">Holiday</a> object for the specified date (y,m,d) or 
+      <code>None</code> if no holiday is defined</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.get_holiday">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">Style</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#get_style" class="summary-sig-name">get_style</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">flags</span>,
+        <span class="summary-sig-arg">dow</span>)</span><br />
+      return appropriate style object, depending on <i>flags</i> and 
+      <i>dow</i></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.get_style">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">(str,str,Style)</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.holiday.HolidayProvider-class.html#__call__" class="summary-sig-name">__call__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">year</span>,
+        <span class="summary-sig-arg">month</span>,
+        <span class="summary-sig-arg">dom</span>,
+        <span class="summary-sig-arg">dow</span>)</span><br />
+      returns (header,footer,day_style)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.__call__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE VARIABLES ==================== -->
+<a name="section-InstanceVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="lib.holiday.HolidayProvider-class.html#annual" class="summary-name">annual</a><br />
+      dict of events occuring annually, indexed by tuple 
+      <i>(day,month)</i>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="cache"></a><span class="summary-name">cache</span><br />
+      for each year requested, all holidays occuring within that year 
+      (annual, monthly, easter-based etc.) are precomputed and stored into 
+      dict <code>cache</code>, indexed by a <code>date()</code> object
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="cath_easter"></a><span class="summary-name">cath_easter</span><br />
+      dict of events relative to the catholic easter Sunday, indexed by an 
+      integer days offset
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="fixed"></a><span class="summary-name">fixed</span><br />
+      fixed date events, indexed by a <code>date()</code> object
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="george"></a><span class="summary-name">george</span><br />
+      events occuring on St George's day (orthodox calendar special 
+      computation)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="monthly"></a><span class="summary-name">monthly</span><br />
+      event occuring monthly, indexed by int <i>day</i>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="orth_easter"></a><span class="summary-name">orth_easter</span><br />
+      dict of events relative to the orthodox easter Sunday, indexed by an 
+      integer days offset
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="ycache"></a><span class="summary-name">ycache</span><br />
+      set holding cached years; each new year requested, triggers a 
+      cache-fill operation
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">s_normal</span>,
+        <span class="sig-arg">s_weekend</span>,
+        <span class="sig-arg">s_holiday</span>,
+        <span class="sig-arg">s_weekend_holiday</span>,
+        <span class="sig-arg">s_multi</span>,
+        <span class="sig-arg">s_weekend_multi</span>,
+        <span class="sig-arg">multiday_markers</span>=<span class="sig-default">True</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>initialize a <code>HolidayProvider</code> object</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>s_normal</code></strong> - style class object for normal (weekday) day cells</li>
+        <li><strong class="pname"><code>s_weekend</code></strong> - style for weekend day cells</li>
+        <li><strong class="pname"><code>s_holiday</code></strong> - style for holiday day cells</li>
+        <li><strong class="pname"><code>s_weekend_holiday</code></strong> - style for holiday cells on weekends</li>
+        <li><strong class="pname"><code>s_multi</code></strong> - style for multi-day holiday weekday cells</li>
+        <li><strong class="pname"><code>s_weekend_multi</code></strong> - style for multi-day holiday weekend cells</li>
+        <li><strong class="pname"><code>multiday_markers</code></strong> - if <code>True</code>, then use end-of-multiday-holiday markers 
+          and range markers (with dots), otherwise only first day and 
+          first-day-of-month are marked</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_parse_day_record"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_parse_day_record</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">fields</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider._parse_day_record">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>return tuple (etype,ddef,footer,header,flags)</p>
+  <dl class="fields">
+    <dt>Returns: (char,type(ddef),str,str,int)</dt>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        <i>ddef</i> is one of the following:
+        <ul>
+          <li>
+            None
+          </li>
+          <li>
+            int
+          </li>
+          <li>
+            ((y,m,d),)
+          </li>
+          <li>
+            ((y,m,d),(y,m,d))
+          </li>
+        </ul>
+      </p>
+</div></td></tr></table>
+</div>
+<a name="_multi_holiday_tuple"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_multi_holiday_tuple</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">header</span>,
+        <span class="sig-arg">footer</span>,
+        <span class="sig-arg">flags</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider._multi_holiday_tuple">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>returns a 4-tuple of <a href="lib.holiday.Holiday-class.html" 
+  class="link">Holiday</a> objects representing (beginning, end, 
+  first-day-of-month, rest)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>header</code></strong> - passed as <code>[header]</code> of the generated <a 
+          href="lib.holiday.Holiday-class.html" class="link">Holiday</a> 
+          object</li>
+        <li><strong class="pname"><code>footer</code></strong> - passed as <code>[footer]</code> of the generated <a 
+          href="lib.holiday.Holiday-class.html" class="link">Holiday</a> 
+          object</li>
+        <li><strong class="pname"><code>flags</code></strong> - <code>flags</code> of the generated <a 
+          href="lib.holiday.Holiday-class.html" class="link">Holiday</a> 
+          object</li>
+    </ul></dd>
+    <dt>Returns: (Holiday,Holiday,Holiday,Holiday)</dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="load_holiday_file"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">load_holiday_file</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.load_holiday_file">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>load a holiday file into the <code>HolidayProvider</code> object</p>
+  <p><b>File Format:</b></p>
+  <ul>
+    <li>
+      <code>type|date*span|footer|header|flags</code>
+    </li>
+    <li>
+      <code>type|date1-date2|footer|header|flags</code>
+    </li>
+    <li>
+      <code>type|date|footer|header|flags</code>
+    </li>
+  </ul>
+  <p><i>type:</i></p>
+  <ul>
+    <li>
+      <code>d</code>: event occurs annually fixed day/month; 
+      <i>date</i>=MMDD
+    </li>
+    <li>
+      <code>d</code>: event occurs monthly, fixed day; <i>date</i>=DD
+    </li>
+    <li>
+      <code>d</code>: fixed day/month/year combination (e.g. deadline, 
+      trip, etc.); <i>date</i>=YYYYMMDD
+    </li>
+    <li>
+      <code>oe</code>: Orthodox Easter-dependent holiday, annually; 
+      <i>date</i>=integer offset in days
+    </li>
+    <li>
+      <code>ge</code>: Georgios' name day, Orthodox Easter dependent 
+      holiday, annually; <i>date</i> field is ignored
+    </li>
+    <li>
+      <code>ce</code>: Catholic Easter holiday; <i>date</i>=integer offset 
+      in days
+    </li>
+  </ul>
+  <p><i>date*span</i> and range <i>date1-date2</i> supported only for 
+  <i>date</i>=YYYYMMDD (fixed) events</p>
+  <p><i>flags:</i> comma-separated list of the following:</p>
+  <ol start="1">
+    <li>
+      off
+    </li>
+    <li>
+      multi
+    </li>
+    <li>
+      reminder (or any prefix of it)
+    </li>
+  </ol>
+  <p><b>Example</b>:</p>
+<pre class="literalblock">
+   d|0101||New year's|off
+   d|0501||Labour day|off
+   ce|-2||Good Friday|
+   ce|0||Easter|off
+   ce|1||Easter Monday|off
+   d|20130223-20130310|winter vacations (B)||multi
+</pre>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> - file to be loaded</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_holiday"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_holiday</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">y</span>,
+        <span class="sig-arg">m</span>,
+        <span class="sig-arg">d</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.get_holiday">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>return a <a href="lib.holiday.Holiday-class.html" 
+  class="link">Holiday</a> object for the specified date (y,m,d) or 
+  <code>None</code> if no holiday is defined</p>
+  <dl class="fields">
+    <dt>Returns: Holiday</dt>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        If year <i>y</i> has not been requested before, the cache is 
+        updated first with all holidays that belong in <i>y</i>, indexed by
+        <code>date()</code> objects.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="get_style"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_style</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">flags</span>,
+        <span class="sig-arg">dow</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.get_style">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>return appropriate style object, depending on <i>flags</i> and 
+  <i>dow</i></p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>flags</code></strong> - bit combination of holiday flags</li>
+        <li><strong class="pname"><code>dow</code></strong> - day of week</li>
+    </ul></dd>
+    <dt>Returns: Style</dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__call__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__call__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">year</span>,
+        <span class="sig-arg">month</span>,
+        <span class="sig-arg">dom</span>,
+        <span class="sig-arg">dow</span>)</span>
+    <br /><em class="fname">(Call operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.holiday-pysrc.html#HolidayProvider.__call__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>returns (header,footer,day_style)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>month</code></strong> - month (0-12)</li>
+        <li><strong class="pname"><code>dom</code></strong> - day of month (1-31)</li>
+        <li><strong class="pname"><code>dow</code></strong> - day of week (0-6)</li>
+    </ul></dd>
+    <dt>Returns: (str,str,Style)</dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== INSTANCE VARIABLE DETAILS ==================== -->
+<a name="section-InstanceVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="annual"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">annual</h3>
+  dict of events occuring annually, indexed by tuple <i>(day,month)</i>. 
+  Note each dict entry is actually a list of <a 
+  href="lib.holiday.Holiday-class.html" class="link">Holiday</a> objects. 
+  This is also true for the other instance variables: <a 
+  href="lib.holiday.HolidayProvider-class.html#monthly" 
+  class="link">monthly</a>, <a 
+  href="lib.holiday.HolidayProvider-class.html#fixed" 
+  class="link">fixed</a>, <a 
+  href="lib.holiday.HolidayProvider-class.html#orth_easter" 
+  class="link">orth_easter</a>, <a 
+  href="lib.holiday.HolidayProvider-class.html#george" 
+  class="link">george</a>, <a 
+  href="lib.holiday.HolidayProvider-class.html#cath_easter" 
+  class="link">cath_easter</a>.
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:14 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

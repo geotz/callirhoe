@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.xcairo</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        Module&nbsp;xcairo
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.xcairo-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module xcairo</h1><p class="nomargin-top"><span class="codelink"><a href="lib.xcairo-pysrc.html">source&nbsp;code</a></span></p>
+<p>general-purpose drawing routines &amp; higher-level CAIRO routines</p>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="lib.xcairo.Page-class.html" class="summary-name">Page</a><br />
+      class holding Page properties
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="lib.xcairo.InvalidFormat-class.html" class="summary-name">InvalidFormat</a><br />
+      exception thrown when an invalid output format is requested
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="lib.xcairo.PageWriter-class.html" class="summary-name">PageWriter</a><br />
+      class to output multiple pages in raster (png) or vector (pdf) 
+        format
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">(int,int)</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#page_spec" class="summary-sig-name">page_spec</a>(<span class="summary-sig-arg">spec</span>=<span class="summary-sig-default">None</span>)</span><br />
+      return tuple of page dimensions (width,height) in mm for <i>spec</i></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#page_spec">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="mm_to_dots"></a><span class="summary-sig-name">mm_to_dots</span>(<span class="summary-sig-arg">mm</span>)</span><br />
+      convert millimeters to dots</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#mm_to_dots">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="dots_to_mm"></a><span class="summary-sig-name">dots_to_mm</span>(<span class="summary-sig-arg">dots</span>)</span><br />
+      convert dots to millimeters</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#dots_to_mm">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#set_color" class="summary-sig-name">set_color</a>(<span class="summary-sig-arg">cr</span>,
+        <span class="summary-sig-arg">rgba</span>)</span><br />
+      set stroke color</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#set_color">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">str</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="extract_font_name"></a><span class="summary-sig-name">extract_font_name</span>(<span class="summary-sig-arg">f</span>)</span><br />
+      extract the font name from a string or from a tuple (fontname, slant,
+      weight)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#extract_font_name">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#make_sloppy_rect" class="summary-sig-name">make_sloppy_rect</a>(<span class="summary-sig-arg">cr</span>,
+        <span class="summary-sig-arg">rect</span>,
+        <span class="summary-sig-arg">sdx</span>=<span class="summary-sig-default">0.0</span>,
+        <span class="summary-sig-arg">sdy</span>=<span class="summary-sig-default">0.0</span>,
+        <span class="summary-sig-arg">srot</span>=<span class="summary-sig-default">0.0</span>)</span><br />
+      slightly rotate and translate a rect to give it a sloppy look</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#make_sloppy_rect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#draw_shadow" class="summary-sig-name">draw_shadow</a>(<span class="summary-sig-arg">cr</span>,
+        <span class="summary-sig-arg">rect</span>,
+        <span class="summary-sig-arg">thickness</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">shadow_color</span>=<span class="summary-sig-default"><code class="variable-group">(</code>0<code class="variable-op">, </code>0<code class="variable-op">, </code>0<code class="variable-op">, </code>0.3<code class="variable-group">)</code></span>)</span><br />
+      draw a shadow at the bottom-right corner of a rect</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#draw_shadow">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#draw_line" class="summary-sig-name">draw_line</a>(<span class="summary-sig-arg">cr</span>,
+        <span class="summary-sig-arg">rect</span>,
+        <span class="summary-sig-arg">stroke_rgba</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">stroke_width</span>=<span class="summary-sig-default">1.0</span>)</span><br />
+      draw a line from (x,y) to (x+w,y+h), where rect=(x,y,w,h)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#draw_line">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#draw_box" class="summary-sig-name">draw_box</a>(<span class="summary-sig-arg">cr</span>,
+        <span class="summary-sig-arg">rect</span>,
+        <span class="summary-sig-arg">stroke_rgba</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">fill_rgba</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">stroke_width</span>=<span class="summary-sig-default">1.0</span>,
+        <span class="summary-sig-arg">shadow</span>=<span class="summary-sig-default">None</span>)</span><br />
+      draw a box (rectangle) with optional shadow</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#draw_box">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="lib.xcairo-module.html#draw_str" class="summary-sig-name">draw_str</a>(<span class="summary-sig-arg">cr</span>,
+        <span class="summary-sig-arg">text</span>,
+        <span class="summary-sig-arg">rect</span>,
+        <span class="summary-sig-arg">scaling</span>=<span class="summary-sig-default">-1</span>,
+        <span class="summary-sig-arg">stroke_rgba</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">align</span>=<span class="summary-sig-default"><code class="variable-group">(</code>2<code class="variable-op">, </code>0<code class="variable-group">)</code></span>,
+        <span class="summary-sig-arg">bbox</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">font</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Times</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">measure</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">shadow</span>=<span class="summary-sig-default">None</span>)</span><br />
+      draw text</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="lib.xcairo-pysrc.html#draw_str">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="XDPI"></a><span class="summary-name">XDPI</span> = <code title="72.0">72.0</code><br />
+      dots per inch of output device
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="ISOPAGE"></a><span class="summary-name">ISOPAGE</span> = <code title="[1188, 840, 594, 420, 297, 210, 148, 105, 74, 52, 37]"><code class="variable-group">[</code>1188<code class="variable-op">, </code>840<code class="variable-op">, </code>594<code class="variable-op">, </code>420<code class="variable-op">, </code>297<code class="variable-op">, </code>210<code class="variable-op">, </code>148<code class="variable-op">, </code>105<code class="variable-op">, </code>74<code class="variable-op">, </code>52<code class="variable-op">, </code>37<code class="variable-group">]</code></code><br />
+      ISO page height list, index k for height of Ak paper
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'lib'"><code class="variable-quote">'</code><code class="variable-string">lib</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="page_spec"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">page_spec</span>(<span class="sig-arg">spec</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#page_spec">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>return tuple of page dimensions (width,height) in mm for 
+  <i>spec</i></p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>spec</code></strong> - paper type. Paper type can be an ISO paper type (a0..a9 or 
+          a0w..a9w) or of the form W:H; positive values correspond to W or 
+          H mm, negative values correspond to -W or -H pixels; 'w' suffix 
+          swaps width &amp; height; None defaults to A4 paper</li>
+    </ul></dd>
+    <dt>Returns: (int,int)</dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="set_color"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">set_color</span>(<span class="sig-arg">cr</span>,
+        <span class="sig-arg">rgba</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#set_color">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>set stroke color</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cr</code></strong> - cairo context</li>
+        <li><strong class="pname"><code>rgba</code></strong> (tuple) - (r,g,b) or (r,g,b,a)</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="make_sloppy_rect"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_sloppy_rect</span>(<span class="sig-arg">cr</span>,
+        <span class="sig-arg">rect</span>,
+        <span class="sig-arg">sdx</span>=<span class="sig-default">0.0</span>,
+        <span class="sig-arg">sdy</span>=<span class="sig-default">0.0</span>,
+        <span class="sig-arg">srot</span>=<span class="sig-default">0.0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#make_sloppy_rect">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>slightly rotate and translate a rect to give it a sloppy look</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cr</code></strong> - cairo context</li>
+        <li><strong class="pname"><code>sdx</code></strong> - maximum x-offset, true offset will be uniformly distibuted</li>
+        <li><strong class="pname"><code>sdy</code></strong> - maximum y-offset</li>
+        <li><strong class="pname"><code>sdy</code></strong> - maximum rotation</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="draw_shadow"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_shadow</span>(<span class="sig-arg">cr</span>,
+        <span class="sig-arg">rect</span>,
+        <span class="sig-arg">thickness</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">shadow_color</span>=<span class="sig-default"><code class="variable-group">(</code>0<code class="variable-op">, </code>0<code class="variable-op">, </code>0<code class="variable-op">, </code>0.3<code class="variable-group">)</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#draw_shadow">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>draw a shadow at the bottom-right corner of a rect</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cr</code></strong> - cairo context</li>
+        <li><strong class="pname"><code>rect</code></strong> - tuple (x,y,w,h)</li>
+        <li><strong class="pname"><code>thickness</code></strong> - if <code>None</code> nothing is drawn</li>
+        <li><strong class="pname"><code>shadow_color</code></strong> - shadow color</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="draw_line"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_line</span>(<span class="sig-arg">cr</span>,
+        <span class="sig-arg">rect</span>,
+        <span class="sig-arg">stroke_rgba</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">stroke_width</span>=<span class="sig-default">1.0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#draw_line">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>draw a line from (x,y) to (x+w,y+h), where rect=(x,y,w,h)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cr</code></strong> - cairo context</li>
+        <li><strong class="pname"><code>rect</code></strong> - tuple (x,y,w,h)</li>
+        <li><strong class="pname"><code>stroke_rgba</code></strong> - stroke color</li>
+        <li><strong class="pname"><code>stroke_width</code></strong> - stroke width, if &lt;= 0 nothing is drawn</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="draw_box"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_box</span>(<span class="sig-arg">cr</span>,
+        <span class="sig-arg">rect</span>,
+        <span class="sig-arg">stroke_rgba</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">fill_rgba</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">stroke_width</span>=<span class="sig-default">1.0</span>,
+        <span class="sig-arg">shadow</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#draw_box">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>draw a box (rectangle) with optional shadow</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cr</code></strong> - cairo context</li>
+        <li><strong class="pname"><code>rect</code></strong> - box rectangle as tuple (x,y,w,h)</li>
+        <li><strong class="pname"><code>stroke_rgba</code></strong> - stroke color (set if not <code>None</code>)</li>
+        <li><strong class="pname"><code>fill_rgba</code></strong> - fill color (set if not <code>None</code>)</li>
+        <li><strong class="pname"><code>stroke_width</code></strong> - stroke width</li>
+        <li><strong class="pname"><code>shadow</code></strong> - shadow thickness</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="draw_str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_str</span>(<span class="sig-arg">cr</span>,
+        <span class="sig-arg">text</span>,
+        <span class="sig-arg">rect</span>,
+        <span class="sig-arg">scaling</span>=<span class="sig-default">-1</span>,
+        <span class="sig-arg">stroke_rgba</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">align</span>=<span class="sig-default"><code class="variable-group">(</code>2<code class="variable-op">, </code>0<code class="variable-group">)</code></span>,
+        <span class="sig-arg">bbox</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">font</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Times</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">measure</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">shadow</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="lib.xcairo-pysrc.html#draw_str">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>draw text</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cr</code></strong> - cairo context</li>
+        <li><strong class="pname"><code>text</code></strong> - text string to be drawn</li>
+        <li><strong class="pname"><code>scaling</code></strong> (int) - text scaling mode
+          <ul>
+            <li>
+              -1: auto select x-scaling or y-scaling (whatever fills the 
+              rect)
+            </li>
+            <li>
+              0: no scaling
+            </li>
+            <li>
+              1: x-scaling, scale so that text fills rect horizontally, 
+              preserving ratio
+            </li>
+            <li>
+              2: y-scaling, scale so that text fills rect vertically, 
+              preserving ratio
+            </li>
+            <li>
+              3: xy-scaling, stretch so that text fills rect completely, 
+              does not preserve ratio
+            </li>
+          </ul></li>
+        <li><strong class="pname"><code>stroke_rgba</code></strong> - stroke color</li>
+        <li><strong class="pname"><code>align</code></strong> (tuple) - alignment mode as (int,int) tuple for horizontal/vertical 
+          alignment
+          <ul>
+            <li>
+              0: left/top alignment
+            </li>
+            <li>
+              1: right/bottom alignment
+            </li>
+            <li>
+              2: center/middle alignment
+            </li>
+          </ul></li>
+        <li><strong class="pname"><code>bbox</code></strong> - draw text bounding box (for debugging)</li>
+        <li><strong class="pname"><code>font</code></strong> - font name as string or (font,slant,weight) tuple</li>
+        <li><strong class="pname"><code>measure</code></strong> - use this string for measurement instead of <code>text</code></li>
+        <li><strong class="pname"><code>shadow</code></strong> - draw text shadow as tuple (dx,dy)</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 30 23:24:13 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
