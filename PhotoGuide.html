@@ -132,9 +132,9 @@
 <h2 id="image-prepost-processing">Image pre/post processing</h2>
 <p>For convenience you can provide additional ImageMagick operators with the <code>--pre-magic</code>, <code>--in-magick</code> and <code>--post-magick</code> arguments (in this order!). The first set of options is applied at the original input image, the second one at the overlapped area, the third one at the final (composite) image. <code>calmagick</code> already adjusts brightness of the overlapped area (<code>--brightness</code>) by 10%, in order to enhance calendar visibility. Another useful argument is <code>--saturation</code> which adjusts color saturation of the overlayed area. Apart from <code>--brightness</code> and <code>--saturation</code> (<code>calmagick</code> arguments for convenience), <code>--in-magick</code> can give you access to arbitrary ImageMagick operators.</p>
 <table><tr>
-<p><pre><code>$ calmagick image.jpg 0 0 --brightness=50 <sub>(left image below)</sub>
-$ calmagick image.jpg 0 0 --saturation=0 <sub>(middle image below)</sub>
-$ calmagick image.jpg 0 0 --in-magick -blur 0x25 <sub>(right image below)</sub>
+<p><pre><code>$ calmagick image.jpg 0 0 --brightness=50
+$ calmagick image.jpg 0 0 --saturation=0
+$ calmagick image.jpg 0 0 --in-magick -blur 0x25
 </code></pre>
 Each line corresponds to each one of the photos below:
 <table><tr>
