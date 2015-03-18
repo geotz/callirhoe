@@ -1,14 +1,14 @@
 =============================================
  callirhoe - high quality calendar rendering
         (c) 2012-2014 George Tzoumas
-    https://code.google.com/p/callirhoe/
+     https://geotz.github.io/callirhoe/
 =============================================
 
 QUICK INSTALLATION GUIDE
 
 CONTENTS
  1) FROM COMPRESSED ARCHIVE
- 2) FROM SVN
+ 2) FROM GITHUB
  3) INSTALLING INTO BINARY PATH
  4) INSTALLATION FOR ARCH LINUX
 
@@ -16,18 +16,17 @@ CONTENTS
 
 1) FROM COMPRESSED ARCHIVE
 
-Download the latest version from the project's page,
-or directly from:
-    https://callirhoe.googlecode.com/svn/wiki/releases/
+Download the latest version from the project's page.
 
-You end up with a file named callirhoe-X.Y.Z.7z where X.Y.Z the version
-number (for example 0.4.0).
+You end up with a file named callirhoe-vX.Y.Z-gID.tar.gz or .zip where 
+X.Y.Z the version number (for example 0.4.1) and ID the commit ID
+(depending on how you obtained the archive).
 
 Extract the contents of the archive
-$ 7z x callirhoe-X.Y.Z.7z
+$ tar zxf callirhoe-vX.Y.Z-gID.tar.gz
 
 Change into program's directory
-$ cd callirhoe-X.Y.Z
+$ cd geotz-callirhoe-ID
 
 Now you can launch the program, e.g.
 
@@ -36,19 +35,21 @@ $ ./callirhoe.py foo.pdf
 See section 3 for how to install callirhoe so that it lies in your
 executable path.
 
-2) FROM SVN
+2) FROM GITHUB
 
-Checkout the latest version from the svn:
+Checkout the latest version from github. Most probably you want only the
+master branch (unless you also want to download the website with  over
+100MB of pregenerated calendars!):
 
-$ svn checkout https://callirhoe.googlecode.com/svn/trunk callirhoe-svn
+$ git clone -b master --single-branch https://github.com/geotz/callirhoe.git
 
 Change into directory
 
-$ cd callirhoe-svn
+$ cd callirhoe
 
 After a few days/weeks/months... you may update to the latest version:
 
-$ svn up
+$ git pull
 
 You can launch the program as usual:
 
