@@ -68,7 +68,14 @@
 </tr></table>
 </p>
 <h3 id="placement-algorithm">Placement algorithm</h3>
-<p>The default placement algorithm is <em>minimal-entropy overlap</em>. Roughly, the algorithm works as follows: 1. Find the smallest size minimum-entropy rectangle (<code>--min-size</code>), by sliding through the image. Let <em>S</em> be that entropy. 1. Relax the value of <em>S</em>, 20% by default (<code>--relax</code>). 1. Starting from the biggest size rectangles (<code>--max-size</code>), scan through the image until the relaxed value <em>S</em> is attained. Try smaller rectangles if previous pass fails, until size limit is reached.</p>
+<p>The default placement algorithm is <em>minimal-entropy overlap</em>.
+Roughly, the algorithm works as follows:
+<ol><small><li> Find the smallest size minimum-entropy rectangle (<code>--min-size</code>), by sliding through the image.
+Let <em>S</em> be that entropy.</i>
+<li>Relax the value of <em>S</em>, 20% by default (<code>--relax</code>).</li>
+<li>Starting from the biggest size rectangles (<code>--max-size</code>), scan through the image until the
+relaxed value <em>S</em> is attained. Try smaller rectangles if previous pass fails, until size limit is reached.
+</li></small></ol></p>
 <p>Let's see what happens if we relax by a bigger factor, say 50% instead of 20%.</p>
 <p><pre><code>$ calmagick image.jpg 0 0 --relax=0.5</code></pre></p>
 <p>
