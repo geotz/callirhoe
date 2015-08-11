@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #    callirhoe - high quality calendar rendering
-#    Copyright (C) 2012-2014 George M. Tzoumas
+#    Copyright (C) 2012-2015 George M. Tzoumas
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ from datetime import date, timedelta
 import _base
 
 parser = _base.get_parser(__name__)
+parser.add_option("--phantom-days", action="store_true", default=False,
+                  help="show days from previous/next month in the unused cells")
 
 def _weekrows_of_month(year, month):
     """returns the number of Monday-Sunday ranges (or subsets of) that a month contains, which are 4, 5 or 6
@@ -78,10 +80,30 @@ class CalendarRenderer(_base.CalendarRenderer):
         for row in range(weekrows):
             for col in range(7):
                 R = dom_grid.item(row, col)
-                if dom > 0 and dom <= span:
-                    holiday_tuple = self.holiday_provider(year, month, dom, col)
-                    day_style = holiday_tuple[2]
-                    dcell = _base.DayCell(day = (dom, col), header = holiday_tuple[0], footer = holiday_tuple[1],
+                is_normal = dom > 0 and dom <= span
+                if is_normal or self.options.phantom_days:
+                    real_year, real_month, real_dom = year, month, dom
+
+                    # handle phantom days
+                    if dom < 1:
+                        real_month -= 1
+                        if real_month < 1:
+                            real_month = 12
+                            real_year -= 1
+                        real_dom += calendar.monthrange(real_year, real_month)[1]
+                    elif dom > span:
+                        real_month += 1
+                        if real_month > 12:
+                            real_month = 1
+                            real_year += 1
+                        real_dom -= span
+
+                    holiday_tuple = self.holiday_provider(real_year, real_month, real_dom, col)
+                    if is_normal:
+                        day_style = holiday_tuple[2]
+                    else:
+                        day_style = S.dom_weekend_phantom if col >= 5 else S.dom_phantom
+                    dcell = _base.DayCell(day = (real_dom, col), header = holiday_tuple[0], footer = holiday_tuple[1],
                                           theme = (day_style, G.dom, L), show_day_name = False)
                     dcell.draw(cr, R, self.options.short_daycell_ratio)
                 else:

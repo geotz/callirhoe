@@ -33,6 +33,14 @@ class dom_weekend(base.dom_weekend):
     font = "GFS Bodoni"
     header_font = footer_font = "GFS Elpis"
 
+class dom_phantom(base.dom_phantom):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class dom_weekend_phantom(base.dom_weekend_phantom):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
 class dom_holiday(base.dom_holiday):
     font = ("GFS Bodoni",)
     header_font = footer_font = "GFS Elpis"

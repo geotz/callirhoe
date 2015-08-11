@@ -45,6 +45,16 @@ class dom_weekend(dom):
     fg = _fg
     font = ("Times New Roman", 0, 1)
 
+class dom_phantom(dom):
+    fg = dom.fg + (0.15,)
+    header = dom.header + (0.15,)
+    footer = dom.footer + (0.15,)
+
+class dom_weekend_phantom(dom_weekend):
+    fg = dom_weekend.fg + (0.15,)
+    header = dom_weekend.header + (0.15,)
+    footer = dom_weekend.footer + (0.15,)
+
 class dom_holiday(dom):
     """day of month (holiday, indicated by the OFF flag in the holiday file)"""
     fg = _fg

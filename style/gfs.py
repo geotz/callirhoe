@@ -41,6 +41,14 @@ class dom_weekend_holiday(default.dom_weekend_holiday):
     font = "GFS Bodoni"
     header_font = footer_font = "GFS Elpis"
 
+class dom_phantom(default.dom_phantom):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
+class dom_weekend_phantom(default.dom_weekend_phantom):
+    font = "GFS Bodoni"
+    header_font = footer_font = "GFS Elpis"
+
 class dom_multi(default.dom_multi):
     font = ("GFS Bodoni",)
     header_font = footer_font = "GFS Elpis"

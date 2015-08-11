@@ -32,6 +32,10 @@ class dom_holiday(default.dom_holiday): pass
     
 class dom_weekend_holiday(default.dom_weekend_holiday): pass
 
+class dom_phantom(default.dom_phantom): pass
+
+class dom_weekend_phantom(default.dom_weekend_phantom): pass
+
 class dom_multi(default.dom_multi): pass
 
 class dom_weekend_multi(default.dom_weekend_multi): pass

@@ -61,11 +61,11 @@ def get_parser(layout_name):
                       "resizing day cells, in order to have uniform month boxes.")
     parser.add_option("--padding", type="float", default=None,
                       help="set month box padding (equivalent to --geom-var=month.padding=PADDING)")
-    parser.add_option("--no-shadow", action="store_true", default=None,
+    parser.add_option("--no-shadow", action="store_true", default=False,
                       help="disable box shadows")
     parser.add_option("--opaque", action="store_true", default=False,
                       help="make background opaque (white fill)")
-    parser.add_option("--swap-colors", action="store_true", default=None,
+    parser.add_option("--swap-colors", action="store_true", default=False,
                       help="swap month colors for even/odd years")
     return parser
 

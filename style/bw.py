@@ -54,6 +54,16 @@ class dom_weekend_holiday(dom_holiday):
     fg = (0,0,0)
     bg = (0.95,0.95,0.95)
 
+class dom_phantom(dom):
+    """day of month (phantom -- belonging to previous/next month)"""
+    fg = (0.8,)*3
+    header = footer = (0.8,)*3
+
+class dom_weekend_phantom(dom_weekend):
+    """day of month (phantom weekend)"""
+    fg = (0.8,)*3
+    header = footer = (0.8,)*3
+
 class dom_multi(dom_holiday):
     """day of month (multi-day holiday)"""
     pass

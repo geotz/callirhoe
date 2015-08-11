@@ -32,6 +32,10 @@ class dom_holiday(gfs.dom_holiday): pass
     
 class dom_weekend_holiday(gfs.dom_weekend_holiday): pass
 
+class dom_phantom(gfs.dom_phantom): pass
+
+class dom_weekend_phantom(gfs.dom_weekend_phantom): pass
+
 class dom_multi(gfs.dom_multi): pass
 
 class dom_weekend_multi(gfs.dom_weekend_multi): pass

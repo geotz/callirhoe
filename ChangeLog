@@ -1,4 +1,9 @@
 *******************************
+* Version 0.4.2 (Aug 2015)    *
+*******************************
++ phantom days in classic layout (days from prev/next month) [--phantom-days]
+
+*******************************
 * Version 0.4.1 (Nov 2014)    *
 *******************************
 + packaging support for Python/Arch Linux {Nick}
@@ -40,4 +45,4 @@ Legend:
 ~ known bug
 <X> comments/suggestions by X
 {X} contributed code by X
-[x] configuration variable x
+[x] option x

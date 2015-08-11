@@ -62,11 +62,11 @@ def get_parser(layout_name):
                       help="set month box padding (equivalent to --geom-var=month.padding=PADDING); "
                       "month bars look better with smaller padding, while matrix mode looks better with "
                       "larger padding")
-    parser.add_option("--no-shadow", action="store_true", default=None,
+    parser.add_option("--no-shadow", action="store_true", default=False,
                       help="disable box shadows")
     parser.add_option("--opaque", action="store_true", default=False,
                       help="make background opaque (white fill)")
-    parser.add_option("--swap-colors", action="store_true", default=None,
+    parser.add_option("--swap-colors", action="store_true", default=False,
                       help="swap month colors for even/odd years")
     return parser
 
@@ -253,7 +253,7 @@ class CalendarRenderer(object):
         if not self.options.no_footer:
             V0 = VLayout(page.Text_rect, 40, (1,)*4)
             Rcal = V0.item_span(39,0)
-            Rc = rect_rel_scale(V0.item(39),1,0.5,0,0)
+            Rc = rect_rel_scale(V0.item(39),0.99,0.5,0,0)
         else:
             Rcal = page.Text_rect
 
