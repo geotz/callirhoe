@@ -53,6 +53,8 @@ import lib.holiday as holiday
 import lib
 
 from lib.plugin import *
+
+
 # TODO: SEE IF IT CAN BE MOVED INTO lib.plugin ...
 def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
     """import a plugin making it visible
@@ -124,6 +126,7 @@ and do some magic with ImageMagick! ;)
     
 """
 
+
 def add_list_option(parser, opt):
     """add a --list-I{plugins} option to parser
 
@@ -131,6 +134,7 @@ def add_list_option(parser, opt):
     """
     parser.add_option("--list-%s" % opt, action="store_true", dest="list_%s" % opt, default=False,
                        help="list available %s" % opt)
+
 
 def get_parser():
     """get the argument parser object
@@ -184,6 +188,7 @@ def get_parser():
     parser.add_option("--geom-var", action="append", dest="geom_assign",
                     help="modify a geometry variable")
     return parser
+
 
 def main_program():
     parser = get_parser()
@@ -296,6 +301,7 @@ def main_program():
     renderer = Layout.CalendarRenderer(Outfile, Year, Month, MonthSpan,
                                         (Style,Geometry,Language), hprovider, lib._version, loptions)
     renderer.render()
+
 
 if __name__ == "__main__":
     try:
