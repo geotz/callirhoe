@@ -301,11 +301,12 @@ class CalendarRenderer(object):
                 if y > yy[-1]:
                     yy.append(y)
             # TODO: use full year range in fractal mode
-            if not self.options.month_with_year and not self.options.no_footer:
+            valid_page = not self.options.fractal or num_pages_written == 0
+            if not self.options.month_with_year and not self.options.no_footer and valid_page:
                 year_str = str(yy[0]) if yy[0] == yy[-1] else "%s – %s" % (yy[0],yy[-1])
                 draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), scaling = -1,
                          align = (0,0), font = (extract_font_name(S.month.font),0,0))
-            if not self.options.no_footer:
+            if not self.options.no_footer and valid_page:
                 draw_str(page.cr, text = "rendered by Callirhoe ver. %s" % self.version_string,
                          rect=Rc, stroke_rgba=(0, 0, 0, 0.5), scaling=-1, align=(1, 0),
                          font=(extract_font_name(S.month.font), 1, 0))
