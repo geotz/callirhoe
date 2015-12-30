@@ -68,6 +68,8 @@ def get_parser(layout_name):
                       help="make background opaque (white fill)")
     parser.add_option("--swap-colors", action="store_true", default=False,
                       help="swap month colors for even/odd years")
+    parser.add_option("--fractal", action="store_true", default=False,
+                      help="2x2 fractal layout; overrides rows=2, cols=2, z-order=increasing")
     return parser
 
 
@@ -212,7 +214,11 @@ class CalendarRenderer(object):
     def render(self):
         """main calendar rendering routine"""
         S,G,L = self.Theme
-        rows, cols = self.options.rows, self.options.cols
+        if self.options.fractal:
+            rows = cols = 2
+        else:
+            rows, cols = self.options.rows, self.options.cols
+
 
         if self.options.symmetric:
             G.month.symmetric = True
@@ -258,7 +264,7 @@ class CalendarRenderer(object):
             Rcal = page.Text_rect
 
         grid = GLayout(Rcal, rows, cols, pad = (mm_to_dots(G.month.padding),)*4)
-        mpp = grid.count() # months per page
+        mpp = 3 if self.options.fractal else grid.count()  # months per page
         num_pages = int(ceil(self.MonthSpan*1.0/mpp))
         cur_month = self.Month
         cur_year = self.Year
@@ -275,23 +281,26 @@ class CalendarRenderer(object):
                 
         num_pages_written = 0
         
-        z_order = self.options.z_order
+        z_order = "increasing" if self.options.fractal else self.options.z_order
         if z_order == "auto":
             if G.month.sloppy_dx != 0 or G.month.sloppy_dy != 0 or G.month.sloppy_rot != 0:
                 z_order = "decreasing"
             else:
                 z_order = "increasing"
-        for p in page_layout:
+        total_placed = 0
+        for p in page_layout:  # [[(month,year),...],...]
             num_placed = 0
             yy = [p[0][1]]
             if z_order == "decreasing": p.reverse()
             for (m,y) in p:
-                k = len(p) - num_placed - 1 if z_order == "decreasing" else num_placed 
-                self._draw_month(page.cr, grid.item_seq(k, self.options.grid_order == "column"), 
+                k = len(p) - num_placed - 1 if z_order == "decreasing" else num_placed
+                self._draw_month(page.cr, grid.item_seq(k, self.options.grid_order == "column"),
                            month=m, year=y)
                 num_placed += 1
+                total_placed += 1
                 if y > yy[-1]:
                     yy.append(y)
+            # TODO: use full year range in fractal mode
             if not self.options.month_with_year and not self.options.no_footer:
                 year_str = str(yy[0]) if yy[0] == yy[-1] else "%s – %s" % (yy[0],yy[-1])
                 draw_str(page.cr, text = year_str, rect = Rc, stroke_rgba = (0,0,0,0.5), scaling = -1,
@@ -301,6 +310,16 @@ class CalendarRenderer(object):
                          rect=Rc, stroke_rgba=(0, 0, 0, 0.5), scaling=-1, align=(1, 0),
                          font=(extract_font_name(S.month.font), 1, 0))
             num_pages_written += 1
-            page.end_page()
-            if num_pages_written < num_pages:
-                page.new_page()
+            if self.options.fractal:
+                if total_placed < self.MonthSpan-1:
+                    # undo padding to apply same padding recursively
+                    tmp = rect_pad(grid.item_seq(3), (-mm_to_dots(G.month.padding)/2.0,)*4)
+                    grid = GLayout(tmp, rows, cols, pad=(mm_to_dots(G.month.padding)/2.0,)*4)
+                else:
+                    grid = GLayout(grid.item_seq(3), 1, 1)
+                if num_pages_written == num_pages:
+                    page.end_page()
+            else:
+                page.end_page()
+                if num_pages_written < num_pages:
+                    page.new_page()

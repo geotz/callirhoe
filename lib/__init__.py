@@ -1,6 +1,6 @@
 import time
 
-_version = "0.4.2"
+_version = "0.4.3"
 _copyright = """Copyright (C) 2012-2015 George M. Tzoumas
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
