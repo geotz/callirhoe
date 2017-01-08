@@ -29,6 +29,7 @@ from datetime import date, timedelta
 
 import _base
 
+# TODO: merge with base parser...
 def get_parser(layout_name):
     """get the parser object for the layout command-line arguments
 
@@ -67,6 +68,8 @@ def get_parser(layout_name):
                       help="make background opaque (white fill)")
     parser.add_option("--swap-colors", action="store_true", default=False,
                       help="swap month colors for even/odd years")
+    parser.add_option("--fractal", action="store_true", default=False,
+                      help=optparse.SUPPRESS_HELP)
     return parser
 
 parser = get_parser(__name__)

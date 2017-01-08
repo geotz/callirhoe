@@ -183,7 +183,7 @@ class CalendarRenderer(object):
         self.holiday_provider = holiday_provider
         self.version_string = version_string
         self.options = options
-        
+
     def _draw_month(self, cr, rect, month, year):
         """this method renders a calendar month, it B{should be overridden} in any subclass
 
@@ -193,7 +193,7 @@ class CalendarRenderer(object):
         @param year: year
         """
         raise NotImplementedError("base _draw_month() should be overridden")
-        
+
 #1   1   1
 #2   2   1
 #3   3   1
@@ -228,19 +228,19 @@ class CalendarRenderer(object):
             S.month.box_shadow = False
         if self.Year % 2: self.options.swap_colors = not self.options.swap_colors
         if self.options.swap_colors:
-            S.month.color_map_bg = (S.month.color_map_bg[1], S.month.color_map_bg[0]) 
-            S.month.color_map_fg = (S.month.color_map_fg[1], S.month.color_map_fg[0]) 
+            S.month.color_map_bg = (S.month.color_map_bg[1], S.month.color_map_bg[0])
+            S.month.color_map_fg = (S.month.color_map_fg[1], S.month.color_map_fg[0])
 
         try:
             page = PageWriter(self.Outfile, G.pagespec, not self.options.opaque, G.landscape, G.border)
         except InvalidFormat as e:
             print >> sys.stderr, "invalid output format", e.args[0]
             sys.exit(1)
-        
+
         if rows == 0 and cols == 0:
-    #        if MonthSpan < 4: 
+    #        if MonthSpan < 4:
     #            cols = 1; rows = MonthSpan
-    #        elif MonthSpan < 9: 
+    #        elif MonthSpan < 9:
     #            cols = 2; rows = int(math.ceil(MonthSpan/2.0))
     #        else:
                 # TODO: improve this heuristic
@@ -255,7 +255,7 @@ class CalendarRenderer(object):
         elif cols == 0:
             cols = int(ceil(self.MonthSpan*1.0/rows))
         G.landscape = page.landscape  # PNG is pseudo-landscape (portrait with width>height)
-        
+
         if not self.options.no_footer:
             V0 = VLayout(page.Text_rect, 40, (1,)*4)
             Rcal = V0.item_span(39,0)
@@ -278,9 +278,9 @@ class CalendarRenderer(object):
                 cur_month += 1
                 if cur_month > 12: cur_month = 1; cur_year += 1
                 if num_placed >= self.MonthSpan: break
-                
+
         num_pages_written = 0
-        
+
         z_order = "increasing" if self.options.fractal else self.options.z_order
         if z_order == "auto":
             if G.month.sloppy_dx != 0 or G.month.sloppy_dy != 0 or G.month.sloppy_rot != 0:
