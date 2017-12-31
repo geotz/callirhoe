@@ -119,7 +119,7 @@ class DayCell(object):
         if self.footer:
             R = rect_rel_scale(rect, G.footer_size[0], G.footer_size[1], 0, 1.0 - G.footer_align)
             draw_str(cr, text = self.footer, rect = R, scaling = -1, stroke_rgba = S.footer,
-                font = S.footer_font)
+                font = S.footer_font, measure = "MgMgMg")
 
     def _draw_long(self, cr, rect):
         """render the day cell in long mode"""
