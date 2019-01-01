@@ -95,8 +95,10 @@ class DayCell(object):
         """render the day cell in short mode"""
         S,G,L = self.theme
         x, y, w, h = rect
-        day_of_month, day_of_week = self.day
-        draw_box(cr, rect, S.frame, S.bg, mm_to_dots(S.frame_thickness))
+        day_of_month, day_of_week, week_of_year = self.day
+        S_bg = S.bg
+        #if day_of_week >= 5 and (week_of_year & 1): S_bg = color_scale(S.bg,0.9)
+        draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness))
         R = rect_rel_scale(rect, G.size[0], G.size[1])
         if self.show_day_name:
             Rdom, Rdow = rect_hsplit(R, *G.mw_split)
@@ -125,8 +127,10 @@ class DayCell(object):
         """render the day cell in long mode"""
         S,G,L = self.theme
         x, y, w, h = rect
-        day_of_month, day_of_week = self.day
-        draw_box(cr, rect, S.frame, S.bg, mm_to_dots(S.frame_thickness))
+        day_of_month, day_of_week, week_of_year = self.day
+        S_bg = S.bg
+        #if day_of_week >= 5 and (week_of_year & 1): S_bg = tuple(reversed(S.bg))
+        draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness))
         R1, Rhf = rect_hsplit(rect, *G.hf_hsplit)
         if self.show_day_name:
             R = rect_rel_scale(R1, G.size[2], G.size[3])
