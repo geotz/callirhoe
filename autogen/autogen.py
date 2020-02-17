@@ -197,7 +197,7 @@ Variants = {
     'TR': [None]
 }
 
-BaseYear = 2019
+BaseYear = 2020
 
 for lang in lang_list:
     for v in Variants[lang]:
