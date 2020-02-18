@@ -241,7 +241,7 @@ class CalendarRenderer(object):
         try:
             page = PageWriter(self.Outfile, G.pagespec, not self.options.opaque, G.landscape, G.border)
         except InvalidFormat as e:
-            print >> sys.stderr, "invalid output format", e.args[0]
+            print("invalid output format", e.args[0], file=sys.stderr)
             sys.exit(1)
 
         if rows == 0 and cols == 0:
@@ -277,9 +277,9 @@ class CalendarRenderer(object):
         cur_year = self.Year
         num_placed = 0
         page_layout = []
-        for k in xrange(num_pages):
+        for k in range(num_pages):
             page_layout.append([])
-            for i in xrange(mpp):
+            for i in range(mpp):
                 page_layout[k].append((cur_month,cur_year))
                 num_placed += 1
                 cur_month += 1

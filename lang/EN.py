@@ -18,18 +18,18 @@
 
 """English language definition file"""
 
-long_day_name = [ u'Monday', u'Tuesday', u'Wednesday',
-             u'Thursday', u'Friday', u'Saturday', u'Sunday' ]         
+long_day_name = [ 'Monday', 'Tuesday', 'Wednesday',
+             'Thursday', 'Friday', 'Saturday', 'Sunday' ]         
 
-short_day_name = [ u'Mo', u'Tu', u'We', u'Th', u'Fr', u'Sa', u'Su' ]
+short_day_name = [ 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su' ]
 
 long_month_name = [ '',
-               u'January', u'February', u'March', u'April', 
-               u'May', u'June', u'July', u'August', 
-               u'September', u'October', u'November', u'December' ]
+               'January', 'February', 'March', 'April', 
+               'May', 'June', 'July', 'August', 
+               'September', 'October', 'November', 'December' ]
 
 short_month_name = [ '', 
-               u'Jan', u'Feb', u'Mar', u'Apr', u'May', u'Jun', 
-               u'Jul', u'Aug', u'Sep', u'Oct', u'Nov', u'Dec' ]
+               'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
 
-week_of_year_prefix = u'W'
+week_of_year_prefix = 'W'

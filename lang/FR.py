@@ -18,17 +18,17 @@
 
 """French language definition file"""
 
-long_day_name = [ u'Lundi', u'Mardi', u'Mercredi',
-             u'Jeudi', u'Vendredi', u'Samedi', u'Dimanche' ]
+long_day_name = [ 'Lundi', 'Mardi', 'Mercredi',
+             'Jeudi', 'Vendredi', 'Samedi', 'Dimanche' ]
 
-short_day_name = [ u'Lu', u'Ma', u'Me', u'Je', u'Ve', u'Sa', u'Di' ]
+short_day_name = [ 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di' ]
 
 long_month_name = [ '',
-               u'Janvier', u'Février', u'Mars', u'Avril', 
-               u'Mai', u'Juin', u'Juillet', u'Août', 
-               u'Septembre', u'Octobre', u'Novembre', u'Décembre' ]
+               'Janvier', 'Février', 'Mars', 'Avril', 
+               'Mai', 'Juin', 'Juillet', 'Août', 
+               'Septembre', 'Octobre', 'Novembre', 'Décembre' ]
 
-short_month_name = [ '', u'Jan', u'Fév', u'Mar', u'Avr', u'Mai', u'Jun', u'Jul', 
-                     u'Aoû', u'Sep', u'Oct', u'Nov', u'Déc' ]
+short_month_name = [ '', 'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 
+                     'Aoû', 'Sep', 'Oct', 'Nov', 'Déc' ]
 
-week_of_year_prefix = u'S'
+week_of_year_prefix = 'S'

@@ -23,7 +23,7 @@ import calendar
 import sys
 from datetime import date, timedelta
 
-import _base
+from . import _base
 
 parser = _base.get_parser(__name__)
 parser.add_option("--phantom-days", action="store_true", default=False,
@@ -53,8 +53,8 @@ class CalendarRenderer(_base.CalendarRenderer):
         day, span = calendar.monthrange(year, month)
         weekrows = 6 if G.month.symmetric else _weekrows_of_month(year, month)
         dom = -day + 1;
-        wmeasure = 'A'*max(map(len,L.day_name))
-        mmeasure = 'A'*max(map(len,L.month_name))
+        wmeasure = 'A'*max(list(map(len,L.day_name)))
+        mmeasure = 'A'*max(list(map(len,L.month_name)))
         if self.options.month_with_year:
             mmeasure += 'A'*(len(str(year))+1)
 

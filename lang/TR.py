@@ -19,15 +19,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-long_day_name = [ u'Pazartesi', u'Salı', u' Çarşamba ',
-             u'Perşembe', u'Cuma', u'Cumartesi', u'Pazar' ]
+long_day_name = [ 'Pazartesi', 'Salı', ' Çarşamba ',
+             'Perşembe', 'Cuma', 'Cumartesi', 'Pazar' ]
 
-short_day_name = [ u'Pt', u'Sa', u'Ça', u'Pe', u'Cu', u'Ct', u'Pa' ]
+short_day_name = [ 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pa' ]
 
-long_month_name = [ '', u'Ocak', u'Şubat', u'Mart', u'Nisan',
-               u'Mayıs', u'Haziran', u'Temmuz', u'Ağustos',
-               u'Eylül', u'Ekim', u'Kasım', u'Aralık' ]
+long_month_name = [ '', 'Ocak', 'Şubat', 'Mart', 'Nisan',
+               'Mayıs', 'Haziran', 'Temmuz', 'Ağustos',
+               'Eylül', 'Ekim', 'Kasım', 'Aralık' ]
 
 short_month_name = long_month_name
 
-week_of_year_prefix = u'H'
+week_of_year_prefix = 'H'

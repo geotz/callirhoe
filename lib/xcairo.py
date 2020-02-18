@@ -26,14 +26,14 @@ import cairo
 import math
 import random
 from os.path import splitext
-from geom import *
+from .geom import *
 
 XDPI = 72.0
 """dots per inch of output device"""
 
 # decreasing order
 # [1188, 840, 594, 420, 297, 210, 148, 105, 74, 52, 37]
-ISOPAGE = map(lambda x: int(210*math.sqrt(2)**x+0.5), range(5,-6,-1))
+ISOPAGE = [int(210*math.sqrt(2)**x+0.5) for x in range(5,-6,-1)]
 """ISO page height list, index k for height of Ak paper"""
 
 def page_spec(spec = None):

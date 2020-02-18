@@ -24,7 +24,7 @@ import optparse
 import sys
 from datetime import date, timedelta
 
-import _base
+from . import _base
 
 parser = _base.get_parser(__name__)
 parser.set_defaults(rows=2)
@@ -36,7 +36,7 @@ class CalendarRenderer(_base.CalendarRenderer):
         make_sloppy_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
         day, span = calendar.monthrange(year, month)
-        mmeasure = 'A'*max(map(len,L.month_name))
+        mmeasure = 'A'*max(list(map(len,L.month_name)))
         if self.options.month_with_year:
             mmeasure += 'A'*(len(str(year))+1)
 

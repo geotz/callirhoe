@@ -18,7 +18,7 @@
 
 """module defining Greek Font Society fonts for black & white style"""
 
-import bw as base
+from . import bw as base
 
 # day of week
 class dow(base.dow):

@@ -27,7 +27,7 @@ import optparse
 import sys
 from datetime import date, timedelta
 
-import _base
+from . import _base
 
 # TODO: merge with base parser...
 def get_parser(layout_name):
@@ -139,8 +139,8 @@ class CalendarRenderer(_base.CalendarRenderer):
         make_sloppy_rect(cr, rect, G.month.sloppy_dx, G.month.sloppy_dy, G.month.sloppy_rot)
 
         day, span = calendar.monthrange(year, month)
-        wmeasure = 'A'*max(map(len,L.day_name))
-        mmeasure = 'A'*max(map(len,L.month_name))
+        wmeasure = 'A'*max(list(map(len,L.day_name)))
+        mmeasure = 'A'*max(list(map(len,L.month_name)))
 
         rows = 31 if G.month.symmetric else span
         grid = VLayout(rect_from_origin(rect), 32) # title bar always symmetric

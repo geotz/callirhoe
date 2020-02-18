@@ -59,7 +59,7 @@ def _strip_empty(sl):
 
     @rtype: [str,...]
     """
-    return filter(lambda z: z, sl) if sl else []
+    return [z for z in sl if z] if sl else []
 
 def _flatten(sl):
     """join list I{sl} into a comma-separated string
@@ -281,8 +281,7 @@ class HolidayProvider(object):
               footer_tuple = (footer, None, footer, None)
         else:
             footer_tuple = (None, None, None, None)
-        return tuple(map(lambda k: Holiday([header_tuple[k]], [footer_tuple[k]], flags),
-                         range(4)))
+        return tuple([Holiday([header_tuple[k]], [footer_tuple[k]], flags) for k in range(4)])
 
     def load_holiday_file(self, filename):
         """load a holiday file into the C{HolidayProvider} object
@@ -386,7 +385,7 @@ class HolidayProvider(object):
                 if not dt in self.cache: self.cache[dt] = Holiday()
                 self.cache[dt].merge_with(self.monthly[m0])
             # fixed
-            for dt in filter(lambda z: z.year == y, self.fixed):
+            for dt in [z for z in self.fixed if z.year == y]:
                 if not dt in self.cache: self.cache[dt] = Holiday()
                 self.cache[dt].merge_with(self.fixed[dt])
             # orthodox easter
@@ -454,5 +453,5 @@ if __name__ == '__main__':
     while cur <= d2:
         y,m,d = cur.year, cur.month, cur.day
         hol = hp.get_holiday(y,m,d)
-        if hol: print cur.strftime("%a %b %d %Y"),hol
+        if hol: print(cur.strftime("%a %b %d %Y"),hol)
         cur += timedelta(1)

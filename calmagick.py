@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.7
 # -*- coding: utf-8 -*-
 
 #    callirhoe - high quality calendar rendering
@@ -31,7 +31,7 @@ import tempfile
 import glob
 import random
 import optparse
-import Queue
+import queue
 import threading
 
 import lib
@@ -84,17 +84,17 @@ class PNMImage(object):
         state = 0;
         for i in range(len(strlist)):
             # skip comments
-            if strlist[i].startswith('#'): continue
+            if strlist[i].startswith(b'#'): continue
             # skip empty lines
             if len(strlist[i]) == 0: continue
             # parse header
             if state == 0:
-                if not strlist[i].startswith('P2'):
+                if not strlist[i].startswith(b'P2'):
                     raise RuntimeError('invalid PNM image format: %s' % strlist[i])
                 state += 1
             # parse size
             elif state == 1:
-                w,h = map(int,strlist[i].split())
+                w,h = list(map(int,strlist[i].split()))
                 if w != h:
                     raise RuntimeError('non-square PNM image')
                 self.size = (w,h)
@@ -105,14 +105,14 @@ class PNMImage(object):
                 state += 1
             # bitmap
             else:
-                data = ' '.join(filter(lambda s: not s.startswith('#'), strlist[i:]))
-                intlist = map(int,data.split())
+                data = ' '.join([s.decode('utf-8') for s in strlist[i:] if not s.startswith(b'#')])
+                intlist = list(map(int,data.split()))
                 self.data = [intlist[x:x+w] for x in range(0, len(intlist), w)]
                 break
 
         self._rsum_cache=(-1,-1,0) # y,x,s
 #        self.xsum = [map(lambda x: sum(self.data[y][0:x]), range(w+1)) for y in range(0,h)]
-        self.xsum = [map(lambda x: self._rsum(y,x), range(w+1)) for y in range(0,h)]
+        self.xsum = [[self._rsum(y,x) for x in range(w+1)] for y in range(0,h)]
 
     def _rsum(self,y,x):
         """running sum with cache
@@ -171,13 +171,13 @@ class PNMImage(object):
         w,h = self.size
         sz_lo = _bound(int(w*size_range[0]+0.5),1,w)
         sz_hi = _bound(int(w*size_range[1]+0.5),1,w)
-        szv_range = range(sz_lo, sz_hi+1)
+        szv_range = list(range(sz_lo, sz_hi+1))
         if rr == 1:
-            sz_range = zip(szv_range, szv_range)
+            sz_range = list(zip(szv_range, szv_range))
         elif rr > 1:
-            sz_range = zip(szv_range, map(lambda x: _bound(int(x/rr+0.5),1,w), szv_range))
+            sz_range = list(zip(szv_range, [_bound(int(x/rr+0.5),1,w) for x in szv_range]))
         else:
-            sz_range = zip(map(lambda x: _bound(int(x*rr+0.5),1,w), szv_range), szv_range)
+            sz_range = list(zip([_bound(int(x*rr+0.5),1,w) for x in szv_range], szv_range))
         best = self.lowest_block_avg(*sz_range[0])
         # we do not use at_least because non-global minimum, when relaxed, may jump well above threshold
         entropy_thres = max(at_least, best[0]*(1+relax))
@@ -427,17 +427,17 @@ def _entropy_placement(img, size, args, options, r):
     R = float(w)/h
     if r == 0: r = R
     if options.verbose:
-        print "Calculating image entropy..."
+        print("Calculating image entropy...")
     qresize = '%dx%d!' % ((options.quantum,)*2)
     pnm_entropy = PNMImage(subprocess.check_output([_prog_im, img] + args + _IM_entropy_args(options.alt) +
     [qresize, '-normalize'] + (['-negate'] if options.placement == 'max' else []) + "-compress None pnm:-".split()).splitlines())
 
     # find optimal fit
-    if options.verbose: print "Fitting... ",
+    if options.verbose: print("Fitting... ", end=' ')
     best = pnm_entropy.fit_rect((options.min_size,options.max_size), options.low_entropy, options.relax, r/R)
     if options.verbose:
-        print "ent=%0.2f frac=(%0.2f,%0.2f) pos=(%d,%d) bs=(%d,%d) min=%0.2f r=%0.2f" % (
-            best[0], best[1][0], best[1][1], best[2][0], best[2][1], best[3][0], best[3][1], best[4], R*best[3][0]/best[3][1])
+        print("ent=%0.2f frac=(%0.2f,%0.2f) pos=(%d,%d) bs=(%d,%d) min=%0.2f r=%0.2f" % (
+            best[0], best[1][0], best[1][1], best[2][0], best[2][1], best[3][0], best[3][1], best[4], R*best[3][0]/best[3][1]))
 
     # (W,H,X,Y)
     w,h = size
@@ -511,17 +511,17 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
             if img in cache:
                 geometry, dark = cache[img]
         if options.verbose and geometry:
-            if stats: print "[%d/%d]" % stats,
-            print "Reusing image info from cache...", geometry, "DARK" if dark else "LIGHT"
+            if stats: print("[%d/%d]" % stats, end=' ')
+            print("Reusing image info from cache...", geometry, "DARK" if dark else "LIGHT")
 
     if geometry is None:
         if options.verbose:
-            if stats: print "[%d/%d]" % stats,
-            print "Extracting image info..."
+            if stats: print("[%d/%d]" % stats, end=' ')
+            print("Extracting image info...")
         w,h = _IM_get_image_size(img, magick_args[0])
         qresize = '%dx%d!' % ((options.quantum,)*2)
         if options.verbose:
-            print "%s %dx%d %dmp R=%0.2f" % (img, w, h, int(w*h/1000000.0+0.5), float(w)/h)
+            print("%s %dx%d %dmp R=%0.2f" % (img, w, h, int(w*h/1000000.0+0.5), float(w)/h))
 
         if '/' in options.ratio:
             tmp = options.ratio.split('/')
@@ -547,14 +547,14 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
                 '-compose', 'multiply', img, '-composite', '-region', '%dx%d+%d+%d' % geometry,
                 '-negate', outimg])
         elif options.test == 'print':
-            print ' '.join(map(str,geometry))
+            print(' '.join(map(str,geometry)))
         elif options.test == 'crop':
             subprocess.call([_prog_im, img] + magick_args[0] + ['-crop', '%dx%d+%d+%d' % geometry,
                 outimg])
         return
 
     # generate callirhoe calendar
-    if options.verbose: print "Generating calendar image (%s) ... [&]" % options.style
+    if options.verbose: print("Generating calendar image (%s) ... [&]" % options.style)
     if not options.vanilla: callirhoe_args = callirhoe_args + ['--no-footer', '--border=0']
     calimg = mktemp('.png')
     try:
@@ -562,14 +562,14 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
 
         if dark is None:
             # measure luminance
-            if options.verbose: print "Measuring luminance...",
+            if options.verbose: print("Measuring luminance...", end=' ')
             if options.negative > 0 and options.negative < 255:
                 luma = _IM_get_image_luminance(img, magick_args[0], geometry)
-                if options.verbose: print "(%s)" % luma,
+                if options.verbose: print("(%s)" % luma, end=' ')
             else:
                 luma = 255 - options.negative
             dark = luma < options.negative
-            if options.verbose: print "DARK" if dark else "LIGHT"
+            if options.verbose: print("DARK" if dark else "LIGHT")
             if cache is not None:
                 with _mutex:
                     cache[img] = (geometry, dark)
@@ -578,7 +578,7 @@ def compose_calendar(img, outimg, options, callirhoe_args, magick_args, stats=No
         if pcal.returncode != 0: raise RuntimeError("calmagick: calendar creation failed")
 
         # perform final composition
-        if options.verbose: print "Composing overlay (%s)..." % outimg
+        if options.verbose: print("Composing overlay (%s)..." % outimg)
         overlay = ['(', '-negate', calimg, ')'] if dark else [calimg]
         subprocess.call([_prog_im, img] + magick_args[0] + ['-region', '%dx%d+%d+%d' % geometry] +
             ([] if options.brightness == 0 else ['-brightness-contrast', '%d' % (-options.brightness if dark else options.brightness)]) +
@@ -602,7 +602,7 @@ def parse_range(s,hint=None):
         if hint and span == 0: span = hint
         year = lib.parse_year(t[1])
         margs = []
-        for m in xrange(span):
+        for m in range(span):
             margs += [(month,year)]
             month += 1
             if month > 12: month = 1; year += 1
@@ -626,7 +626,7 @@ def range_worker(q,ev,i):
             try:
                 compose_calendar(*item)
             except Exception as e:
-                print >> sys.stderr, "Exception in Thread-%d: %s" % (i,e.args)
+                print("Exception in Thread-%d: %s" % (i,e.args), file=sys.stderr)
                 ev.set()
             finally:
                 q.task_done()
@@ -655,14 +655,14 @@ def main_program():
     if options.range:
         flist = sorted(glob.glob(args[0]))
         mrange = parse_range(options.range,hint=len(flist))
-        if options.verbose: print "Composing %d photos..." % len(mrange)
+        if options.verbose: print("Composing %d photos..." % len(mrange))
         if options.sample is not None:
             flist = random.sample(flist, options.sample if options.sample else min(len(mrange),len(flist)))
         nf = len(flist)
         if nf > 0:
             if len(mrange) > nf and options.prefix == 'no?': options.prefix = 'yes'
             if options.jobs > 1:
-                q = Queue.Queue()
+                q = queue.Queue()
                 ev = threading.Event()
                 for i in range(options.jobs):
                      t = threading.Thread(target=range_worker,args=(q,ev,i))

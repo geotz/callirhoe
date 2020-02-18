@@ -18,7 +18,7 @@
 
 """module defining rainbow color style"""
 
-import default
+from . import default
 
 # day of week
 class dow(default.dow): pass
@@ -52,6 +52,6 @@ class month(default.month):
         color_mix(spring,summer,0.66), color_mix(spring,summer,0.33), summer, # july
         color_mix(summer,autumn,0.66), color_mix(summer,autumn,0.33), autumn, # october
         color_mix(autumn,winter,0.66), color_mix(autumn,winter,0.33)) # december
-    color_map_bg = (map(lambda x: color_scale(x, 0.5), _c1), _c1)
+    color_map_bg = ([color_scale(x, 0.5) for x in _c1], _c1)
     color_map_fg = (((1,1,1),)*13, ((0,0,0),)*13)
 #                    map(lambda x: color_auto_fg(x), color_map_bg[1]

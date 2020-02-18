@@ -19,18 +19,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see http://www.gnu.org/licenses/
 
-long_day_name = [ u'Montag', u'Dienstag', u'Mittwoch',
-             u'Donnerstag', u'Freitag', u'Samstag', u'Sonntag' ]
+long_day_name = [ 'Montag', 'Dienstag', 'Mittwoch',
+             'Donnerstag', 'Freitag', 'Samstag', 'Sonntag' ]
 
-short_day_name = [ u'Mo', u'Di', u'Mi', u'Do', u'Fr', u'Sa', u'So' ]
+short_day_name = [ 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So' ]
 
 long_month_name = [ '',
-               u'Januar', u'Februar', u'März', u'April', 
-               u'Mai', u'Juni', u'Juli', u'August', 
-               u'September', u'Oktober', u'November', u'Dezember' ]
+               'Januar', 'Februar', 'März', 'April', 
+               'Mai', 'Juni', 'Juli', 'August', 
+               'September', 'Oktober', 'November', 'Dezember' ]
 
 short_month_name = [ '', 
-               u'Jan', u'Feb', u'Mrz', u'Apr', u'Mai', u'Jun', 
-               u'Jul', u'Aug', u'Sep', u'Okt', u'Nov', u'Dez' ]
+               'Jan', 'Feb', 'Mrz', 'Apr', 'Mai', 'Jun', 
+               'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez' ]
 
-week_of_year_prefix = u'W'
+week_of_year_prefix = 'W'

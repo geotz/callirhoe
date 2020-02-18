@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.7
 # -*- coding: utf-8 -*-
 
 #    callirhoe - high quality calendar rendering
@@ -93,7 +93,7 @@ def import_plugin(plugin_paths, cat, longcat, longcat2, listopt, preset):
 
 def print_examples():
     """print usage examples"""
-    print """Examples:
+    print("""Examples:
 
 Create a calendar of the current year (by default in a 4x3 grid):
     $ callirhoe my_calendar.pdf 
@@ -124,7 +124,7 @@ Create a calendar as a full-hd wallpaper (1920x1080):
 and do some magic with ImageMagick! ;)
     $ convert wallpaper.png -negate fancy.png
     
-"""
+""")
 
 
 def add_list_option(parser, opt):
@@ -198,20 +198,20 @@ def main_program():
 
     list_and_exit = False
     if options.list_languages:
-        for x in plugin_list("lang"): print x[0],
-        print
+        for x in plugin_list("lang"): print(x[0], end=' ')
+        print()
         list_and_exit = True
     if options.list_styles:
-        for x in plugin_list("style"): print x[0],
-        print
+        for x in plugin_list("style"): print(x[0], end=' ')
+        print()
         list_and_exit = True
     if options.list_geometries:
-        for x in plugin_list("geom"): print x[0],
-        print
+        for x in plugin_list("geom"): print(x[0], end=' ')
+        print()
         list_and_exit = True
     if options.list_layouts:
-        for x in plugin_list("layouts"): print x[0],
-        print
+        for x in plugin_list("layouts"): print(x[0], end=' ')
+        print()
         list_and_exit = True
     if list_and_exit: return
 
@@ -248,11 +248,11 @@ def main_program():
     # the usual "beware of exec()" crap applies here... but come on,
     # this is a SCRIPTING language, you can always hack the source code!!!
     if options.lang_assign:
-        for x in options.lang_assign: exec "Language.%s" % x
+        for x in options.lang_assign: exec("Language.%s" % x)
     if options.style_assign:
-        for x in options.style_assign: exec "Style.%s" % x
+        for x in options.style_assign: exec("Style.%s" % x)
     if options.geom_assign:
-        for x in options.geom_assign: exec "Geometry.%s" % x
+        for x in options.geom_assign: exec("Geometry.%s" % x)
 
     calendar.long_month_name = Language.long_month_name
     calendar.long_day_name = Language.long_day_name

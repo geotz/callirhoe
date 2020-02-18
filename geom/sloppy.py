@@ -18,7 +18,7 @@
 
 """module defining the sloppy geometry"""
 
-import default
+from . import default
 
 class dom(default.dom): pass
 

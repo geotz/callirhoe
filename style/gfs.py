@@ -18,7 +18,7 @@
 
 """module defining Greek Font Society fonts for default style"""
 
-import default
+from . import default
 
 # day of week
 class dow(default.dow):

@@ -124,7 +124,7 @@ def color_mix(a, b, frac):
     @param frac: amount of first color
     @rtype: tuple
     """
-    return map(lambda (x,y): x*frac + y*(1 - frac), zip(a,b))
+    return [x_y[0]*frac + x_y[1]*(1 - frac) for x_y in zip(a,b)]
 
 def color_scale(a, frac):
     """scale color values
@@ -133,7 +133,7 @@ def color_scale(a, frac):
     @param frac: scale amount (to be multiplied)
     @rtype: tuple
     """
-    return map(lambda x: min(1.0,x*frac), a)
+    return [min(1.0,x*frac) for x in a]
 
 def color_auto_fg(bg, light = (1,1,1), dark = (0,0,0)):
     """return I{light} or I{dark} foreground color based on an ad-hoc evaluation of I{bg}
@@ -196,7 +196,7 @@ class VLayout(object):
 
         @rtype: (float,float,float,float),...
         """
-        return map(self.item, range(self.count()))
+        return list(map(self.item, list(range(self.count()))))
 
 class HLayout(VLayout):
     """horizontal layout manager defined as a transpose of L{VLayout}"""
@@ -282,21 +282,21 @@ class GLayout(object):
 
         @rtype: (float,float,float,float),...
         """
-        return map(self.item_seq, range(self.count()))
+        return list(map(self.item_seq, list(range(self.count()))))
 
     def row_items(self, row):
         """get sequence of cell rects of a row
 
         @rtype: (float,float,float,float),...
         """
-        return map(lambda x: self.item(row, x), range(self.col_count()))
+        return [self.item(row, x) for x in range(self.col_count())]
         
     def col_items(self, col):
         """get sequence of cell rects of a column
 
         @rtype: (float,float,float,float),...
         """
-        return map(lambda x: self.item(x, col), range(self.row_count()))
+        return [self.item(x, col) for x in range(self.row_count())]
         
         
     def item_span(self, nr, nc, row = -1, col = -1):
