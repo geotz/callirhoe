@@ -1,7 +1,7 @@
 import time
 
-_version = "0.4.3"
-_copyright = """Copyright (C) 2012-2015 George M. Tzoumas
+_version = "0.4.4"
+_copyright = """Copyright (C) 2012-2020 George M. Tzoumas
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law."""
