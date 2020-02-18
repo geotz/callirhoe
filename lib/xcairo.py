@@ -283,7 +283,7 @@ def draw_line(cr, rect, stroke_rgba = None, stroke_width = 1.0):
         cr.set_line_width(stroke_width)
     cr.stroke()
 
-def draw_box(cr, rect, stroke_rgba = None, fill_rgba = None, stroke_width = 1.0, shadow = None):
+def draw_box(cr, rect, stroke_rgba = None, fill_rgba = None, stroke_width = 1.0, shadow = None, lightweight = False):
     """draw a box (rectangle) with optional shadow
 
     @param cr: cairo context
@@ -292,6 +292,7 @@ def draw_box(cr, rect, stroke_rgba = None, fill_rgba = None, stroke_width = 1.0,
     @param fill_rgba: fill color (set if not C{None})
     @param stroke_width: stroke width
     @param shadow: shadow thickness
+    @param lightweight: draw only top side if filled
     """
     if (stroke_width <= 0): return
     draw_shadow(cr, rect, shadow)
@@ -303,7 +304,12 @@ def draw_box(cr, rect, stroke_rgba = None, fill_rgba = None, stroke_width = 1.0,
     cr.close_path()
     if fill_rgba:
         set_color(cr, fill_rgba)
-        cr.fill_preserve()
+        if lightweight:
+            cr.fill()
+            cr.move_to(x, y)
+            cr.rel_line_to(w, 0)    
+        else:
+            cr.fill_preserve()
     if stroke_rgba:
         set_color(cr, stroke_rgba)
         cr.set_line_width(stroke_width)

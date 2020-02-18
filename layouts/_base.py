@@ -84,12 +84,13 @@ class DayCell(object):
     @type show_day_name: bool
     @ivar show_day_name: whether day name is displayed
     """
-    def __init__(self, day, header, footer, theme, show_day_name):
+    def __init__(self, day, header, footer, theme, show_day_name, lightweight = False):
         self.day = day
         self.header = header
         self.footer = footer
         self.theme = theme
         self.show_day_name = show_day_name
+        self.lightweight = lightweight
 
     def _draw_short(self, cr, rect):
         """render the day cell in short mode"""
@@ -98,7 +99,8 @@ class DayCell(object):
         day_of_month, day_of_week, week_of_year = self.day
         S_bg = S.bg
         #if day_of_week >= 5 and (week_of_year & 1): S_bg = color_scale(S.bg,0.9)
-        draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness))
+        draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness), 
+                 lightweight = self.lightweight)
         R = rect_rel_scale(rect, G.size[0], G.size[1])
         if self.show_day_name:
             Rdom, Rdow = rect_hsplit(R, *G.mw_split)
@@ -130,7 +132,8 @@ class DayCell(object):
         day_of_month, day_of_week, week_of_year = self.day
         S_bg = S.bg
         #if day_of_week >= 5 and (week_of_year & 1): S_bg = tuple(reversed(S.bg))
-        draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness))
+        draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness),
+                 lightweight = self.lightweight)
         R1, Rhf = rect_hsplit(rect, *G.hf_hsplit)
         if self.show_day_name:
             R = rect_rel_scale(R1, G.size[2], G.size[3])

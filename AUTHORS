@@ -11,8 +11,9 @@ George M. Tzoumas <geortz@gmail.com>
 
 CONTRIBUTORS
 ------------
-Neels Hofmeyr <neels@hofmeyr.de>
-Nick Kavalieris <ph4ntome@gmail.com>
+Neels Hofmeyr <neels@hofmeyr.de> -- sparse layout
+Nick Kavalieris <ph4ntome@gmail.com> -- archlinux package
+wrybread@github -- ideas for lightweight mode
 
 LANGUAGE DEFINITIONS
 --------------------
