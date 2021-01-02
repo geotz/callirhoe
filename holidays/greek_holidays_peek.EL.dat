@@ -1,0 +1,27 @@
+# type|DATE*span|footer|header|flags
+# type|DATE1-DATE2|footer|header|flags
+# type|DATE|footer|header|flags
+#
+# type:
+# d: event occurs annually fixed day/month: MMDD
+# d: event occurs monthly, fixed day: DD
+# d: fixed day/month/year combination (e.g. deadline, trip, etc.): YYYYMMDD
+# oe: Orthodox Easter-dependent holiday, annually
+# ge: Georgios' name day, Orthodox Easter dependent holiday, annually
+# ce: Catholic Easter holiday
+#
+# DATE*span and DATE1-DATE2 supported only for YYYYMMDD
+# flags = {off, multi}
+
+d|0106||(ΘΕΟΦΑΝΕΙΑ)|
+d|0325||(ΕΥΑΓΓΕΛΙΣΜΟΣ)|
+d|1028||(ΕΠΕΤΕΙΟΣ ΤΟΥ «ΟΧΙ»)|
+d|1117||(ΠΟΛΥΤΕΧΝΕΙΟ)|
+
+oe|-59||(Τσικνοπέμπτη)|
+oe|-49||(Της Τυροφάγου)|
+oe|-48||(ΚΑΘΑΡΑ ΔΕΥΤΕΡΑ)|
+oe|0||(ΑΓΙΟ ΠΑΣΧΑ ΟΡΘ.)|
+oe|50||(ΑΓΙΟΥ ΠΝΕΥΜΑΤΟΣ ΟΡΘ.)|
+
+#ce|0|Καθολικό Πάσχα||
