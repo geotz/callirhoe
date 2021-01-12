@@ -189,7 +189,7 @@ class VLayout(object):
         @rtype: (float,float,float,float)
         """
         if k < 0: k = (self.count() - n) // 2
-        return rect_hull(self.item(k), self.item(k + n - 1))
+        return rect_hull(self.item(n), self.item(k + n - 1))
         
     def items(self):
         """returns a sequence of all items
