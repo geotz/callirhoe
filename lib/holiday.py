@@ -271,14 +271,14 @@ class HolidayProvider(object):
             if self.multiday_markers:
               header_tuple = (header+'..', '..'+header, '..'+header+'..', None)
             else:
-              header_tuple = (header, None, header, None)
+              header_tuple = (header, None, None, None)
         else:
             header_tuple = (None, None, None, None)
         if footer:
             if self.multiday_markers:
               footer_tuple = (footer+'..', '..'+footer, '..'+footer+'..', None)
             else:
-              footer_tuple = (footer, None, footer, None)
+              footer_tuple = (footer, None, None, None)
         else:
             footer_tuple = (None, None, None, None)
         return tuple([Holiday([header_tuple[k]], [footer_tuple[k]], flags) for k in range(4)])
