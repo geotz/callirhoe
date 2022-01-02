@@ -27,6 +27,8 @@ from datetime import date, timedelta
 from . import _base
 
 parser = _base.get_parser(__name__)
+parser.add_option("--iso-week", action="store_true", default=False,
+                  help="show ISO week number (starts on Monday)")
 parser.set_defaults(rows=2)
 
 class CalendarRenderer(_base.CalendarRenderer):
@@ -51,22 +53,19 @@ class CalendarRenderer(_base.CalendarRenderer):
             draw_shadow(cr, rect_from_origin(rect), shad)
             
         # draw day cells
-        iso_y, iso_w, iso_d = date(year,month,1).isocalendar()
         for dom in range(1,rows+1):
             R = dom_grid.item(dom-1)
             if dom <= span:
                 holiday_tuple = self.holiday_provider(year, month, dom, day)
                 day_style = holiday_tuple[2]
-                dcell = _base.DayCell(day = (dom, day, iso_w), header = holiday_tuple[0], footer = holiday_tuple[1],
-                                      theme = (day_style, G.dom, L), show_day_name = True)
-                dcell.draw(cr, R, self.options.short_daycell_ratio)
+                dcell = _base.DayCell(day = (day, date(year, month, dom)), header = holiday_tuple[0], footer = holiday_tuple[1],
+                                      theme = (day_style, G.dom, L), show_day_name = True, options = self.options)
+                dcell.draw(cr, R)
             else:
                 day_style = S.dom
                 draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
                          stroke_width = mm_to_dots(day_style.frame_thickness))
             day = (day + 1) % 7
-            iso_w += (iso_d == 7)
-            iso_d = (iso_d + 1) if iso_d < 7 else 1
             
         # draw month title (name)
         mcolor = S.month.color_map_bg[year%2][month]

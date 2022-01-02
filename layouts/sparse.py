@@ -121,7 +121,7 @@ def _draw_day_cell(cr, rect, day, header, footer, theme, show_day_name, text_hei
           week_nr = date(year, month, day_of_month).isocalendar()[1]
           draw_str(cr, text = "%s%d" % (L.week_of_year_prefix, week_nr), rect = Rmiddle_top,
               scaling = -1, stroke_rgba = ds.fg, align = (0,valign),
-              font = ds.header_font, measure = "W88")
+              font = ds.header_font, measure = "%s88" % (L.week_of_year_prefix,))
 
     if header:
         draw_str(cr, text = header, rect = Rright_header, scaling = -1,

@@ -32,6 +32,9 @@ parser.add_option("--lightweight", action="store_true", default=False,
                   help="lightweight cell rendering (lighter/no borders)")
 parser.add_option("--lw-inner-padding", type="float", default=1.5,
                   help="inner padding for month box in lightweight mode")
+parser.add_option("--iso-week", action="store_true", default=False,
+                  help="show ISO week number (starts on Monday)")
+
 
 def _weekrows_of_month(year, month):
     """returns the number of Monday-Sunday ranges (or subsets of) that a month contains, which are 4, 5 or 6
@@ -90,14 +93,12 @@ class CalendarRenderer(_base.CalendarRenderer):
                      align = (2,0), font = S.dow.font, measure = wmeasure)
             
         # draw day cells
-        iso_y, iso_w, iso_d = date(year,month,1).isocalendar()
         for row in range(weekrows):
             for col in range(7):
                 R = dom_grid.item(row, col)
                 is_normal = dom > 0 and dom <= span
                 if is_normal or self.options.phantom_days:
                     real_year, real_month, real_dom = year, month, dom
-                    real_iso_w = iso_w
 
                     # handle phantom days
                     if dom < 1:
@@ -118,17 +119,16 @@ class CalendarRenderer(_base.CalendarRenderer):
                         day_style = holiday_tuple[2]
                     else:
                         day_style = S.dom_weekend_phantom if col >= 5 else S.dom_phantom
-                    dcell = _base.DayCell(day = (real_dom, col, iso_w), header = holiday_tuple[0], footer = holiday_tuple[1],
+                    dcell = _base.DayCell(day = (col, date(real_year, real_month, real_dom)), header = holiday_tuple[0], footer = holiday_tuple[1],
                                           theme = (day_style, G.dom, L), show_day_name = False, 
-                                          lightweight = self.options.lightweight )
-                    dcell.draw(cr, R, self.options.short_daycell_ratio)
+                                          options = self.options )
+                    dcell.draw(cr, R)
                 else:
                     day_style = S.dom_weekend if col >= 5 else S.dom
                     draw_box(cr, rect = R, stroke_rgba = day_style.frame, fill_rgba = day_style.bg,
                              stroke_width = mm_to_dots(day_style.frame_thickness),
                              lightweight = self.options.lightweight)
                 dom += 1
-        iso_w += 1
                 
         # draw month title (name)
         mcolor = S.month.color_map_bg[year%2][month]

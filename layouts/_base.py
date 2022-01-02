@@ -84,19 +84,20 @@ class DayCell(object):
     @type show_day_name: bool
     @ivar show_day_name: whether day name is displayed
     """
-    def __init__(self, day, header, footer, theme, show_day_name, lightweight = False):
+    def __init__(self, day, header, footer, theme, show_day_name, options, lightweight = False):
         self.day = day
         self.header = header
         self.footer = footer
         self.theme = theme
         self.show_day_name = show_day_name
+        self.options = options
         self.lightweight = lightweight
 
     def _draw_short(self, cr, rect):
         """render the day cell in short mode"""
         S,G,L = self.theme
         x, y, w, h = rect
-        day_of_month, day_of_week, week_of_year = self.day
+        day_of_week, cell_date = self.day
         S_bg = S.bg
         #if day_of_week >= 5 and (week_of_year & 1): S_bg = color_scale(S.bg,0.9)
         draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness), 
@@ -108,8 +109,15 @@ class DayCell(object):
             Rdom = R
         valign = 0 if self.show_day_name else 2
         # draw day of month (number)
-        draw_str(cr, text = str(day_of_month), rect = Rdom, scaling = -1, stroke_rgba = S.fg,
+        draw_str(cr, text = str(cell_date.day), rect = Rdom, scaling = -1, stroke_rgba = S.fg,
                  align = (2,valign), font = S.font, measure = "88")
+        # draw week number
+        if self.options.iso_week and (day_of_week == 0 or cell_date.day == 1 and not getattr(self.options, 'phantom_days', False)):
+            Rweek = rect_rel_scale(rect, 0.95, G.size[1] if self.header else 0.95)
+            Rweek = rect_vsplit(rect_hsplit(Rweek,0.2)[0], 0.2)[0]
+            week_of_year = cell_date.isocalendar()[1];
+            draw_str(cr, text = "%s%d" % (L.week_of_year_prefix,week_of_year), rect = Rweek, scaling = -1, stroke_rgba = S.fg,
+                    align = (2,2), font = S.font, measure = "%s88" % (L.week_of_year_prefix,))
         # draw name of day
         if self.show_day_name:
             draw_str(cr, text = L.day_name[day_of_week][0], rect = Rdow, scaling = -1, stroke_rgba = S.fg,
@@ -129,7 +137,7 @@ class DayCell(object):
         """render the day cell in long mode"""
         S,G,L = self.theme
         x, y, w, h = rect
-        day_of_month, day_of_week, week_of_year = self.day
+        day_of_week, cell_date = self.day
         S_bg = S.bg
         #if day_of_week >= 5 and (week_of_year & 1): S_bg = tuple(reversed(S.bg))
         draw_box(cr, rect, S.frame, S_bg, mm_to_dots(S.frame_thickness),
@@ -142,8 +150,14 @@ class DayCell(object):
             Rdom = rect_rel_scale(R1, G.size[0], G.size[1])
         valign = 0 if self.show_day_name else 2
         # draw day of month (number)
-        draw_str(cr, text = str(day_of_month), rect = Rdom, scaling = -1, stroke_rgba = S.fg,
+        draw_str(cr, text = str(cell_date.day), rect = Rdom, scaling = -1, stroke_rgba = S.fg,
                  align = (2,valign), font = S.font, measure = "88")
+        # draw week number
+        if self.options.iso_week and (day_of_week == 0 or cell_date.day == 1):
+            Rweek = rect_vsplit(rect_hsplit(rect,0.125)[0], 0.25)[0]
+            week_of_year = cell_date.isocalendar()[1];
+            draw_str(cr, text = "%s%d" % (L.week_of_year_prefix,week_of_year), rect = Rweek, scaling = -1, stroke_rgba = S.fg,
+                    align = (2,2), font = S.font, measure = "%s88" % (L.week_of_year_prefix,))
         # draw name of day
         if self.show_day_name:
             draw_str(cr, text = L.day_name[day_of_week], rect = Rdow, scaling = -1, stroke_rgba = S.fg,
@@ -158,12 +172,12 @@ class DayCell(object):
             draw_str(cr, text = self.footer, rect = Rf, scaling = -1, stroke_rgba = S.footer, align = (1,2),
                  font = S.footer_font)
 
-    def draw(self, cr, rect, short_thres):
-        """automatically render a short or long day cell depending on threshold I{short_thres}
+    def draw(self, cr, rect):
+        """automatically render a short or long day cell depending on threshold given in options
 
-        If C{rect} ratio is less than C{short_thres} then short mode is chosen, otherwise long mode.
+        If C{rect} ratio is less than C{self.options.short_daycell_ratio} then short mode is chosen, otherwise long mode.
         """
-        if rect_ratio(rect) < short_thres:
+        if rect_ratio(rect) < self.options.short_daycell_ratio:
             self._draw_short(cr, rect)
         else:
             self._draw_long(cr, rect)
