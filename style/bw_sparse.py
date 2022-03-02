@@ -44,7 +44,7 @@ class dom:
 
 class dom_holiday(dom):
     """day of month (holiday, indicated by the OFF flag in the holiday file)"""
-    bg = (0.95,0.95,0.95)
+    bg = (0.80,0.80,0.80)
 
 class dom_weekend(dom_holiday):
     """day of month style (weekend)"""
