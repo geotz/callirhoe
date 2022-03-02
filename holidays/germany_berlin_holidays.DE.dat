@@ -14,6 +14,7 @@
 # flags = {off, multi}
 
 d|0101||Neujahr|off
+d|0308||Internationaler Frauentag|off
 d|0501||Tag der Arbeit|off
 d|1003||Tag der Deutschen Einheit|off
 d|1224||Heiligabend|off
