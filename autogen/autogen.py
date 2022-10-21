@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
 
 import os
@@ -162,13 +162,13 @@ class Context:
         self.dirname = '%s.%d/%s%s' % (self.name,self.year,self.lang,self.hsuffix)
 
     def __call__(self, mode, layout, style, geom, RxC, basename):
-        print 'Generating %s/%s ...' % (self.dirname,basename)
+        print('Generating %s/%s ...' % (self.dirname,basename))
         pdffile = '%s/%s.pdf' % (self.dirname,basename)
         pngfile = '%s/%s.png' % (self.dirname,basename)
         mls = "%s.%s.%dx%d" % (mode,layout,RxC[0],RxC[1])
         extra_args = ExtraArgs.get(mls, [])
         if os.path.exists(pdffile):
-            print 'Skipping existing', pdffile
+            print('Skipping existing', pdffile)
         else:
             paper = 'a4w' if mode == 'landscape' else 'a4'
             p = subprocess.Popen(['callirhoe', '-t', layout, '-s', style, '-g', geom, '--paper='+paper, '-l', self.lang,
@@ -176,15 +176,15 @@ class Context:
             p.wait()
         #if p.returncode != 0: raise RuntimeError("autogen: calendar creation failed")
         if os.path.exists(pngfile):
-            print 'Skipping existing', pngfile
+            print('Skipping existing', pngfile)
         else:
-            print 'Converting to png ...'
+            print('Converting to png ...')
             width = '480' if mode == 'landscape' else '320'
             p = subprocess.Popen(['convert', '%s/%s.pdf[0]' % (self.dirname, basename), '-scale', width, pngfile])
             #p.wait() # optional...
 
 
-lang_list = ['EN', 'EL', 'FR', 'DE', 'TR'];
+lang_list = ['EN', 'EL', 'FR'];
 
 # holiday variants
 Variants = {
@@ -192,12 +192,10 @@ Variants = {
     'EL': [None, ('hol', ['greek_holidays.EL.dat']), ('hol_nam', ['greek_holidays.EL.dat', 'greek_namedays.EL.dat'])],
     'FR': [None, ('hol', ['french_holidays.FR.dat']), ('hol_zA', ['french_holidays.FR.dat', 'french_holidays_zone_A.FR.dat']),
            ('hol_zB', ['french_holidays.FR.dat', 'french_holidays_zone_B.FR.dat']),
-           ('hol_zC', ['french_holidays.FR.dat', 'french_holidays_zone_C.FR.dat'])],
-    'DE': [None],
-    'TR': [None]
+           ('hol_zC', ['french_holidays.FR.dat', 'french_holidays_zone_C.FR.dat'])]
 }
 
-BaseYear = 2020
+BaseYear = 2021
 
 for lang in lang_list:
     for v in Variants[lang]:
