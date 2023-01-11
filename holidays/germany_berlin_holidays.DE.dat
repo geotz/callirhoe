@@ -14,6 +14,7 @@
 # flags = {off, multi}
 
 d|0101||Neujahr|off
+d|0308||Internationaler Frauentag|off
 d|0501||Tag der Arbeit|off
 d|1003||Tag der Deutschen Einheit|off
 d|1224||Heiligabend|off
@@ -43,3 +44,25 @@ d|20150715||(Schulfrei)|multi
 d|20150716-20150828||Sommerferien|multi
 d|20151019-20151031||Herbstferien|multi
 d|20151223-20160102||Weihnachtsferien|multi
+
+d|20220129-20220205||Winterferien|multi
+d|20220307||(Schulfrei)|off
+d|20220411-20220423||Osterferien|multi
+d|20220527||(Schulfrei)|off
+d|20220607||(Schulfrei)|off
+d|20220707-20220819||Sommerferien|multi
+d|20221024-20221105||Herbstferien|multi
+d|20221222-20230102||Weihnachtsferien|multi
+
+d|20230130-20230204||Winterferien|multi
+d|20230403-20230414||Osterferien|multi
+d|20230519||(Schulfrei)|off
+d|20230530||(Schulfrei)|off
+d|20230713-20230825||Sommerferien|multi
+d|20231002||(Schulfrei)|off
+d|20231023-20231104||Herbstferien|multi
+d|20231223-20240105||Weihnachtsferien|multi
+
+d|20240205-20240210||Winterferien|multi
+d|20240325-20240405||Osterferien|multi
+d|20240718-20240830||Sommerferien|multi
